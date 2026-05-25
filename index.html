@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel BI · Mock-up v2 — Alle fases</title>
+<style>
+/* ==========================================================================
+   Tokens — copied from styling/tokens.css for offline portability
+   ========================================================================== */
+:root {
+  --color-bg: #f0f2f8;
+  --color-surface: #ffffff;
+  --color-surface-2: #f5f7fc;
+  --color-surface-alt: #f8f9fd;
+
+  --color-nav: #080e1e;
+  --color-nav-border: rgba(255,255,255,0.06);
+
+  --color-primary: #5b7ef5;
+  --color-primary-hover: #4a6de8;
+  --color-primary-dark: #3655cc;
+  --color-primary-light: #dce5ff;
+  --color-primary-subtle: #eef2ff;
+  --color-primary-glow: rgba(91,126,245,0.28);
+
+  --color-accent: #10cdb0;
+  --color-accent-subtle: rgba(16,205,176,0.10);
+
+  --color-text: #0b1120;
+  --color-text-secondary: #2d3748;
+  --color-text-muted: #64748b;
+  --color-text-faint: #94a3b8;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #d8dde8;
+  --color-border-light: #eaedf5;
+
+  --color-success: #0f9060;
+  --color-success-bg: #d1fae9;
+  --color-success-border: rgba(15,144,96,0.20);
+
+  --color-warning: #b45309;
+  --color-warning-bg: #fef3c7;
+  --color-warning-border: rgba(180,83,9,0.20);
+
+  --color-danger: #dc2626;
+  --color-danger-bg: #fee2e2;
+  --color-danger-border: rgba(220,38,38,0.20);
+
+  --color-info: #2563eb;
+  --color-info-bg: #dbeafe;
+  --color-info-border: rgba(37,99,235,0.20);
+
+  --color-neutral: #4b5563;
+  --color-neutral-bg: #f1f3f7;
+  --color-neutral-border: rgba(75,85,99,0.16);
+
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px;
+  --space-4: 16px; --space-5: 20px; --space-6: 24px;
+  --space-8: 32px; --space-10: 40px; --space-12: 48px;
+
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --font-size-2xs: 10px;
+  --font-size-xs:  11px;
+  --font-size-sm:  13px;
+  --font-size-md:  14px;
+  --font-size-lg:  16px;
+  --font-size-xl:  20px;
+  --font-size-2xl: 28px;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --tracking-tight: -0.015em;
+  --tracking-wide:  0.04em;
+  --tracking-wider: 0.07em;
+  --tracking-widest: 0.11em;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 22px;
+  --radius-full: 9999px;
+
+  --shadow-xs: 0 1px 2px rgba(10,18,40,0.05);
+  --shadow-sm: 0 1px 4px rgba(10,18,40,0.07), 0 1px 2px rgba(10,18,40,0.04);
+  --shadow-md: 0 4px 16px rgba(10,18,40,0.09), 0 2px 4px rgba(10,18,40,0.05);
+  --shadow-lg: 0 8px 32px rgba(10,18,40,0.11), 0 3px 8px rgba(10,18,40,0.05);
+
+  --ring-primary: 0 0 0 3px rgba(91,126,245,0.28);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 100ms var(--ease-out);
+  --transition-base: 180ms var(--ease-out);
+}
+
+/* ==========================================================================
+   Reset + base
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-md);
+  line-height: 1.55;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+table { border-collapse: collapse; width: 100%; }
+:focus-visible { outline: none; box-shadow: var(--ring-primary); border-radius: 4px; }
+
+/* ==========================================================================
+   App shell
+   ========================================================================== */
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 56px 1fr auto;
+}
+
+/* ==========================================================================
+   Topbar
+   ========================================================================== */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8, 14, 30, 0.92);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border-bottom: 1px solid var(--color-nav-border);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-6);
+  gap: var(--space-6);
+  color: var(--color-text-inverse);
+}
+.topbar-brand { display: flex; align-items: center; gap: var(--space-3); flex-shrink: 0; }
+.brand-mark {
+  width: 30px; height: 30px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 12px var(--color-primary-glow);
+}
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-name { font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); letter-spacing: var(--tracking-tight); }
+.brand-sub { font-size: var(--font-size-2xs); color: var(--color-text-faint); letter-spacing: var(--tracking-wide); }
+.topbar-nav { display: flex; gap: var(--space-1); flex: 1; margin-left: var(--space-6); }
+.nav-tab {
+  position: relative;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-faint);
+  border-radius: var(--radius-md);
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+.nav-tab:hover:not(.active) { color: #cfd6e6; background: rgba(255,255,255,0.04); }
+.nav-tab.active {
+  color: var(--color-text-inverse);
+  background: rgba(91,126,245,0.16);
+  box-shadow: inset 0 0 0 1px rgba(91,126,245,0.32);
+}
+.phase-tag {
+  font-size: 9px;
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.06);
+  color: var(--color-text-faint);
+  font-weight: var(--font-weight-semibold);
+}
+.nav-tab.active .phase-tag { background: rgba(91,126,245,0.22); color: #cfd6e6; }
+.topbar-right { display: flex; align-items: center; gap: var(--space-3); flex-shrink: 0; }
+.role-pill {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-2);
+  background: rgba(91,126,245,0.18);
+  border: 1px solid rgba(91,126,245,0.32);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.role-pill:hover { background: rgba(91,126,245,0.26); }
+.role-avatar {
+  width: 22px; height: 22px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 100%);
+  color: var(--color-text-inverse);
+  font-size: 10px; font-weight: var(--font-weight-bold);
+  display: flex; align-items: center; justify-content: center;
+}
+.role-label { color: var(--color-text-inverse); }
+.role-meta { color: var(--color-text-faint); margin-left: var(--space-1); }
+.icon-btn {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-md);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--color-text-faint);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.icon-btn:hover { background: rgba(255,255,255,0.06); color: var(--color-text-inverse); }
+
+/* ==========================================================================
+   Screen body
+   ========================================================================== */
+.screen-body {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-6) var(--space-10);
+  display: flex; flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* Mock-up annotation banner */
+.alert-banner {
+  display: flex; align-items: flex-start; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-info-bg);
+  border: 1px solid var(--color-info-border);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+.alert-banner .alert-icon { color: var(--color-info); flex-shrink: 0; margin-top: 1px; }
+.alert-banner strong { color: var(--color-info); font-weight: var(--font-weight-semibold); }
+.alert-banner .alert-close {
+  margin-left: auto; color: var(--color-text-muted);
+  font-size: var(--font-size-lg); line-height: 1; padding: 0 var(--space-1);
+}
+.alert-banner.warning { background: var(--color-warning-bg); border-color: var(--color-warning-border); color: var(--color-text-secondary); }
+.alert-banner.warning .alert-icon, .alert-banner.warning strong { color: var(--color-warning); }
+
+/* Page header */
+.page-header { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+.page-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.15;
+}
+.page-sub { color: var(--color-text-muted); font-size: var(--font-size-sm); margin-top: var(--space-1); }
+.page-actions { display: flex; gap: var(--space-2); }
+.btn {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid transparent;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+.btn-secondary { background: var(--color-surface); border-color: var(--color-border); color: var(--color-text-secondary); }
+.btn-secondary:hover { border-color: var(--color-text-faint); color: var(--color-text); }
+.btn-primary { background: var(--color-primary); color: var(--color-text-inverse); }
+.btn-primary:hover { background: var(--color-primary-hover); }
+.btn-sm { padding: var(--space-1) var(--space-3); font-size: var(--font-size-xs); }
+
+/* ==========================================================================
+   Filter bar
+   ========================================================================== */
+.filter-bar {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-4) var(--space-5);
+  display: flex; flex-direction: column; gap: var(--space-3);
+}
+.filter-row { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+.filter-label {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--color-text-muted);
+  min-width: 130px;
+}
+.chip-group { display: flex; gap: var(--space-1); flex-wrap: wrap; }
+.chip {
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+.chip:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.chip.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-xs);
+}
+.chip.toggle-all { background: transparent; border-style: dashed; color: var(--color-text-muted); }
+.chip.toggle-all.active { background: var(--color-text-secondary); border-style: solid; border-color: var(--color-text-secondary); color: var(--color-text-inverse); }
+.chip-check {
+  width: 12px; height: 12px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.0);
+  border: 1.5px solid currentColor;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: currentColor;
+  font-size: 9px;
+  line-height: 1;
+}
+.chip.active .chip-check { background: rgba(255,255,255,0.35); border-color: rgba(255,255,255,0.65); color: var(--color-text-inverse); }
+.segmented {
+  display: inline-flex;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: 3px;
+}
+.segmented .seg {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  border-radius: 5px;
+  transition: all var(--transition-fast);
+}
+.segmented .seg.active {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-xs);
+}
+.segmented .seg:hover:not(.active) { color: var(--color-text-secondary); }
+
+/* ==========================================================================
+   View routing
+   ========================================================================== */
+.view { display: none; flex-direction: column; gap: var(--space-5); }
+.view.active { display: flex; }
+
+/* ==========================================================================
+   KPI tiles
+   ========================================================================== */
+.kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-4); }
+.kpi-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.kpi-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.kpi-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+  display: flex; flex-direction: column; gap: var(--space-3);
+  position: relative; overflow: hidden;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.kpi-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.kpi-eyebrow {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  display: flex; align-items: center; gap: var(--space-2);
+}
+.kpi-eyebrow .info-dot {
+  width: 14px; height: 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-2);
+  color: var(--color-text-faint);
+  font-size: 9px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: var(--font-weight-bold);
+  cursor: help;
+}
+.kpi-value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.05;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+.kpi-meta { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.delta-pill {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  border: 1px solid transparent;
+}
+.delta-pill.up { background: var(--color-success-bg); color: var(--color-success); border-color: var(--color-success-border); }
+.delta-pill.down { background: var(--color-danger-bg); color: var(--color-danger); border-color: var(--color-danger-border); }
+.delta-pill.flat { background: var(--color-neutral-bg); color: var(--color-neutral); border-color: var(--color-neutral-border); }
+.delta-pill.warn { background: var(--color-warning-bg); color: var(--color-warning); border-color: var(--color-warning-border); }
+.kpi-context { font-size: var(--font-size-xs); color: var(--color-text-muted); }
+.spark { width: 100%; height: 36px; display: block; }
+.kpi-card .formula {
+  font-size: 10px;
+  color: var(--color-text-faint);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0;
+}
+
+/* Card / chart */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-5);
+}
+.card-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+.card-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  letter-spacing: var(--tracking-tight);
+}
+.card-sub { font-size: var(--font-size-xs); color: var(--color-text-muted); margin-top: 2px; }
+.legend { display: flex; gap: var(--space-3); flex-wrap: wrap; font-size: var(--font-size-xs); color: var(--color-text-muted); }
+.legend-dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; vertical-align: middle; margin-right: 6px; }
+.legend-dot.primary { background: var(--color-primary); }
+.legend-dot.accent { background: var(--color-accent); }
+.legend-dot.warning { background: var(--color-warning); }
+.legend-dot.danger { background: var(--color-danger); }
+.legend-dot.success { background: var(--color-success); }
+.legend-dot.neutral { background: var(--color-text-faint); }
+
+.chart-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--space-4); }
+.chart-grid.equal { grid-template-columns: 1fr 1fr; }
+.chart-svg { width: 100%; height: 260px; display: block; }
+.chart-bar-svg { width: 100%; height: 280px; display: block; }
+.chart-stacked-svg { width: 100%; height: 280px; display: block; }
+.gridline { stroke: var(--color-border-light); stroke-width: 1; }
+.axis-label { fill: var(--color-text-faint); font-size: 10px; font-family: var(--font-sans); }
+.line-actual { fill: none; stroke: var(--color-primary); stroke-width: 2.25; stroke-linejoin: round; stroke-linecap: round; }
+.line-budget { fill: none; stroke: var(--color-accent); stroke-width: 2; stroke-dasharray: 5 4; stroke-linejoin: round; stroke-linecap: round; }
+.line-needed { fill: none; stroke: var(--color-warning); stroke-width: 2; stroke-dasharray: 4 3; stroke-linejoin: round; stroke-linecap: round; }
+.area-actual { fill: url(#areaGrad); opacity: 0.9; }
+
+/* ==========================================================================
+   Per-hotel table / generic data table
+   ========================================================================== */
+.table-card { padding: 0; overflow: hidden; }
+.table-card .card-header { padding: var(--space-5) var(--space-5) var(--space-3); margin-bottom: 0; }
+.table-wrap { overflow-x: auto; }
+.data-table { font-size: var(--font-size-sm); }
+.data-table th {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--color-text-muted);
+  padding: var(--space-3) var(--space-4);
+  text-align: right;
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--color-surface-2);
+  white-space: nowrap;
+}
+.data-table th:first-child { text-align: left; }
+.data-table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: right;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border-light);
+  font-variant-numeric: tabular-nums;
+}
+.data-table td:first-child { text-align: left; color: var(--color-text); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover td { background: var(--color-surface-alt); }
+.data-table tfoot td {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  background: var(--color-surface-2);
+  border-top: 1px solid var(--color-border);
+}
+.hotel-cell { display: flex; flex-direction: column; gap: 2px; }
+.hotel-name { font-weight: var(--font-weight-semibold); color: var(--color-text); }
+.hotel-slug { font-size: var(--font-size-2xs); color: var(--color-text-faint); letter-spacing: var(--tracking-wide); }
+.value-up { color: var(--color-success); font-weight: var(--font-weight-medium); }
+.value-down { color: var(--color-danger); font-weight: var(--font-weight-medium); }
+.value-flat { color: var(--color-text-muted); font-weight: var(--font-weight-medium); }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+.badge::before { content: ""; width: 6px; height: 6px; border-radius: var(--radius-full); background: currentColor; }
+.badge-success { background: var(--color-success-bg); color: var(--color-success); border-color: var(--color-success-border); }
+.badge-warning { background: var(--color-warning-bg); color: var(--color-warning); border-color: var(--color-warning-border); }
+.badge-danger { background: var(--color-danger-bg); color: var(--color-danger); border-color: var(--color-danger-border); }
+.badge-neutral { background: var(--color-neutral-bg); color: var(--color-neutral); border-color: var(--color-neutral-border); }
+
+/* ==========================================================================
+   Phase-specific extras
+   ========================================================================== */
+/* Personnel rank list */
+.rank-list { display: flex; flex-direction: column; gap: var(--space-2); }
+.rank-row {
+  display: grid;
+  grid-template-columns: 28px 1fr 80px 60px;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  font-size: var(--font-size-sm);
+}
+.rank-num { font-weight: var(--font-weight-bold); color: var(--color-text-muted); text-align: center; }
+.rank-id { color: var(--color-text); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: var(--font-size-xs); }
+.rank-bar {
+  height: 6px;
+  background: var(--color-border-light);
+  border-radius: var(--radius-full);
+  position: relative;
+  overflow: hidden;
+}
+.rank-bar > span {
+  display: block; height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  border-radius: var(--radius-full);
+}
+.rank-val { font-weight: var(--font-weight-semibold); color: var(--color-text); font-variant-numeric: tabular-nums; text-align: right; font-size: var(--font-size-xs); }
+
+/* Alert list */
+.alert-list { display: flex; flex-direction: column; gap: var(--space-2); }
+.alert-item {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-light);
+  border-left: 3px solid var(--color-text-faint);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+}
+.alert-item.danger { border-left-color: var(--color-danger); background: var(--color-danger-bg); }
+.alert-item.warn { border-left-color: var(--color-warning); background: var(--color-warning-bg); }
+.alert-item.success { border-left-color: var(--color-success); background: var(--color-success-bg); }
+.alert-item .alert-meta { color: var(--color-text-muted); font-size: var(--font-size-xs); margin-left: auto; }
+.alert-item strong { color: var(--color-text); font-weight: var(--font-weight-semibold); }
+
+/* Reconciliation block */
+.recon-grid { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: var(--space-4); align-items: center; }
+.recon-tile {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  text-align: center;
+}
+.recon-tile .recon-label { font-size: var(--font-size-2xs); text-transform: uppercase; letter-spacing: var(--tracking-widest); color: var(--color-text-muted); margin-bottom: var(--space-2); font-weight: var(--font-weight-semibold); }
+.recon-tile .recon-value { font-size: var(--font-size-xl); font-weight: var(--font-weight-bold); font-variant-numeric: tabular-nums; }
+.recon-tile.delta { border-color: var(--color-warning-border); background: var(--color-warning-bg); }
+.recon-tile.delta .recon-value { color: var(--color-warning); }
+.recon-op { font-size: 24px; font-weight: var(--font-weight-bold); color: var(--color-text-faint); text-align: center; }
+
+/* ==========================================================================
+   Status bar
+   ========================================================================== */
+.status-bar {
+  display: flex; align-items: center; gap: var(--space-5);
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border-light);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  flex-wrap: wrap;
+}
+.status-bar .status-item { display: inline-flex; align-items: center; gap: var(--space-2); }
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: var(--radius-full);
+  background: var(--color-success);
+  box-shadow: 0 0 0 3px rgba(15,144,96,0.18);
+}
+.status-dot.warn { background: var(--color-warning); box-shadow: 0 0 0 3px rgba(180,83,9,0.18); }
+.status-dot.muted { background: var(--color-text-faint); box-shadow: 0 0 0 3px rgba(148,163,184,0.18); }
+.status-version { margin-left: auto; color: var(--color-text-faint); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 10px; }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 70px; right: 24px;
+  background: var(--color-text);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-sm);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex; align-items: center; gap: var(--space-2);
+  opacity: 0; transform: translateY(8px); pointer-events: none;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  z-index: 200;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast .toast-dot { width: 7px; height: 7px; border-radius: var(--radius-full); background: var(--color-accent); }
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 1280px) {
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  .kpi-grid.cols-4 { grid-template-columns: repeat(2, 1fr); }
+  .recon-grid { grid-template-columns: 1fr; }
+  .recon-op { transform: rotate(90deg); }
+}
+@media (max-width: 1024px) {
+  .kpi-grid, .kpi-grid.cols-4, .kpi-grid.cols-3 { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid, .chart-grid.equal { grid-template-columns: 1fr; }
+  .topbar-nav { display: none; }
+  .filter-label { min-width: 100%; }
+}
+@media (max-width: 640px) {
+  .screen-body { padding: var(--space-4); }
+  .kpi-grid, .kpi-grid.cols-4, .kpi-grid.cols-3 { grid-template-columns: 1fr; }
+  .page-header { flex-direction: column; align-items: flex-start; }
+  .topbar { padding: 0 var(--space-4); gap: var(--space-3); }
+  .role-meta { display: none; }
+  .status-bar { padding: var(--space-3) var(--space-4); }
+  .status-version { margin-left: 0; flex-basis: 100%; }
+  .rank-row { grid-template-columns: 22px 1fr 60px; }
+  .rank-row .rank-bar { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ========================================================== TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="9" width="3" height="5" rx="0.6" fill="white"/>
+          <rect x="6.5" y="5" width="3" height="9" rx="0.6" fill="white"/>
+          <rect x="11" y="2" width="3" height="12" rx="0.6" fill="white"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Hotel BI</span>
+        <span class="brand-sub">ZeaYou Zeeland</span>
+      </div>
+    </div>
+
+    <nav class="topbar-nav" id="mainNav" aria-label="Hoofdnavigatie">
+      <button class="nav-tab active" type="button" data-view="executive">Executive <span class="phase-tag">Fase 1</span></button>
+      <button class="nav-tab" type="button" data-view="financieel">Financieel <span class="phase-tag">Fase 2</span></button>
+      <button class="nav-tab" type="button" data-view="personeel">Personeel <span class="phase-tag">Fase 3</span></button>
+      <button class="nav-tab" type="button" data-view="fb">F&amp;B <span class="phase-tag">Fase 4</span></button>
+    </nav>
+
+    <div class="topbar-right">
+      <button class="icon-btn" type="button" aria-label="Meldingen" title="3 meldingen">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+      </button>
+      <div class="role-pill" title="Wissel rol (mock-up)">
+        <span class="role-avatar">JB</span>
+        <span class="role-label">Executive</span>
+        <span class="role-meta">· Jur</span>
+      </div>
+      <button class="icon-btn" type="button" aria-label="Uitloggen">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================== SCREEN BODY -->
+  <main class="screen-body">
+
+    <!-- Mock-up annotation -->
+    <div class="alert-banner" role="note" id="mockBanner">
+      <span class="alert-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      </span>
+      <span>
+        <strong>Design mock-up v2 — alle fases.</strong>
+        Klik bovenaan op <em>Executive · Financieel · Personeel · F&amp;B</em> om tussen de fasen te wisselen.
+        De filterchips zijn klikbaar — selecties worden direct in de KPI-cijfers verwerkt. Data is fictief.
+      </span>
+      <button class="alert-close" type="button" aria-label="Sluit melding" id="mockBannerClose">×</button>
+    </div>
+
+    <!-- Page header (dynamic) -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title" id="pageTitle">Executive overzicht</h1>
+        <div class="page-sub" id="pageSub">Portfolio · 6 hotels · MTD t/m 2 mei 2026</div>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-secondary" type="button" id="exportBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Exporteer
+        </button>
+        <button class="btn btn-primary" type="button" id="refreshBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Vernieuwen
+        </button>
+      </div>
+    </div>
+
+    <!-- Filter bar (shared across views) -->
+    <section class="filter-bar" aria-label="Filters">
+      <div class="filter-row">
+        <span class="filter-label">Periode</span>
+        <div class="chip-group" id="periodChips" data-single="true">
+          <button class="chip" type="button" data-period="today">Vandaag</button>
+          <button class="chip" type="button" data-period="yesterday">Gisteren</button>
+          <button class="chip active" type="button" data-period="mtd">MTD</button>
+          <button class="chip" type="button" data-period="prev-month">Vorige maand</button>
+          <button class="chip" type="button" data-period="ytd">YTD</button>
+          <button class="chip" type="button" data-period="custom">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Custom
+          </button>
+        </div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">Hotels</span>
+        <div class="chip-group" id="hotelChips">
+          <button class="chip toggle-all active" type="button" data-action="toggle-all-hotels">Alle hotels</button>
+          <button class="chip active" type="button" data-hotel="copper-co"><span class="chip-check">✓</span>Copper &amp; Co</button>
+          <button class="chip active" type="button" data-hotel="bommelje"><span class="chip-check">✓</span>Bommeljé</button>
+          <button class="chip active" type="button" data-hotel="cityhotel-wood"><span class="chip-check">✓</span>Cityhotel Wood</button>
+          <button class="chip active" type="button" data-hotel="tien-torens"><span class="chip-check">✓</span>Tien Torens</button>
+          <button class="chip active" type="button" data-hotel="strandhotel-zoutelande"><span class="chip-check">✓</span>Strandhotel Zoutelande</button>
+          <button class="chip active" type="button" data-hotel="mezger-lodges"><span class="chip-check">✓</span>Mezger Lodges</button>
+        </div>
+      </div>
+      <div class="filter-row">
+        <span class="filter-label">Vergelijken met</span>
+        <div class="segmented" role="tablist" id="compareSeg">
+          <button class="seg active" type="button" role="tab" aria-selected="true" data-compare="prev-period">Vorige periode</button>
+          <button class="seg" type="button" role="tab" aria-selected="false" data-compare="prev-year">Vorig jaar</button>
+          <button class="seg" type="button" role="tab" aria-selected="false" data-compare="none">Geen</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================== VIEW: EXECUTIVE (Phase 1) -->
+    <section class="view active" id="view-executive" data-phase="1">
+
+      <div class="kpi-grid">
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">RevPAR <span class="info-dot" title="Revenue per Available Room">i</span></div>
+          <div class="kpi-value" data-kpi="revpar">€&nbsp;87,40</div>
+          <div class="kpi-meta">
+            <span class="delta-pill up" data-delta="revpar">▲ +4,2%</span>
+            <span class="kpi-context" data-compare-text>vs. vorige periode</span>
+          </div>
+          <svg class="spark" viewBox="0 0 200 36" preserveAspectRatio="none">
+            <defs><linearGradient id="sg1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5b7ef5" stop-opacity="0.28"/><stop offset="1" stop-color="#5b7ef5" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0,26 L20,24 40,22 60,21 80,18 100,17 120,15 140,13 160,11 180,8 200,7" fill="none" stroke="#5b7ef5" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+            <path d="M0,26 L20,24 40,22 60,21 80,18 100,17 120,15 140,13 160,11 180,8 200,7 L200,36 L0,36 Z" fill="url(#sg1)"/>
+          </svg>
+          <div class="formula">SUM(revenue_rooms) / SUM(rooms_available)</div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">ADR <span class="info-dot" title="Average Daily Rate">i</span></div>
+          <div class="kpi-value" data-kpi="adr">€&nbsp;132,15</div>
+          <div class="kpi-meta">
+            <span class="delta-pill up" data-delta="adr">▲ +2,1%</span>
+            <span class="kpi-context" data-compare-text>vs. vorige periode</span>
+          </div>
+          <svg class="spark" viewBox="0 0 200 36" preserveAspectRatio="none">
+            <defs><linearGradient id="sg2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5b7ef5" stop-opacity="0.28"/><stop offset="1" stop-color="#5b7ef5" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0,22 L20,21 40,18 60,19 80,16 100,15 120,13 140,12 160,10 180,8 200,7" fill="none" stroke="#5b7ef5" stroke-width="1.6"/>
+            <path d="M0,22 L20,21 40,18 60,19 80,16 100,15 120,13 140,12 160,10 180,8 200,7 L200,36 L0,36 Z" fill="url(#sg2)"/>
+          </svg>
+          <div class="formula">SUM(revenue_rooms) / SUM(rooms_sold)</div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Bezetting <span class="info-dot" title="rooms_sold / rooms_available">i</span></div>
+          <div class="kpi-value" data-kpi="occupancy">66,2&nbsp;%</div>
+          <div class="kpi-meta">
+            <span class="delta-pill up" data-delta="occupancy">▲ +3,4 pp</span>
+            <span class="kpi-context" data-compare-text>vs. vorige periode</span>
+          </div>
+          <svg class="spark" viewBox="0 0 200 36" preserveAspectRatio="none">
+            <defs><linearGradient id="sg3" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5b7ef5" stop-opacity="0.28"/><stop offset="1" stop-color="#5b7ef5" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0,28 L20,26 40,24 60,22 80,19 100,18 120,16 140,14 160,12 180,10 200,9" fill="none" stroke="#5b7ef5" stroke-width="1.6"/>
+            <path d="M0,28 L20,26 40,24 60,22 80,19 100,18 120,16 140,14 160,12 180,10 200,9 L200,36 L0,36 Z" fill="url(#sg3)"/>
+          </svg>
+          <div class="formula">SUM(rooms_sold) / SUM(rooms_available)</div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Kameromzet <span class="info-dot" title="Totale kameromzet ex. BTW">i</span></div>
+          <div class="kpi-value" data-kpi="revenue">€&nbsp;412.380</div>
+          <div class="kpi-meta">
+            <span class="delta-pill up" data-delta="revenue">▲ +6,8%</span>
+            <span class="kpi-context" data-compare-text>vs. vorige periode</span>
+          </div>
+          <svg class="spark" viewBox="0 0 200 36" preserveAspectRatio="none">
+            <defs><linearGradient id="sg4" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5b7ef5" stop-opacity="0.28"/><stop offset="1" stop-color="#5b7ef5" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0,30 L20,28 40,24 60,22 80,18 100,15 120,13 140,11 160,9 180,7 200,5" fill="none" stroke="#5b7ef5" stroke-width="1.6"/>
+            <path d="M0,30 L20,28 40,24 60,22 80,18 100,15 120,13 140,11 160,9 180,7 200,5 L200,36 L0,36 Z" fill="url(#sg4)"/>
+          </svg>
+          <div class="formula">SUM(revenue_rooms)</div>
+        </article>
+
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Δ Budget <span class="info-dot" title="Variantie t.o.v. budget — bron pending V8">i</span></div>
+          <div class="kpi-value" data-kpi="budget-delta">+3,8&nbsp;%</div>
+          <div class="kpi-meta">
+            <span class="delta-pill up">▲ Op koers</span>
+            <span class="kpi-context">budget € 397.180</span>
+          </div>
+          <svg class="spark" viewBox="0 0 200 36" preserveAspectRatio="none">
+            <defs><linearGradient id="sg5" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#10cdb0" stop-opacity="0.30"/><stop offset="1" stop-color="#10cdb0" stop-opacity="0"/></linearGradient></defs>
+            <line x1="0" y1="20" x2="200" y2="20" stroke="#94a3b8" stroke-dasharray="3 3" stroke-width="1"/>
+            <path d="M0,22 L40,19 80,18 120,17 160,15 200,11" fill="none" stroke="#10cdb0" stroke-width="1.8"/>
+            <path d="M0,22 L40,19 80,18 120,17 160,15 200,11 L200,36 L0,36 Z" fill="url(#sg5)"/>
+          </svg>
+          <div class="formula">(actual − budget) / budget</div>
+        </article>
+      </div>
+
+      <!-- Charts -->
+      <div class="chart-grid">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Kameromzet trend (30 dagen)</div>
+              <div class="card-sub">Werkelijk vs. budget · ex. BTW · alle hotels</div>
+            </div>
+            <div class="legend">
+              <span><span class="legend-dot primary"></span>Werkelijk</span>
+              <span><span class="legend-dot accent"></span>Budget / forecast</span>
+            </div>
+          </div>
+          <svg class="chart-svg" viewBox="0 0 720 260" preserveAspectRatio="none">
+            <defs><linearGradient id="areaGrad" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5b7ef5" stop-opacity="0.22"/><stop offset="1" stop-color="#5b7ef5" stop-opacity="0"/></linearGradient></defs>
+            <g><line class="gridline" x1="50" y1="30" x2="710" y2="30"/><line class="gridline" x1="50" y1="80" x2="710" y2="80"/><line class="gridline" x1="50" y1="130" x2="710" y2="130"/><line class="gridline" x1="50" y1="180" x2="710" y2="180"/><line class="gridline" x1="50" y1="230" x2="710" y2="230"/></g>
+            <g><text class="axis-label" x="42" y="34" text-anchor="end">€ 20k</text><text class="axis-label" x="42" y="84" text-anchor="end">€ 16k</text><text class="axis-label" x="42" y="134" text-anchor="end">€ 12k</text><text class="axis-label" x="42" y="184" text-anchor="end">€ 8k</text><text class="axis-label" x="42" y="234" text-anchor="end">€ 4k</text></g>
+            <g><text class="axis-label" x="60" y="252">3 apr</text><text class="axis-label" x="180" y="252">10 apr</text><text class="axis-label" x="320" y="252">17 apr</text><text class="axis-label" x="460" y="252">24 apr</text><text class="axis-label" x="600" y="252">1 mei</text><text class="axis-label" x="700" y="252" text-anchor="end">vandaag</text></g>
+            <path class="area-actual" d="M50,200 L72,195 94,185 116,200 138,180 160,175 182,165 204,170 226,150 248,160 270,140 292,150 314,135 336,125 358,140 380,115 402,120 424,105 446,110 468,90 490,100 512,85 534,95 556,75 578,85 600,70 622,80 644,60 666,70 688,55 710,65 L710,240 L50,240 Z"/>
+            <path class="line-actual" d="M50,200 L72,195 94,185 116,200 138,180 160,175 182,165 204,170 226,150 248,160 270,140 292,150 314,135 336,125 358,140 380,115 402,120 424,105 446,110 468,90 490,100 512,85 534,95 556,75 578,85 600,70 622,80 644,60 666,70 688,55 710,65"/>
+            <path class="line-budget" d="M50,210 L72,205 94,200 116,195 138,190 160,185 182,180 204,175 226,170 248,165 270,160 292,155 314,150 336,145 358,140 380,135 402,130 424,125 446,120 468,115 490,110 512,105 534,100 556,95 578,90 600,85 622,80 644,75 666,70 688,67 710,68"/>
+            <circle cx="710" cy="65" r="3.5" fill="#5b7ef5" stroke="white" stroke-width="1.5"/>
+            <circle cx="710" cy="68" r="3.5" fill="#10cdb0" stroke="white" stroke-width="1.5"/>
+          </svg>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Hotelvergelijking — RevPAR (MTD)</div><div class="card-sub">Per hotel · % delta vs. vorige periode</div></div>
+          </div>
+          <svg class="chart-bar-svg" viewBox="0 0 520 320">
+            <g><line class="gridline" x1="170" y1="20" x2="170" y2="290"/><line class="gridline" x1="245" y1="20" x2="245" y2="290"/><line class="gridline" x1="320" y1="20" x2="320" y2="290"/><line class="gridline" x1="395" y1="20" x2="395" y2="290"/><line class="gridline" x1="470" y1="20" x2="470" y2="290"/></g>
+            <g><text class="axis-label" x="170" y="308" text-anchor="middle">€ 60</text><text class="axis-label" x="245" y="308" text-anchor="middle">€ 75</text><text class="axis-label" x="320" y="308" text-anchor="middle">€ 90</text><text class="axis-label" x="395" y="308" text-anchor="middle">€ 105</text><text class="axis-label" x="470" y="308" text-anchor="middle">€ 120</text></g>
+            <text class="axis-label" x="160" y="42" text-anchor="end" fill="#0b1120" font-weight="600">Strandhotel Zoutelande</text>
+            <rect x="170" y="28" width="260" height="20" rx="4" fill="#5b7ef5"/><text class="axis-label" x="436" y="42" fill="#0b1120" font-weight="600">€ 112,30</text><text class="axis-label" x="492" y="42" fill="#0f9060" font-weight="600">+6,1%</text>
+            <text class="axis-label" x="160" y="82" text-anchor="end" fill="#0b1120" font-weight="600">Copper &amp; Co</text>
+            <rect x="170" y="68" width="190" height="20" rx="4" fill="#5b7ef5"/><text class="axis-label" x="366" y="82" fill="#0b1120" font-weight="600">€ 98,10</text><text class="axis-label" x="492" y="82" fill="#0f9060" font-weight="600">+4,4%</text>
+            <text class="axis-label" x="160" y="122" text-anchor="end" fill="#0b1120" font-weight="600">Bommeljé</text>
+            <rect x="170" y="108" width="155" height="20" rx="4" fill="#5b7ef5"/><text class="axis-label" x="331" y="122" fill="#0b1120" font-weight="600">€ 91,00</text><text class="axis-label" x="492" y="122" fill="#0f9060" font-weight="600">+3,2%</text>
+            <text class="axis-label" x="160" y="162" text-anchor="end" fill="#0b1120" font-weight="600">Cityhotel Wood</text>
+            <rect x="170" y="148" width="120" height="20" rx="4" fill="#5b7ef5"/><text class="axis-label" x="296" y="162" fill="#0b1120" font-weight="600">€ 84,40</text><text class="axis-label" x="492" y="162" fill="#0f9060" font-weight="600">+1,1%</text>
+            <text class="axis-label" x="160" y="202" text-anchor="end" fill="#0b1120" font-weight="600">Tien Torens</text>
+            <rect x="170" y="188" width="80" height="20" rx="4" fill="#94a3b8"/><text class="axis-label" x="256" y="202" fill="#0b1120" font-weight="600">€ 76,20</text><text class="axis-label" x="492" y="202" fill="#dc2626" font-weight="600">−0,8%</text>
+            <text class="axis-label" x="160" y="242" text-anchor="end" fill="#0b1120" font-weight="600">Mezger Lodges</text>
+            <rect x="170" y="228" width="40" height="20" rx="4" fill="#94a3b8"/><text class="axis-label" x="216" y="242" fill="#0b1120" font-weight="600">€ 68,40</text><text class="axis-label" x="492" y="242" fill="#dc2626" font-weight="600">−3,5%</text>
+            <line x1="290" y1="20" x2="290" y2="280" stroke="#10cdb0" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <text class="axis-label" x="294" y="276" fill="#10cdb0" font-weight="600">portfolio € 87,40</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Per-hotel table -->
+      <section class="card table-card">
+        <div class="card-header">
+          <div><div class="card-title">Per hotel — MTD</div><div class="card-sub">Geselecteerde hotels · vergeleken met vorige periode</div></div>
+          <button class="btn btn-secondary btn-sm" type="button">Drill-down</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="hotelTable">
+            <thead><tr><th>Hotel</th><th>Bezetting</th><th>RevPAR</th><th>ADR</th><th>Kameromzet</th><th>Δ Budget</th><th>Δ Vorig jaar</th><th style="text-align:left;">Status</th></tr></thead>
+            <tbody>
+              <tr data-hotel-row="strandhotel-zoutelande">
+                <td><div class="hotel-cell"><span class="hotel-name">Strandhotel Zoutelande</span><span class="hotel-slug">strandhotel-zoutelande · 84 kamers</span></div></td>
+                <td>78,4 %</td><td>€ 112,30</td><td>€ 143,20</td><td>€ 89.420</td>
+                <td><span class="value-up">+7,2%</span></td><td><span class="value-up">+9,1%</span></td>
+                <td style="text-align:left;"><span class="badge badge-success">Op koers</span></td>
+              </tr>
+              <tr data-hotel-row="copper-co">
+                <td><div class="hotel-cell"><span class="hotel-name">Copper &amp; Co</span><span class="hotel-slug">copper-co · 62 kamers</span></div></td>
+                <td>71,0 %</td><td>€ 98,10</td><td>€ 138,15</td><td>€ 76.150</td>
+                <td><span class="value-up">+4,8%</span></td><td><span class="value-up">+5,4%</span></td>
+                <td style="text-align:left;"><span class="badge badge-success">Op koers</span></td>
+              </tr>
+              <tr data-hotel-row="bommelje">
+                <td><div class="hotel-cell"><span class="hotel-name">Bommeljé</span><span class="hotel-slug">bommelje · 48 kamers</span></div></td>
+                <td>68,3 %</td><td>€ 91,00</td><td>€ 133,20</td><td>€ 65.020</td>
+                <td><span class="value-up">+3,1%</span></td><td><span class="value-up">+2,2%</span></td>
+                <td style="text-align:left;"><span class="badge badge-success">Op koers</span></td>
+              </tr>
+              <tr data-hotel-row="cityhotel-wood">
+                <td><div class="hotel-cell"><span class="hotel-name">Cityhotel Wood</span><span class="hotel-slug">cityhotel-wood · 54 kamers</span></div></td>
+                <td>64,1 %</td><td>€ 84,40</td><td>€ 131,60</td><td>€ 68.310</td>
+                <td><span class="value-flat">+0,4%</span></td><td><span class="value-up">+1,8%</span></td>
+                <td style="text-align:left;"><span class="badge badge-warning">Aandacht</span></td>
+              </tr>
+              <tr data-hotel-row="tien-torens">
+                <td><div class="hotel-cell"><span class="hotel-name">Tien Torens</span><span class="hotel-slug">tien-torens · 36 kamers</span></div></td>
+                <td>59,8 %</td><td>€ 76,20</td><td>€ 127,40</td><td>€ 41.150</td>
+                <td><span class="value-down">−2,1%</span></td><td><span class="value-down">−0,8%</span></td>
+                <td style="text-align:left;"><span class="badge badge-warning">Aandacht</span></td>
+              </tr>
+              <tr data-hotel-row="mezger-lodges">
+                <td><div class="hotel-cell"><span class="hotel-name">Mezger Lodges</span><span class="hotel-slug">mezger-lodges · 28 kamers</span></div></td>
+                <td>55,4 %</td><td>€ 68,40</td><td>€ 123,40</td><td>€ 28.330</td>
+                <td><span class="value-down">−6,7%</span></td><td><span class="value-down">−3,5%</span></td>
+                <td style="text-align:left;"><span class="badge badge-danger">Onder budget</span></td>
+              </tr>
+            </tbody>
+            <tfoot><tr id="hotelFootRow">
+              <td>Portfolio · <span data-selected-count>6</span> hotels</td>
+              <td>66,2 %</td><td>€ 87,40</td><td>€ 132,15</td><td>€ 412.380</td>
+              <td><span class="value-up">+3,8%</span></td><td><span class="value-up">+4,1%</span></td>
+              <td style="text-align:left;"><span class="badge badge-success">Op koers</span></td>
+            </tr></tfoot>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- ========================================================== VIEW: FINANCIEEL (Phase 2) -->
+    <section class="view" id="view-financieel" data-phase="2">
+
+      <div class="alert-banner warning">
+        <span class="alert-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </span>
+        <span><strong>Fase 2 — preview.</strong> Bron Exact Online (purchase_invoice). Budget-bron <strong>V8</strong> nog open (Exact / Atomize / Excel). VAT-basis volgens <strong>G3</strong> = ex-BTW.</span>
+      </div>
+
+      <div class="kpi-grid cols-4">
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Inkoopkosten</div>
+          <div class="kpi-value">€&nbsp;187.420</div>
+          <div class="kpi-meta">
+            <span class="delta-pill warn">▲ +2,8%</span>
+            <span class="kpi-context">vs. budget € 182.300</span>
+          </div>
+          <div class="formula">SUM(amount_excl_vat)</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Δ Budget — totaal</div>
+          <div class="kpi-value">+ € 5.120</div>
+          <div class="kpi-meta">
+            <span class="delta-pill warn">▲ +2,8%</span>
+            <span class="kpi-context">3 afdelingen overschrijden</span>
+          </div>
+          <div class="formula">spend_actual − spend_budget</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Loonkosten % omzet</div>
+          <div class="kpi-value">31,4 %</div>
+          <div class="kpi-meta">
+            <span class="delta-pill down">▼ −1,2 pp</span>
+            <span class="kpi-context">target ≤ 32%</span>
+          </div>
+          <div class="formula">SUM(cost_approved) / SUM(revenue_rooms)</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Omzet vs. budget</div>
+          <div class="kpi-value">+ 3,8 %</div>
+          <div class="kpi-meta">
+            <span class="delta-pill up">▲ Op koers</span>
+            <span class="kpi-context">€ 412.380 / € 397.180</span>
+          </div>
+          <div class="formula">(actual − budget) / budget</div>
+        </article>
+      </div>
+
+      <div class="chart-grid equal">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Inkoop per afdeling — MTD</div><div class="card-sub">Werkelijk vs. budget · ex-BTW</div></div>
+            <div class="legend"><span><span class="legend-dot primary"></span>Werkelijk</span><span><span class="legend-dot accent"></span>Budget</span></div>
+          </div>
+          <svg class="chart-bar-svg" viewBox="0 0 520 280">
+            <g><line class="gridline" x1="180" y1="20" x2="180" y2="250"/><line class="gridline" x1="260" y1="20" x2="260" y2="250"/><line class="gridline" x1="340" y1="20" x2="340" y2="250"/><line class="gridline" x1="420" y1="20" x2="420" y2="250"/><line class="gridline" x1="500" y1="20" x2="500" y2="250"/></g>
+            <g><text class="axis-label" x="180" y="268" text-anchor="middle">€ 10k</text><text class="axis-label" x="260" y="268" text-anchor="middle">€ 30k</text><text class="axis-label" x="340" y="268" text-anchor="middle">€ 50k</text><text class="axis-label" x="420" y="268" text-anchor="middle">€ 70k</text><text class="axis-label" x="500" y="268" text-anchor="middle">€ 90k</text></g>
+            <text class="axis-label" x="170" y="42" text-anchor="end" fill="#0b1120" font-weight="600">Restaurant</text>
+            <rect x="180" y="28" width="280" height="10" rx="2" fill="#5b7ef5"/><rect x="180" y="40" width="245" height="6" rx="2" fill="#10cdb0" opacity="0.7"/>
+            <text class="axis-label" x="490" y="38" fill="#dc2626" font-weight="600">+ € 7.080</text>
+            <text class="axis-label" x="170" y="82" text-anchor="end" fill="#0b1120" font-weight="600">F&amp;B inkoop</text>
+            <rect x="180" y="68" width="210" height="10" rx="2" fill="#5b7ef5"/><rect x="180" y="80" width="220" height="6" rx="2" fill="#10cdb0" opacity="0.7"/>
+            <text class="axis-label" x="490" y="78" fill="#0f9060" font-weight="600">− € 2.150</text>
+            <text class="axis-label" x="170" y="122" text-anchor="end" fill="#0b1120" font-weight="600">Housekeeping</text>
+            <rect x="180" y="108" width="120" height="10" rx="2" fill="#5b7ef5"/><rect x="180" y="120" width="115" height="6" rx="2" fill="#10cdb0" opacity="0.7"/>
+            <text class="axis-label" x="490" y="118" fill="#dc2626" font-weight="600">+ € 480</text>
+            <text class="axis-label" x="170" y="162" text-anchor="end" fill="#0b1120" font-weight="600">Receptie</text>
+            <rect x="180" y="148" width="80" height="10" rx="2" fill="#5b7ef5"/><rect x="180" y="160" width="85" height="6" rx="2" fill="#10cdb0" opacity="0.7"/>
+            <text class="axis-label" x="490" y="158" fill="#0f9060" font-weight="600">− € 320</text>
+            <text class="axis-label" x="170" y="202" text-anchor="end" fill="#0b1120" font-weight="600">Onderhoud</text>
+            <rect x="180" y="188" width="55" height="10" rx="2" fill="#5b7ef5"/><rect x="180" y="200" width="40" height="6" rx="2" fill="#10cdb0" opacity="0.7"/>
+            <text class="axis-label" x="490" y="198" fill="#dc2626" font-weight="600">+ € 920</text>
+            <text class="axis-label" x="170" y="242" text-anchor="end" fill="#0b1120" font-weight="600">Algemeen</text>
+            <rect x="180" y="228" width="35" height="10" rx="2" fill="#5b7ef5"/><rect x="180" y="240" width="38" height="6" rx="2" fill="#10cdb0" opacity="0.7"/>
+            <text class="axis-label" x="490" y="238" fill="#0f9060" font-weight="600">− € 110</text>
+          </svg>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Loonkosten % omzet — trend (12 weken)</div><div class="card-sub">Per afdeling · doel ≤ 32%</div></div>
+            <div class="legend"><span><span class="legend-dot primary"></span>Restaurant</span><span><span class="legend-dot accent"></span>Receptie</span><span><span class="legend-dot warning"></span>Housekeeping</span></div>
+          </div>
+          <svg class="chart-svg" viewBox="0 0 720 260" preserveAspectRatio="none">
+            <g><line class="gridline" x1="50" y1="40" x2="710" y2="40"/><line class="gridline" x1="50" y1="100" x2="710" y2="100"/><line class="gridline" x1="50" y1="160" x2="710" y2="160"/><line class="gridline" x1="50" y1="220" x2="710" y2="220"/></g>
+            <g><text class="axis-label" x="42" y="44" text-anchor="end">40%</text><text class="axis-label" x="42" y="104" text-anchor="end">32%</text><text class="axis-label" x="42" y="164" text-anchor="end">24%</text><text class="axis-label" x="42" y="224" text-anchor="end">16%</text></g>
+            <line x1="50" y1="100" x2="710" y2="100" stroke="#10cdb0" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <text class="axis-label" x="700" y="96" text-anchor="end" fill="#10cdb0" font-weight="600">target 32%</text>
+            <path class="line-actual" d="M50,80 L110,75 170,90 230,82 290,95 350,88 410,80 470,92 530,86 590,78 650,82 710,84"/>
+            <path d="M50,140 L110,135 170,142 230,138 290,144 350,140 410,135 470,138 530,134 590,130 650,132 710,128" fill="none" stroke="#10cdb0" stroke-width="2.25" stroke-linejoin="round"/>
+            <path d="M50,170 L110,168 170,172 230,165 290,170 350,160 410,158 470,162 530,155 590,150 650,148 710,146" fill="none" stroke="#b45309" stroke-width="2.25" stroke-linejoin="round"/>
+            <g><text class="axis-label" x="50" y="252">wk 1</text><text class="axis-label" x="380" y="252" text-anchor="middle">wk 6</text><text class="axis-label" x="710" y="252" text-anchor="end">wk 12</text></g>
+          </svg>
+        </div>
+      </div>
+
+      <section class="card table-card">
+        <div class="card-header">
+          <div><div class="card-title">Inkoop per afdeling × hotel</div><div class="card-sub">MTD · ex-BTW · positief = overschrijding</div></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Afdeling</th><th>Werkelijk</th><th>Budget</th><th>Δ Budget</th><th>% Δ</th><th>Top hotel</th><th style="text-align:left;">Status</th></tr></thead>
+            <tbody>
+              <tr><td>Restaurant</td><td>€ 79.080</td><td>€ 72.000</td><td><span class="value-down">+ € 7.080</span></td><td><span class="value-down">+9,8%</span></td><td>Strandhotel Zoutelande</td><td style="text-align:left;"><span class="badge badge-danger">Overschrijding</span></td></tr>
+              <tr><td>F&amp;B inkoop</td><td>€ 56.850</td><td>€ 59.000</td><td><span class="value-up">− € 2.150</span></td><td><span class="value-up">−3,6%</span></td><td>Copper &amp; Co</td><td style="text-align:left;"><span class="badge badge-success">Op koers</span></td></tr>
+              <tr><td>Housekeeping</td><td>€ 26.480</td><td>€ 26.000</td><td><span class="value-down">+ € 480</span></td><td><span class="value-flat">+1,8%</span></td><td>Bommeljé</td><td style="text-align:left;"><span class="badge badge-warning">Aandacht</span></td></tr>
+              <tr><td>Receptie</td><td>€ 14.220</td><td>€ 14.540</td><td><span class="value-up">− € 320</span></td><td><span class="value-up">−2,2%</span></td><td>Cityhotel Wood</td><td style="text-align:left;"><span class="badge badge-success">Op koers</span></td></tr>
+              <tr><td>Onderhoud</td><td>€ 8.180</td><td>€ 7.260</td><td><span class="value-down">+ € 920</span></td><td><span class="value-down">+12,7%</span></td><td>Tien Torens</td><td style="text-align:left;"><span class="badge badge-danger">Overschrijding</span></td></tr>
+              <tr><td>Algemeen</td><td>€ 2.610</td><td>€ 2.720</td><td><span class="value-up">− € 110</span></td><td><span class="value-up">−4,0%</span></td><td>Mezger Lodges</td><td style="text-align:left;"><span class="badge badge-success">Op koers</span></td></tr>
+            </tbody>
+            <tfoot><tr><td>Totaal</td><td>€ 187.420</td><td>€ 181.520</td><td><span class="value-down">+ € 5.900</span></td><td><span class="value-down">+3,3%</span></td><td>—</td><td style="text-align:left;"><span class="badge badge-warning">Aandacht</span></td></tr></tfoot>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- ========================================================== VIEW: PERSONEEL (Phase 3) -->
+    <section class="view" id="view-personeel" data-phase="3">
+
+      <div class="alert-banner warning">
+        <span class="alert-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </span>
+        <span><strong>Fase 3 — preview.</strong> Bron DISH HR. AVG: medewerkers worden weergegeven via <code style="background:rgba(0,0,0,0.06);padding:1px 4px;border-radius:3px">external_id</code> (geen namen). Vragen <strong>V21</strong> (formule), <strong>V23</strong> (uren-veld), <strong>V31</strong> (identiteit) staan open.</span>
+      </div>
+
+      <div class="kpi-grid cols-4">
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Geplande uren</div>
+          <div class="kpi-value">3.420 u</div>
+          <div class="kpi-meta">
+            <span class="delta-pill flat">+ 12 u</span>
+            <span class="kpi-context">deze week · alle afdelingen</span>
+          </div>
+          <div class="formula">SUM(hours_scheduled)</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Goedgekeurde uren</div>
+          <div class="kpi-value">3.318 u</div>
+          <div class="kpi-meta">
+            <span class="delta-pill warn">▼ −102 u</span>
+            <span class="kpi-context">vs. gepland</span>
+          </div>
+          <div class="formula">SUM(hours_approved)</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Verzuim</div>
+          <div class="kpi-value">94 u</div>
+          <div class="kpi-meta">
+            <span class="delta-pill down">▲ +18 u</span>
+            <span class="kpi-context">2,7% van gepland</span>
+          </div>
+          <div class="formula">SUM(hours_absenteeism)</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Schoonmaak / uur</div>
+          <div class="kpi-value">2,4</div>
+          <div class="kpi-meta">
+            <span class="delta-pill up">▲ +0,2</span>
+            <span class="kpi-context">target 2,5 kamers/uur</span>
+          </div>
+          <div class="formula">rooms_cleaned / hours_worked</div>
+        </article>
+      </div>
+
+      <div class="chart-grid equal">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Bezetting vs. benodigde uren — komende 7 dagen</div><div class="card-sub">Housekeeping · op basis van staffing-formule</div></div>
+            <div class="legend">
+              <span><span class="legend-dot primary"></span>Gepland</span>
+              <span><span class="legend-dot warning"></span>Benodigd</span>
+              <span><span class="legend-dot danger"></span>Tekort</span>
+            </div>
+          </div>
+          <svg class="chart-svg" viewBox="0 0 720 260" preserveAspectRatio="none">
+            <g><line class="gridline" x1="50" y1="40" x2="710" y2="40"/><line class="gridline" x1="50" y1="100" x2="710" y2="100"/><line class="gridline" x1="50" y1="160" x2="710" y2="160"/><line class="gridline" x1="50" y1="220" x2="710" y2="220"/></g>
+            <g><text class="axis-label" x="42" y="44" text-anchor="end">120u</text><text class="axis-label" x="42" y="104" text-anchor="end">90u</text><text class="axis-label" x="42" y="164" text-anchor="end">60u</text><text class="axis-label" x="42" y="224" text-anchor="end">30u</text></g>
+            <!-- Scheduled bars -->
+            <g fill="#5b7ef5" opacity="0.85">
+              <rect x="70" y="120" width="50" height="100" rx="2"/>
+              <rect x="170" y="100" width="50" height="120" rx="2"/>
+              <rect x="270" y="90" width="50" height="130" rx="2"/>
+              <rect x="370" y="80" width="50" height="140" rx="2"/>
+              <rect x="470" y="60" width="50" height="160" rx="2"/>
+              <rect x="570" y="55" width="50" height="165" rx="2"/>
+              <rect x="670" y="105" width="50" height="115" rx="2"/>
+            </g>
+            <!-- Needed line -->
+            <path class="line-needed" d="M95,115 195,90 295,75 395,65 495,40 595,38 695,95"/>
+            <!-- Day labels -->
+            <g><text class="axis-label" x="95" y="240" text-anchor="middle">ma</text><text class="axis-label" x="195" y="240" text-anchor="middle">di</text><text class="axis-label" x="295" y="240" text-anchor="middle">wo</text><text class="axis-label" x="395" y="240" text-anchor="middle">do</text><text class="axis-label" x="495" y="240" text-anchor="middle" fill="#dc2626" font-weight="600">vr</text><text class="axis-label" x="595" y="240" text-anchor="middle" fill="#dc2626" font-weight="600">za</text><text class="axis-label" x="695" y="240" text-anchor="middle">zo</text></g>
+            <!-- Shortage markers -->
+            <circle cx="495" cy="40" r="4" fill="#dc2626"/>
+            <circle cx="595" cy="38" r="4" fill="#dc2626"/>
+          </svg>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Personeelsefficiëntie — top 8 (Housekeeping)</div><div class="card-sub">Kamers schoongemaakt per uur · MTD · gepseudonimiseerd</div></div>
+          </div>
+          <div class="rank-list">
+            <div class="rank-row"><span class="rank-num">1</span><span class="rank-id">DISH-HK-0142</span><div class="rank-bar"><span style="width:96%"></span></div><span class="rank-val">3,1</span></div>
+            <div class="rank-row"><span class="rank-num">2</span><span class="rank-id">DISH-HK-0089</span><div class="rank-bar"><span style="width:90%"></span></div><span class="rank-val">2,9</span></div>
+            <div class="rank-row"><span class="rank-num">3</span><span class="rank-id">DISH-HK-0211</span><div class="rank-bar"><span style="width:84%"></span></div><span class="rank-val">2,7</span></div>
+            <div class="rank-row"><span class="rank-num">4</span><span class="rank-id">DISH-HK-0073</span><div class="rank-bar"><span style="width:78%"></span></div><span class="rank-val">2,5</span></div>
+            <div class="rank-row"><span class="rank-num">5</span><span class="rank-id">DISH-HK-0156</span><div class="rank-bar"><span style="width:72%"></span></div><span class="rank-val">2,4</span></div>
+            <div class="rank-row"><span class="rank-num">6</span><span class="rank-id">DISH-HK-0044</span><div class="rank-bar"><span style="width:66%"></span></div><span class="rank-val">2,2</span></div>
+            <div class="rank-row"><span class="rank-num">7</span><span class="rank-id">DISH-HK-0198</span><div class="rank-bar"><span style="width:58%"></span></div><span class="rank-val">2,0</span></div>
+            <div class="rank-row"><span class="rank-num">8</span><span class="rank-id">DISH-HK-0107</span><div class="rank-bar"><span style="width:50%"></span></div><span class="rank-val">1,8</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-grid equal">
+        <section class="card table-card">
+          <div class="card-header">
+            <div><div class="card-title">Uren per afdeling — MTD</div><div class="card-sub">Gepland / goedgekeurd / verzuim / inhuur</div></div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Afdeling</th><th>Gepland</th><th>Goedgekeurd</th><th>Verzuim</th><th>Inhuur</th><th>Δ G/V</th></tr></thead>
+              <tbody>
+                <tr><td>Housekeeping</td><td>1.260 u</td><td>1.224 u</td><td>32 u</td><td>48 u</td><td><span class="value-down">−36 u</span></td></tr>
+                <tr><td>Receptie</td><td>720 u</td><td>705 u</td><td>15 u</td><td>0 u</td><td><span class="value-flat">−15 u</span></td></tr>
+                <tr><td>Restaurant</td><td>980 u</td><td>948 u</td><td>32 u</td><td>24 u</td><td><span class="value-down">−32 u</span></td></tr>
+                <tr><td>F&amp;B</td><td>340 u</td><td>328 u</td><td>12 u</td><td>0 u</td><td><span class="value-flat">−12 u</span></td></tr>
+                <tr><td>Onderhoud</td><td>120 u</td><td>113 u</td><td>3 u</td><td>0 u</td><td><span class="value-flat">−7 u</span></td></tr>
+              </tbody>
+              <tfoot><tr><td>Totaal</td><td>3.420 u</td><td>3.318 u</td><td>94 u</td><td>72 u</td><td><span class="value-down">−102 u</span></td></tr></tfoot>
+            </table>
+          </div>
+        </section>
+
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Planningsintelligentie — actieve waarschuwingen</div><div class="card-sub">Drempel: tekort &gt; 8 u / dag</div></div>
+          </div>
+          <div class="alert-list">
+            <div class="alert-item danger">
+              <strong>Strandhotel Zoutelande</strong>
+              <span>Housekeeping vrijdag 8 mei: <strong>−14 u</strong> (benodigd 96 u, gepland 82 u)</span>
+              <span class="alert-meta">2 dagen vooruit</span>
+            </div>
+            <div class="alert-item danger">
+              <strong>Copper &amp; Co</strong>
+              <span>Restaurant zaterdag 9 mei: <strong>−11 u</strong> bij verwachte 142 covers</span>
+              <span class="alert-meta">3 dagen vooruit</span>
+            </div>
+            <div class="alert-item warn">
+              <strong>Bommeljé</strong>
+              <span>Receptie zondag 10 mei: <strong>−6 u</strong> (binnen drempel maar grenswaarde)</span>
+              <span class="alert-meta">4 dagen vooruit</span>
+            </div>
+            <div class="alert-item success">
+              <strong>Cityhotel Wood</strong>
+              <span>Alle afdelingen op koers voor komende 7 dagen</span>
+              <span class="alert-meta">geen actie</span>
+            </div>
+            <div class="alert-item warn">
+              <strong>Tien Torens</strong>
+              <span>Verzuim trend Housekeeping: <strong>+18 u</strong> deze week</span>
+              <span class="alert-meta">trend-signaal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================== VIEW: F&B (Phase 4) -->
+    <section class="view" id="view-fb" data-phase="4">
+
+      <div class="alert-banner warning">
+        <span class="alert-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </span>
+        <span><strong>Fase 4 — preview.</strong> POS-bron pending <strong>V16</strong>. Reconciliatie-bron <strong>G2</strong> (MEWS vs. Exact) nog niet besloten — beide getoond.</span>
+      </div>
+
+      <div class="kpi-grid cols-3">
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Ontbijt-omzet (MEWS)</div>
+          <div class="kpi-value">€&nbsp;38.420</div>
+          <div class="kpi-meta">
+            <span class="delta-pill up">▲ +5,1%</span>
+            <span class="kpi-context">SUM(revenue_breakfast)</span>
+          </div>
+          <div class="formula">daily_occupancy.revenue_breakfast</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Ontbijt-omzet (Exact)</div>
+          <div class="kpi-value">€&nbsp;37.180</div>
+          <div class="kpi-meta">
+            <span class="delta-pill up">▲ +4,2%</span>
+            <span class="kpi-context">product_group = 'breakfast'</span>
+          </div>
+          <div class="formula">SUM(amount_excl_vat) WHERE product_group = 'breakfast'</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Reconciliatie-delta</div>
+          <div class="kpi-value">+ € 1.240</div>
+          <div class="kpi-meta">
+            <span class="delta-pill warn">▲ 3,2%</span>
+            <span class="kpi-context">MEWS hoger dan Exact</span>
+          </div>
+          <div class="formula">mews − exact</div>
+        </article>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Ontbijt-reconciliatie · MTD</div><div class="card-sub">Detectie van afwijkingen tussen PMS en boekhouding</div></div>
+        </div>
+        <div class="recon-grid">
+          <div class="recon-tile">
+            <div class="recon-label">MEWS · revenue_breakfast</div>
+            <div class="recon-value">€ 38.420</div>
+          </div>
+          <div class="recon-op">−</div>
+          <div class="recon-tile">
+            <div class="recon-label">Exact · breakfast</div>
+            <div class="recon-value">€ 37.180</div>
+          </div>
+          <div class="recon-op">=</div>
+          <div class="recon-tile delta">
+            <div class="recon-label">Δ Reconciliatie</div>
+            <div class="recon-value">+ € 1.240</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-grid equal">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">POS-omzet per productcategorie</div><div class="card-sub">MTD · alle outlets · ex-BTW</div></div>
+            <div class="legend"><span><span class="legend-dot primary"></span>Werkelijk</span></div>
+          </div>
+          <svg class="chart-bar-svg" viewBox="0 0 520 280">
+            <g><line class="gridline" x1="170" y1="20" x2="170" y2="250"/><line class="gridline" x1="245" y1="20" x2="245" y2="250"/><line class="gridline" x1="320" y1="20" x2="320" y2="250"/><line class="gridline" x1="395" y1="20" x2="395" y2="250"/><line class="gridline" x1="470" y1="20" x2="470" y2="250"/></g>
+            <g><text class="axis-label" x="170" y="268" text-anchor="middle">€ 5k</text><text class="axis-label" x="245" y="268" text-anchor="middle">€ 15k</text><text class="axis-label" x="320" y="268" text-anchor="middle">€ 25k</text><text class="axis-label" x="395" y="268" text-anchor="middle">€ 35k</text><text class="axis-label" x="470" y="268" text-anchor="middle">€ 45k</text></g>
+            <text class="axis-label" x="160" y="42" text-anchor="end" fill="#0b1120" font-weight="600">Ontbijt</text><rect x="170" y="28" width="270" height="20" rx="4" fill="#5b7ef5"/><text class="axis-label" x="446" y="42" font-weight="600">€ 38.420</text>
+            <text class="axis-label" x="160" y="82" text-anchor="end" fill="#0b1120" font-weight="600">Diner</text><rect x="170" y="68" width="220" height="20" rx="4" fill="#5b7ef5"/><text class="axis-label" x="396" y="82" font-weight="600">€ 31.200</text>
+            <text class="axis-label" x="160" y="122" text-anchor="end" fill="#0b1120" font-weight="600">Lunch</text><rect x="170" y="108" width="135" height="20" rx="4" fill="#5b7ef5"/><text class="axis-label" x="311" y="122" font-weight="600">€ 18.640</text>
+            <text class="axis-label" x="160" y="162" text-anchor="end" fill="#0b1120" font-weight="600">Bar / drinks</text><rect x="170" y="148" width="100" height="20" rx="4" fill="#5b7ef5"/><text class="axis-label" x="276" y="162" font-weight="600">€ 14.080</text>
+            <text class="axis-label" x="160" y="202" text-anchor="end" fill="#0b1120" font-weight="600">Roomservice</text><rect x="170" y="188" width="60" height="20" rx="4" fill="#5b7ef5"/><text class="axis-label" x="236" y="202" font-weight="600">€ 7.420</text>
+            <text class="axis-label" x="160" y="242" text-anchor="end" fill="#0b1120" font-weight="600">Overig</text><rect x="170" y="228" width="38" height="20" rx="4" fill="#5b7ef5"/><text class="axis-label" x="214" y="242" font-weight="600">€ 4.180</text>
+          </svg>
+        </div>
+
+        <section class="card table-card">
+          <div class="card-header">
+            <div><div class="card-title">Voorraad-variantie · top categorieën</div><div class="card-sub">Verwacht verbruik vs. POS-actuals · MTD</div></div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Categorie</th><th>Verwacht</th><th>Werkelijk</th><th>Δ</th><th>% Δ</th><th style="text-align:left;">Status</th></tr></thead>
+              <tbody>
+                <tr><td>Bier (fles)</td><td>1.420</td><td>1.382</td><td><span class="value-down">−38</span></td><td><span class="value-down">−2,7%</span></td><td style="text-align:left;"><span class="badge badge-warning">Aandacht</span></td></tr>
+                <tr><td>Wijn (glas)</td><td>2.180</td><td>2.196</td><td><span class="value-up">+16</span></td><td><span class="value-flat">+0,7%</span></td><td style="text-align:left;"><span class="badge badge-success">Op koers</span></td></tr>
+                <tr><td>Frisdrank</td><td>3.040</td><td>2.918</td><td><span class="value-down">−122</span></td><td><span class="value-down">−4,0%</span></td><td style="text-align:left;"><span class="badge badge-danger">Variantie</span></td></tr>
+                <tr><td>Koffie (kop)</td><td>4.860</td><td>4.842</td><td><span class="value-flat">−18</span></td><td><span class="value-flat">−0,4%</span></td><td style="text-align:left;"><span class="badge badge-success">Op koers</span></td></tr>
+                <tr><td>Sterke drank</td><td>620</td><td>584</td><td><span class="value-down">−36</span></td><td><span class="value-down">−5,8%</span></td><td style="text-align:left;"><span class="badge badge-danger">Variantie</span></td></tr>
+                <tr><td>Snacks</td><td>1.180</td><td>1.196</td><td><span class="value-up">+16</span></td><td><span class="value-flat">+1,4%</span></td><td style="text-align:left;"><span class="badge badge-success">Op koers</span></td></tr>
+              </tbody>
+              <tfoot><tr><td>Totaal</td><td>13.300</td><td>13.118</td><td><span class="value-down">−182</span></td><td><span class="value-down">−1,4%</span></td><td style="text-align:left;"><span class="badge badge-warning">Aandacht</span></td></tr></tfoot>
+            </table>
+          </div>
+        </section>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================== STATUS BAR -->
+  <footer class="status-bar" aria-label="Data-versheid">
+    <div class="status-item"><span class="status-dot" aria-hidden="true"></span><span><strong style="color:var(--color-text-secondary);font-weight:600">MEWS</strong> · 3 min geleden</span></div>
+    <div class="status-item"><span class="status-dot" aria-hidden="true"></span><span><strong style="color:var(--color-text-secondary);font-weight:600">Atomize</strong> · 14 u geleden</span></div>
+    <div class="status-item"><span class="status-dot warn" aria-hidden="true"></span><span><strong style="color:var(--color-text-secondary);font-weight:600">Exact Online</strong> · niet actief</span></div>
+    <div class="status-item"><span class="status-dot warn" aria-hidden="true"></span><span><strong style="color:var(--color-text-secondary);font-weight:600">DISH HR</strong> · niet actief</span></div>
+    <div class="status-item"><span class="status-dot muted" aria-hidden="true"></span><span><strong style="color:var(--color-text-secondary);font-weight:600">POS</strong> · pending V16</span></div>
+    <div class="status-version">Mock-up v2 · 2026-05-02 · Alle fasen</div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast-dot"></span>
+    <span class="toast-text">Filters bijgewerkt</span>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ========================================================================
+     State
+     ====================================================================== */
+  var HOTELS = ['copper-co','bommelje','cityhotel-wood','tien-torens','strandhotel-zoutelande','mezger-lodges'];
+  var state = {
+    view: 'executive',
+    period: 'mtd',
+    hotels: HOTELS.slice(),
+    compare: 'prev-period'
+  };
+
+  var PERIOD_LABELS = {
+    'today': 'Vandaag · 2 mei 2026',
+    'yesterday': 'Gisteren · 1 mei 2026',
+    'mtd': 'MTD t/m 2 mei 2026',
+    'prev-month': 'Vorige maand · april 2026',
+    'ytd': 'YTD · 1 jan – 2 mei 2026',
+    'custom': 'Custom periode'
+  };
+  var COMPARE_LABELS = {
+    'prev-period': 'vs. vorige periode',
+    'prev-year': 'vs. vorig jaar',
+    'none': ''
+  };
+  var VIEW_TITLES = {
+    'executive': { title: 'Executive overzicht', sub: 'Portfolio · {hotelCount} hotels · {period}' },
+    'financieel': { title: 'Financieel overzicht', sub: 'Inkoop & loonkosten · {hotelCount} hotels · {period}' },
+    'personeel': { title: 'Personeel & uren', sub: 'Roosters & efficiëntie · {hotelCount} hotels · {period}' },
+    'fb': { title: 'F&B / Voorraad', sub: 'POS & ontbijt-reconciliatie · {hotelCount} hotels · {period}' }
+  };
+
+  /* Period multipliers — fictive but believable variations */
+  var PERIOD_FACTORS = {
+    'today':      { rev: 0.033, occ: -2.4, adr: 0.96, delta: 1.2 },
+    'yesterday':  { rev: 0.030, occ: -3.1, adr: 0.94, delta: 0.8 },
+    'mtd':        { rev: 1.000, occ: 0,    adr: 1.00, delta: 3.8 },
+    'prev-month': { rev: 12.40, occ: 1.2,  adr: 1.02, delta: 2.1 },
+    'ytd':        { rev: 48.20, occ: -1.8, adr: 0.98, delta: 4.5 },
+    'custom':     { rev: 5.200, occ: 0.4,  adr: 1.01, delta: 3.2 }
+  };
+
+  /* Per-hotel base contribution (rooms_revenue MTD, rooms, ADR, occupancy) */
+  var HOTEL_BASE = {
+    'strandhotel-zoutelande': { rev: 89420, rooms: 84, adr: 143.20, occ: 78.4 },
+    'copper-co':              { rev: 76150, rooms: 62, adr: 138.15, occ: 71.0 },
+    'bommelje':               { rev: 65020, rooms: 48, adr: 133.20, occ: 68.3 },
+    'cityhotel-wood':         { rev: 68310, rooms: 54, adr: 131.60, occ: 64.1 },
+    'tien-torens':            { rev: 41150, rooms: 36, adr: 127.40, occ: 59.8 },
+    'mezger-lodges':          { rev: 28330, rooms: 28, adr: 123.40, occ: 55.4 }
+  };
+
+  /* ========================================================================
+     Helpers
+     ====================================================================== */
+  function fmtEuro0(n){ return '€ ' + Math.round(n).toLocaleString('nl-NL'); }
+  function fmtEuro2(n){ return '€ ' + n.toLocaleString('nl-NL', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+  function fmtPct1(n){ return n.toLocaleString('nl-NL', {minimumFractionDigits:1, maximumFractionDigits:1}) + ' %'; }
+  function signed(n, suffix){ return (n >= 0 ? '+' : '−') + Math.abs(n).toLocaleString('nl-NL', {minimumFractionDigits:1, maximumFractionDigits:1}) + (suffix || ''); }
+
+  function classifyDelta(n){
+    if (Math.abs(n) < 0.5) return 'flat';
+    return n > 0 ? 'up' : 'down';
+  }
+  function arrow(n){
+    if (Math.abs(n) < 0.5) return '●';
+    return n > 0 ? '▲' : '▼';
+  }
+
+  /* ========================================================================
+     Computation — derive KPIs from selected hotels + period
+     ====================================================================== */
+  function computeKPIs(){
+    var period = PERIOD_FACTORS[state.period] || PERIOD_FACTORS['mtd'];
+    var selected = state.hotels.length ? state.hotels : HOTELS;
+
+    var totalRev = 0, totalRooms = 0, weightedADR = 0, weightedOCC = 0;
+    selected.forEach(function(h){
+      var b = HOTEL_BASE[h];
+      if (!b) return;
+      totalRev += b.rev * period.rev;
+      totalRooms += b.rooms;
+      weightedADR += b.adr * b.rooms;
+      weightedOCC += b.occ * b.rooms;
+    });
+    var adr = totalRooms ? (weightedADR / totalRooms) * period.adr : 0;
+    var occ = totalRooms ? (weightedOCC / totalRooms) + period.occ : 0;
+    var revpar = totalRooms ? totalRev / (totalRooms * 30) : 0;
+    if (state.period === 'today' || state.period === 'yesterday') revpar = totalRooms ? totalRev / totalRooms : 0;
+
+    /* Compare deltas vary by selected compare basis */
+    var compareScale = state.compare === 'prev-year' ? 1.6 : (state.compare === 'none' ? 0 : 1);
+    return {
+      revpar: revpar,
+      adr: adr,
+      occ: occ,
+      revenue: totalRev,
+      budgetDelta: period.delta,
+      deltas: {
+        revpar:   4.2 * compareScale + (selected.length - 6) * 0.8,
+        adr:      2.1 * compareScale + (selected.length - 6) * 0.4,
+        occupancy: 3.4 * compareScale + (selected.length - 6) * 0.5,
+        revenue:  6.8 * compareScale + (selected.length - 6) * 1.1
+      }
+    };
+  }
+
+  /* ========================================================================
+     Rendering
+     ====================================================================== */
+  var executiveView = document.getElementById('view-executive');
+
+  function renderExecutive(){
+    var k = computeKPIs();
+    var compareText = COMPARE_LABELS[state.compare];
+
+    /* KPI tiles */
+    setKpi('revpar', fmtEuro2(k.revpar), k.deltas.revpar, '%');
+    setKpi('adr', fmtEuro2(k.adr), k.deltas.adr, '%');
+    setKpi('occupancy', fmtPct1(k.occ), k.deltas.occupancy, ' pp');
+    setKpi('revenue', fmtEuro0(k.revenue), k.deltas.revenue, '%');
+
+    /* Compare-text */
+    var compareEls = executiveView.querySelectorAll('[data-compare-text]');
+    compareEls.forEach(function(el){
+      el.textContent = compareText || 'geen vergelijking';
+      el.style.opacity = compareText ? '1' : '0.5';
+    });
+
+    /* Hotel-row visibility + footer count */
+    var visibleCount = 0;
+    var footRow = document.getElementById('hotelFootRow');
+    var footCells = footRow ? footRow.cells : null;
+    var rows = document.querySelectorAll('[data-hotel-row]');
+    var sumRev = 0, sumRooms = 0;
+    rows.forEach(function(tr){
+      var h = tr.getAttribute('data-hotel-row');
+      var on = state.hotels.indexOf(h) !== -1;
+      tr.style.display = on ? '' : 'none';
+      if (on) {
+        visibleCount++;
+        var b = HOTEL_BASE[h];
+        if (b) { sumRev += b.rev; sumRooms += b.rooms; }
+      }
+    });
+    if (footCells) {
+      var period = PERIOD_FACTORS[state.period] || PERIOD_FACTORS['mtd'];
+      var portfolioRev = sumRev * period.rev;
+      var portfolioRevpar = sumRooms ? portfolioRev / (sumRooms * 30) : 0;
+      if (state.period === 'today' || state.period === 'yesterday') portfolioRevpar = sumRooms ? portfolioRev / sumRooms : 0;
+      footCells[0].innerHTML = 'Portfolio · <span data-selected-count>' + visibleCount + '</span> hotels';
+      footCells[1].textContent = fmtPct1(k.occ);
+      footCells[2].textContent = fmtEuro2(portfolioRevpar);
+      footCells[3].textContent = fmtEuro2(k.adr);
+      footCells[4].textContent = fmtEuro0(portfolioRev);
+    }
+  }
+
+  function setKpi(name, valueText, deltaPct, suffix){
+    var valueEl = executiveView.querySelector('[data-kpi="' + name + '"]');
+    var deltaEl = executiveView.querySelector('[data-delta="' + name + '"]');
+    if (valueEl) valueEl.textContent = valueText;
+    if (deltaEl) {
+      deltaEl.classList.remove('up','down','flat','warn');
+      if (state.compare === 'none') {
+        deltaEl.classList.add('flat');
+        deltaEl.textContent = '— geen vergelijking';
+        deltaEl.style.opacity = '0.5';
+      } else {
+        var cls = classifyDelta(deltaPct);
+        deltaEl.classList.add(cls);
+        deltaEl.style.opacity = '1';
+        deltaEl.textContent = arrow(deltaPct) + ' ' + signed(deltaPct, suffix);
+      }
+    }
+  }
+
+  function updatePageHeader(){
+    var meta = VIEW_TITLES[state.view] || VIEW_TITLES['executive'];
+    document.getElementById('pageTitle').textContent = meta.title;
+    var sub = meta.sub
+      .replace('{hotelCount}', state.hotels.length || 0)
+      .replace('{period}', PERIOD_LABELS[state.period] || '');
+    document.getElementById('pageSub').textContent = sub;
+  }
+
+  function showToast(text){
+    var t = document.getElementById('toast');
+    var label = t.querySelector('.toast-text');
+    if (label) label.textContent = text;
+    t.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function(){ t.classList.remove('show'); }, 1400);
+  }
+
+  /* ========================================================================
+     Wiring — interactivity
+     ====================================================================== */
+
+  /* View switching */
+  document.getElementById('mainNav').addEventListener('click', function(e){
+    var btn = e.target.closest('[data-view]');
+    if (!btn) return;
+    var v = btn.getAttribute('data-view');
+    state.view = v;
+    document.querySelectorAll('#mainNav .nav-tab').forEach(function(t){ t.classList.toggle('active', t === btn); });
+    document.querySelectorAll('.view').forEach(function(s){ s.classList.toggle('active', s.id === 'view-' + v); });
+    updatePageHeader();
+    showToast('Fase ' + (document.getElementById('view-' + v).getAttribute('data-phase')) + ' geladen');
+  });
+
+  /* Period chips (single-select) */
+  document.getElementById('periodChips').addEventListener('click', function(e){
+    var btn = e.target.closest('.chip[data-period]');
+    if (!btn) return;
+    var p = btn.getAttribute('data-period');
+    state.period = p;
+    this.querySelectorAll('.chip').forEach(function(c){ c.classList.toggle('active', c === btn); });
+    updatePageHeader();
+    if (state.view === 'executive') renderExecutive();
+    showToast('Periode: ' + (PERIOD_LABELS[p] || p));
+  });
+
+  /* Hotel chips (multi-select + toggle-all) */
+  var hotelChips = document.getElementById('hotelChips');
+  hotelChips.addEventListener('click', function(e){
+    var btn = e.target.closest('.chip');
+    if (!btn) return;
+
+    if (btn.getAttribute('data-action') === 'toggle-all-hotels') {
+      var allOn = state.hotels.length === HOTELS.length;
+      if (allOn) {
+        state.hotels = [];
+      } else {
+        state.hotels = HOTELS.slice();
+      }
+    } else {
+      var h = btn.getAttribute('data-hotel');
+      if (!h) return;
+      var idx = state.hotels.indexOf(h);
+      if (idx === -1) state.hotels.push(h); else state.hotels.splice(idx, 1);
+    }
+
+    /* Sync chip visuals */
+    this.querySelectorAll('.chip[data-hotel]').forEach(function(c){
+      c.classList.toggle('active', state.hotels.indexOf(c.getAttribute('data-hotel')) !== -1);
+    });
+    var allChip = this.querySelector('[data-action="toggle-all-hotels"]');
+    if (allChip) {
+      allChip.classList.toggle('active', state.hotels.length === HOTELS.length);
+      allChip.textContent = state.hotels.length === HOTELS.length ? 'Alle hotels' : (state.hotels.length === 0 ? 'Selecteer hotels' : state.hotels.length + ' van ' + HOTELS.length);
+    }
+
+    updatePageHeader();
+    if (state.view === 'executive') renderExecutive();
+    showToast(state.hotels.length + ' hotel' + (state.hotels.length === 1 ? '' : 's') + ' geselecteerd');
+  });
+
+  /* Compare-with segmented */
+  document.getElementById('compareSeg').addEventListener('click', function(e){
+    var btn = e.target.closest('.seg[data-compare]');
+    if (!btn) return;
+    var c = btn.getAttribute('data-compare');
+    state.compare = c;
+    this.querySelectorAll('.seg').forEach(function(s){
+      var on = s === btn;
+      s.classList.toggle('active', on);
+      s.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    if (state.view === 'executive') renderExecutive();
+    showToast('Vergelijken: ' + (COMPARE_LABELS[c] || 'geen vergelijking'));
+  });
+
+  /* Misc buttons */
+  var refreshBtn = document.getElementById('refreshBtn');
+  if (refreshBtn) refreshBtn.addEventListener('click', function(){
+    showToast('Data vernieuwd · ' + new Date().toLocaleTimeString('nl-NL'));
+  });
+  var exportBtn = document.getElementById('exportBtn');
+  if (exportBtn) exportBtn.addEventListener('click', function(){
+    showToast('Export gestart (mock-up — geen werkelijke download)');
+  });
+
+  /* Banner close */
+  var bannerClose = document.getElementById('mockBannerClose');
+  if (bannerClose) bannerClose.addEventListener('click', function(){
+    var b = document.getElementById('mockBanner');
+    if (b) b.style.display = 'none';
+  });
+
+  /* Initial render */
+  updatePageHeader();
+  renderExecutive();
+})();
+</script>
+</body>
+</html>
