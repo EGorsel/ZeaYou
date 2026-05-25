@@ -1,0 +1,233 @@
+/* ZeaYou mockup feedback widget — namespaced under [data-zy-feedback] */
+
+[data-zy-feedback] {
+  /* Local design tokens — match mockup --color-primary #5b7ef5 */
+  --zy-primary: #5b7ef5;
+  --zy-primary-hover: #4a6de8;
+  --zy-primary-light: rgba(91, 126, 245, 0.18);
+  --zy-success: #0f9060;
+  --zy-error: #dc2626;
+  --zy-surface: #ffffff;
+  --zy-text: #0b1120;
+  --zy-text-muted: #64748b;
+  --zy-border: #d8dde8;
+  --zy-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.24), 0 4px 8px -2px rgba(15, 23, 42, 0.08);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--zy-text);
+}
+
+[data-zy-feedback] *,
+[data-zy-feedback] *::before,
+[data-zy-feedback] *::after {
+  box-sizing: border-box;
+}
+
+[data-zy-feedback] [hidden] { display: none !important; }
+
+/* Floating button -------------------------------------------------------- */
+#zy-fb-button {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2147483600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 999px;
+  background: var(--zy-primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: var(--zy-shadow);
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+#zy-fb-button:hover { background: var(--zy-primary-hover); transform: translateY(-1px); }
+#zy-fb-button:active { transform: translateY(0); }
+#zy-fb-button > span[aria-hidden] { font-size: 18px; line-height: 1; }
+
+@media (max-width: 480px) {
+  #zy-fb-button { padding: 12px 14px; right: 12px; bottom: 12px; }
+  #zy-fb-button .zy-fb-button-label { display: none; }
+}
+
+body.zy-fb-selecting #zy-fb-button { display: none; }
+
+/* Welcome card ----------------------------------------------------------- */
+#zy-fb-welcome {
+  position: fixed;
+  right: 20px;
+  bottom: 84px;
+  z-index: 2147483600;
+  max-width: 320px;
+}
+.zy-fb-welcome-inner {
+  background: var(--zy-surface);
+  border: 1px solid var(--zy-border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: var(--zy-shadow);
+}
+.zy-fb-welcome-inner strong { display: block; margin-bottom: 6px; font-size: 15px; }
+.zy-fb-welcome-inner p { margin: 0 0 12px; color: var(--zy-text-muted); }
+.zy-fb-welcome-close {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: var(--zy-primary);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.zy-fb-welcome-close:hover { background: var(--zy-primary-hover); }
+@media (max-width: 480px) {
+  #zy-fb-welcome { right: 12px; bottom: 76px; left: 12px; max-width: none; }
+}
+
+/* Selection overlay ------------------------------------------------------ */
+#zy-fb-overlay {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  z-index: 2147483500;
+  cursor: crosshair;
+  background: rgba(11, 17, 32, 0.18);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+#zy-fb-overlay.zy-fb-overlay-static { cursor: default; }
+
+.zy-fb-instruction {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  background: rgba(11, 17, 32, 0.92);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 1;
+  pointer-events: none;
+}
+.zy-fb-instruction kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  margin: 0 2px;
+  font-family: inherit;
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+
+#zy-fb-selection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 2px solid var(--zy-primary);
+  background: var(--zy-primary-light);
+  border-radius: 4px;
+  pointer-events: none;
+  transform: translate(0, 0);
+}
+
+/* Modal ------------------------------------------------------------------ */
+#zy-fb-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.zy-fb-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 17, 32, 0.55);
+}
+.zy-fb-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: var(--zy-surface);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--zy-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.zy-fb-modal-card h3 { margin: 0; font-size: 18px; }
+
+.zy-fb-field { display: flex; flex-direction: column; gap: 6px; }
+.zy-fb-field > span { font-size: 13px; font-weight: 600; color: var(--zy-text-muted); }
+.zy-fb-field textarea,
+.zy-fb-field input {
+  font: inherit;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--zy-border);
+  border-radius: 8px;
+  background: #f8f9fd;
+  color: var(--zy-text);
+  resize: vertical;
+}
+.zy-fb-field textarea:focus,
+.zy-fb-field input:focus {
+  outline: none;
+  border-color: var(--zy-primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px var(--zy-primary-light);
+}
+
+.zy-fb-modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 4px; }
+.zy-fb-primary,
+.zy-fb-secondary {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font: inherit;
+}
+.zy-fb-primary { background: var(--zy-primary); color: #fff; }
+.zy-fb-primary:hover:not([disabled]) { background: var(--zy-primary-hover); }
+.zy-fb-primary[disabled] { opacity: 0.6; cursor: progress; }
+.zy-fb-secondary { background: #fff; color: var(--zy-text); border-color: var(--zy-border); }
+.zy-fb-secondary:hover { background: #f5f7fc; }
+
+.zy-fb-error {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #fee2e2;
+  color: var(--zy-error);
+  font-size: 13px;
+}
+
+/* Toast ------------------------------------------------------------------ */
+#zy-fb-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483800;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--zy-text);
+  color: #fff;
+  font-weight: 500;
+  box-shadow: var(--zy-shadow);
+  max-width: 90vw;
+}
+#zy-fb-toast[data-kind="success"] { background: var(--zy-success); }
+#zy-fb-toast[data-kind="error"]   { background: var(--zy-error); }
