@@ -3,6 +3,19 @@
 
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
+// Skip rendering when loaded inside the admin preview iframe.
+const isPreviewMode =
+  window !== window.top ||
+  new URLSearchParams(location.search).get('preview') === '1';
+
+if (isPreviewMode) {
+  console.info('[feedback-widget] preview mode — widget disabled');
+} else {
+  initFeedbackWidget();
+}
+
+function initFeedbackWidget() {
+
 const SUPABASE_URL  = 'https://lpptlfuhnyhciqhimoxa.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcHRsZnVobnloY2lxaGltb3hhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2NjMwODgsImV4cCI6MjA5MzIzOTA4OH0.rlpHJRb_n6AXyTsF_ri6w0w7P4UJkjag1VLh3yYrRFM';
 
@@ -280,3 +293,5 @@ function showToast(msg, kind = 'success') {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => { toast.hidden = true; }, 4000);
 }
+
+} // end initFeedbackWidget

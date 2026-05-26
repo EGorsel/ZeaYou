@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>ZeaYou · Feedback admin</title>
+<style>
+:root {
+  --primary: #5b7ef5;
+  --primary-hover: #4a6de8;
+  --primary-light: rgba(91, 126, 245, 0.18);
+  --bg: #f0f2f8;
+  --surface: #ffffff;
+  --surface-alt: #f8f9fd;
+  --text: #0b1120;
+  --text-muted: #64748b;
+  --text-faint: #94a3b8;
+  --border: #d8dde8;
+  --border-light: #eaedf5;
+  --success: #0f9060;
+  --success-bg: #d1fae9;
+  --warning: #b45309;
+  --warning-bg: #fef3c7;
+  --error: #dc2626;
+  --error-bg: #fee2e2;
+  --shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.24), 0 4px 8px -2px rgba(15, 23, 42, 0.08);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--bg);
+}
+[hidden] { display: none !important; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-weight: 600;
+  transition: background 0.12s ease, transform 0.08s ease;
+}
+button.primary { background: var(--primary); color: #fff; }
+button.primary:hover:not([disabled]) { background: var(--primary-hover); }
+button.primary[disabled] { opacity: 0.6; cursor: progress; }
+button.secondary { background: #fff; color: var(--text); border-color: var(--border); }
+button.secondary:hover { background: var(--surface-alt); }
+button.ghost { background: transparent; color: var(--text-muted); padding: 6px 10px; }
+button.ghost:hover { background: var(--surface-alt); color: var(--text); }
+
+input, textarea {
+  font: inherit;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-alt);
+  color: var(--text);
+}
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+
+/* ============= Login screen ============= */
+#login {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+.login-card h1 {
+  margin: 0 0 6px;
+  font-size: 22px;
+}
+.login-card .subtitle {
+  margin: 0 0 24px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.login-card .field { margin-bottom: 14px; }
+.login-card button { width: 100%; padding: 12px; }
+.login-card .error {
+  background: var(--error-bg);
+  color: var(--error);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+/* ============= Dashboard ============= */
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.topbar h1 { margin: 0; font-size: 16px; font-weight: 700; }
+.topbar h1 .accent { color: var(--primary); }
+.topbar .user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ============= Sidebar (list) ============= */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 14px 14px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.filter-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 8px 10px;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.filter-tab[aria-pressed="true"] {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+.filter-tab .count {
+  background: var(--border-light);
+  color: var(--text-muted);
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+}
+.filter-tab[aria-pressed="true"] .count {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.list-scroll {
+  overflow-y: auto;
+  flex: 1;
+  padding: 8px;
+}
+
+.feedback-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: border-color 0.12s ease, background 0.12s ease;
+  font: inherit;
+  font-weight: normal;
+  color: var(--text);
+}
+.feedback-item:hover { border-color: var(--primary); background: var(--surface-alt); }
+.feedback-item[aria-current="true"] {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+.feedback-item .meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.feedback-item .author {
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.feedback-item .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+.feedback-item[data-resolved="true"] .status-dot { background: var(--success); }
+.feedback-item .body {
+  color: var(--text);
+  font-size: 13px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ============= Detail pane ============= */
+.detail {
+  overflow-y: auto;
+  padding: 24px;
+}
+.detail-empty {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  background: var(--surface-alt);
+}
+
+.preview-section { margin-bottom: 24px; }
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.preview-header h2 { margin: 0; font-size: 14px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.preview-header .preview-meta {
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.preview-frame {
+  position: relative;
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.preview-canvas {
+  position: relative;
+  transform-origin: top left;
+  background: #fff;
+}
+.preview-canvas iframe {
+  display: block;
+  border: 0;
+}
+.selection-rect {
+  position: absolute;
+  border: 3px solid var(--primary);
+  background: rgba(91, 126, 245, 0.22);
+  box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.55);
+  pointer-events: none;
+  z-index: 2;
+}
+.preview-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-muted);
+  font-size: 13px;
+  z-index: 3;
+}
+
+.detail-card {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 18px 20px;
+  border: 1px solid var(--border-light);
+  margin-bottom: 16px;
+}
+.detail-card h3 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.detail-card .comment-body {
+  margin: 0 0 8px;
+  font-size: 15px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.detail-card .by-line {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 24px;
+  font-size: 13px;
+}
+.detail-grid dt { color: var(--text-muted); margin: 0; }
+.detail-grid dd { margin: 0; color: var(--text); font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12px; }
+.detail-grid dd a { color: var(--primary); text-decoration: none; }
+.detail-grid dd a:hover { text-decoration: underline; }
+
+.resolve-card .actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+.resolve-card .actions button { flex-shrink: 0; }
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.status-badge.open { background: var(--primary-light); color: var(--primary); }
+.status-badge.resolved { background: var(--success-bg); color: var(--success); }
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: var(--text);
+  color: #fff;
+  font-weight: 500;
+  box-shadow: var(--shadow);
+  z-index: 9999;
+}
+.toast[data-kind="success"] { background: var(--success); }
+.toast[data-kind="error"] { background: var(--error); }
+
+@media (max-width: 900px) {
+  .main-layout { grid-template-columns: 1fr; }
+  .sidebar { border-right: none; border-bottom: 1px solid var(--border); max-height: 50vh; }
+}
+</style>
+</head>
+<body>
+
+<!-- =============== Login =============== -->
+<div id="login">
+  <form class="login-card" id="login-form">
+    <h1>ZeaYou <span style="color: var(--primary);">·</span> Feedback admin</h1>
+    <p class="subtitle">Log in om feedback van de mockup-preview in te zien.</p>
+    <div class="field">
+      <label for="email">E-mailadres</label>
+      <input type="email" id="email" name="email" autocomplete="email" required>
+    </div>
+    <div class="field">
+      <label for="password">Wachtwoord</label>
+      <input type="password" id="password" name="password" autocomplete="current-password" required>
+    </div>
+    <button type="submit" class="primary" id="login-btn">Inloggen</button>
+    <div class="error" id="login-error" hidden></div>
+  </form>
+</div>
+
+<!-- =============== Dashboard =============== -->
+<div id="dashboard" hidden>
+  <header class="topbar">
+    <h1>ZeaYou <span class="accent">·</span> Feedback admin</h1>
+    <div class="user-info">
+      <span id="user-email"></span>
+      <button type="button" class="ghost" id="logout-btn">Uitloggen</button>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="filter-tabs" role="tablist">
+        <button type="button" class="filter-tab" role="tab" data-filter="open" aria-pressed="true">
+          Open <span class="count" id="count-open">0</span>
+        </button>
+        <button type="button" class="filter-tab" role="tab" data-filter="resolved" aria-pressed="false">
+          Opgelost <span class="count" id="count-resolved">0</span>
+        </button>
+        <button type="button" class="filter-tab" role="tab" data-filter="all" aria-pressed="false">
+          Alles <span class="count" id="count-all">0</span>
+        </button>
+      </div>
+      <div class="list-scroll" id="feedback-list">
+        <div class="empty-state">Bezig met laden…</div>
+      </div>
+    </aside>
+
+    <section class="detail" id="detail-pane">
+      <div class="detail-empty">Selecteer een feedback-item uit de lijst.</div>
+    </section>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL  = 'https://lpptlfuhnyhciqhimoxa.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcHRsZnVobnloY2lxaGltb3hhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2NjMwODgsImV4cCI6MjA5MzIzOTA4OH0.rlpHJRb_n6AXyTsF_ri6w0w7P4UJkjag1VLh3yYrRFM';
+const PREVIEW_MAX_WIDTH = 720; // CSS pixels for the preview canvas
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
+  db:   { schema: 'dev_portal' },
+  auth: { persistSession: true, autoRefreshToken: true }
+});
+
+// ============ DOM refs ============
+const loginScreen   = document.getElementById('login');
+const loginForm     = document.getElementById('login-form');
+const loginBtn      = document.getElementById('login-btn');
+const loginError    = document.getElementById('login-error');
+const dashboard     = document.getElementById('dashboard');
+const userEmailEl   = document.getElementById('user-email');
+const logoutBtn     = document.getElementById('logout-btn');
+const listEl        = document.getElementById('feedback-list');
+const detailEl      = document.getElementById('detail-pane');
+const filterTabs    = [...document.querySelectorAll('.filter-tab')];
+const countOpenEl   = document.getElementById('count-open');
+const countResEl    = document.getElementById('count-resolved');
+const countAllEl    = document.getElementById('count-all');
+const toastEl       = document.getElementById('toast');
+
+let allFeedback = [];
+let activeFilter = 'open';
+let selectedId = null;
+
+// ============ Auth ============
+async function bootstrap() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    showDashboard(session.user);
+  } else {
+    showLogin();
+  }
+}
+
+function showLogin() {
+  loginScreen.hidden = false;
+  dashboard.hidden = true;
+  loginError.hidden = true;
+  loginBtn.disabled = false;
+  loginBtn.textContent = 'Inloggen';
+}
+
+function showDashboard(user) {
+  loginScreen.hidden = true;
+  dashboard.hidden = false;
+  userEmailEl.textContent = user.email || '';
+  loadFeedback();
+}
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  loginBtn.disabled = true;
+  loginBtn.textContent = 'Bezig…';
+  loginError.hidden = true;
+  const email = loginForm.email.value.trim();
+  const password = loginForm.password.value;
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    loginError.textContent = 'Inloggen mislukt: ' + error.message;
+    loginError.hidden = false;
+    loginBtn.disabled = false;
+    loginBtn.textContent = 'Inloggen';
+    return;
+  }
+  showDashboard(data.user);
+});
+
+logoutBtn.addEventListener('click', async () => {
+  await supabase.auth.signOut();
+  allFeedback = [];
+  selectedId = null;
+  loginForm.reset();
+  showLogin();
+});
+
+// ============ Load + render ============
+async function loadFeedback() {
+  listEl.innerHTML = '<div class="empty-state">Bezig met laden…</div>';
+  const { data, error } = await supabase
+    .from('mockup_feedback')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) {
+    listEl.innerHTML = `<div class="empty-state">Laden mislukt: ${escapeHtml(error.message)}</div>`;
+    return;
+  }
+  allFeedback = data || [];
+  updateCounts();
+  renderList();
+}
+
+function updateCounts() {
+  const openCount = allFeedback.filter(f => !f.resolved).length;
+  const resCount  = allFeedback.filter(f => f.resolved).length;
+  countOpenEl.textContent = openCount;
+  countResEl.textContent  = resCount;
+  countAllEl.textContent  = allFeedback.length;
+}
+
+function renderList() {
+  const filtered = allFeedback.filter(f => {
+    if (activeFilter === 'open') return !f.resolved;
+    if (activeFilter === 'resolved') return f.resolved;
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    listEl.innerHTML = `<div class="empty-state">${activeFilter === 'open' ? 'Geen openstaande feedback 🎉' : 'Geen items in deze weergave.'}</div>`;
+    return;
+  }
+
+  listEl.innerHTML = filtered.map(f => `
+    <button type="button" class="feedback-item"
+            data-id="${f.id}"
+            data-resolved="${f.resolved}"
+            aria-current="${f.id === selectedId ? 'true' : 'false'}">
+      <div class="meta">
+        <span class="author">
+          <span class="status-dot"></span>
+          ${escapeHtml(f.author_name || 'Anoniem')}
+        </span>
+        <span>${formatDate(f.created_at)}</span>
+      </div>
+      <div class="body">${escapeHtml(f.comment)}</div>
+    </button>
+  `).join('');
+
+  listEl.querySelectorAll('.feedback-item').forEach(btn => {
+    btn.addEventListener('click', () => selectFeedback(btn.dataset.id));
+  });
+}
+
+filterTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    filterTabs.forEach(t => t.setAttribute('aria-pressed', String(t === tab)));
+    activeFilter = tab.dataset.filter;
+    renderList();
+  });
+});
+
+// ============ Detail ============
+function selectFeedback(id) {
+  selectedId = id;
+  renderList(); // updates aria-current highlight
+  const item = allFeedback.find(f => f.id === id);
+  if (!item) return;
+  renderDetail(item);
+}
+
+function renderDetail(f) {
+  const vw = f.viewport_w || 1280;
+  const vh = f.viewport_h || 720;
+  const scale = Math.min(1, PREVIEW_MAX_WIDTH / vw);
+  const canvasW = vw * scale;
+  const canvasH = vh * scale;
+
+  detailEl.innerHTML = `
+    <div class="preview-section">
+      <div class="preview-header">
+        <h2>Geselecteerd gebied</h2>
+        <span class="preview-meta">Viewport ${vw}×${vh}px · schaal ${(scale*100).toFixed(0)}%</span>
+      </div>
+      <div class="preview-frame" style="width: ${canvasW}px; height: ${canvasH}px;">
+        <div class="preview-canvas" style="width: ${vw}px; height: ${vh}px; transform: scale(${scale});">
+          <iframe id="preview-iframe"
+                  src="./?preview=1${escapeHtml(f.page_hash || '')}"
+                  width="${vw}" height="${vh}"
+                  title="Mockup preview"></iframe>
+          <div class="selection-rect" style="
+            left: ${f.selection_x}px;
+            top:  ${f.selection_y}px;
+            width: ${f.selection_w}px;
+            height: ${f.selection_h}px;
+          "></div>
+        </div>
+        <div class="preview-loading" id="preview-loading">Mockup laden…</div>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <h3>Feedback</h3>
+      <p class="comment-body">${escapeHtml(f.comment)}</p>
+      <p class="by-line">
+        Door <strong>${escapeHtml(f.author_name || 'Anoniem')}</strong>
+        · ${formatDateTime(f.created_at)}
+        · <span class="status-badge ${f.resolved ? 'resolved' : 'open'}">${f.resolved ? 'Opgelost' : 'Open'}</span>
+      </p>
+    </div>
+
+    <div class="detail-card">
+      <h3>Technisch</h3>
+      <dl class="detail-grid">
+        <dt>Mockup-URL</dt><dd><a href="${escapeHtml(f.mockup_url)}${escapeHtml(f.page_hash || '')}" target="_blank" rel="noopener">${escapeHtml(stripProtocol(f.mockup_url))}${escapeHtml(f.page_hash || '')}</a></dd>
+        <dt>Selectie (doc)</dt><dd>(${f.selection_x}, ${f.selection_y}) · ${f.selection_w}×${f.selection_h}</dd>
+        <dt>Viewport</dt><dd>${f.viewport_w}×${f.viewport_h}</dd>
+        <dt>DPR</dt><dd>${f.device_pixel_ratio ?? '–'}</dd>
+        <dt>User agent</dt><dd style="grid-column: 1 / -1; white-space: normal; word-break: break-word;">${escapeHtml(f.user_agent || '–')}</dd>
+      </dl>
+    </div>
+
+    ${f.resolved ? `
+      <div class="detail-card resolve-card">
+        <h3>Opgelost</h3>
+        <p style="margin: 0 0 6px;"><strong>${formatDateTime(f.resolved_at)}</strong></p>
+        ${f.resolved_note ? `<p style="margin: 0; white-space: pre-wrap;">${escapeHtml(f.resolved_note)}</p>` : '<p style="margin: 0; color: var(--text-muted);"><em>Geen notitie</em></p>'}
+        <div class="actions">
+          <button type="button" class="secondary" id="reopen-btn">Heropenen</button>
+        </div>
+      </div>
+    ` : `
+      <div class="detail-card resolve-card">
+        <h3>Markeer als opgelost</h3>
+        <label for="resolve-note">Notitie (optioneel) — bv. "aangepast in commit abc123"</label>
+        <textarea id="resolve-note" rows="2" maxlength="1000" placeholder="Wat heb je gedaan?"></textarea>
+        <div class="actions">
+          <button type="button" class="primary" id="resolve-btn">Markeer als opgelost</button>
+        </div>
+      </div>
+    `}
+  `;
+
+  wirePreviewIframe(f);
+  wireResolveActions(f);
+}
+
+function wirePreviewIframe(f) {
+  const iframe = document.getElementById('preview-iframe');
+  const loading = document.getElementById('preview-loading');
+  if (!iframe) return;
+  iframe.addEventListener('load', () => {
+    try {
+      const target = Math.max(0, f.selection_y - 80);
+      iframe.contentWindow.scrollTo({ top: target, left: 0, behavior: 'instant' });
+    } catch (err) {
+      console.warn('[admin] iframe scroll failed', err);
+    }
+    if (loading) loading.style.display = 'none';
+  });
+}
+
+function wireResolveActions(f) {
+  const resolveBtn = document.getElementById('resolve-btn');
+  const reopenBtn  = document.getElementById('reopen-btn');
+  const noteEl     = document.getElementById('resolve-note');
+
+  if (resolveBtn) {
+    resolveBtn.addEventListener('click', async () => {
+      resolveBtn.disabled = true;
+      resolveBtn.textContent = 'Bezig…';
+      const note = noteEl ? noteEl.value.trim() : '';
+      const { data, error } = await supabase
+        .from('mockup_feedback')
+        .update({
+          resolved: true,
+          resolved_at: new Date().toISOString(),
+          resolved_note: note || null
+        })
+        .eq('id', f.id)
+        .select()
+        .single();
+      if (error) {
+        showToast('Bijwerken mislukt: ' + error.message, 'error');
+        resolveBtn.disabled = false;
+        resolveBtn.textContent = 'Markeer als opgelost';
+        return;
+      }
+      replaceInList(data);
+      renderDetail(data);
+      showToast('Gemarkeerd als opgelost ✓', 'success');
+    });
+  }
+
+  if (reopenBtn) {
+    reopenBtn.addEventListener('click', async () => {
+      reopenBtn.disabled = true;
+      reopenBtn.textContent = 'Bezig…';
+      const { data, error } = await supabase
+        .from('mockup_feedback')
+        .update({ resolved: false, resolved_at: null, resolved_note: null })
+        .eq('id', f.id)
+        .select()
+        .single();
+      if (error) {
+        showToast('Heropenen mislukt: ' + error.message, 'error');
+        reopenBtn.disabled = false;
+        reopenBtn.textContent = 'Heropenen';
+        return;
+      }
+      replaceInList(data);
+      renderDetail(data);
+      showToast('Heropend ✓', 'success');
+    });
+  }
+}
+
+function replaceInList(updated) {
+  const idx = allFeedback.findIndex(f => f.id === updated.id);
+  if (idx >= 0) allFeedback[idx] = updated;
+  updateCounts();
+  renderList();
+}
+
+// ============ Helpers ============
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('nl-NL', { day: '2-digit', month: 'short' })
+       + ' ' + d.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+}
+
+function formatDateTime(iso) {
+  if (!iso) return '–';
+  const d = new Date(iso);
+  return d.toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+}
+
+function stripProtocol(url) {
+  return String(url || '').replace(/^https?:\/\//, '');
+}
+
+let toastTimer = null;
+function showToast(msg, kind = 'success') {
+  toastEl.textContent = msg;
+  toastEl.dataset.kind = kind;
+  toastEl.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toastEl.hidden = true; }, 4000);
+}
+
+// ============ Boot ============
+bootstrap();
+</script>
+</body>
+</html>
