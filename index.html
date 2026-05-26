@@ -648,6 +648,92 @@ table { border-collapse: collapse; width: 100%; }
   .rank-row { grid-template-columns: 22px 1fr 60px; }
   .rank-row .rank-bar { display: none; }
 }
+
+/* Mobile nav */
+.mobile-menu-btn { display:none; width:32px; height:32px; border-radius:var(--radius-md); align-items:center; justify-content:center; color:var(--color-text-faint); transition:background var(--transition-fast),color var(--transition-fast); flex-shrink:0; }
+.mobile-menu-btn:hover { background:rgba(255,255,255,0.06); color:var(--color-text-inverse); }
+.mobile-nav { position:fixed; top:56px; left:0; right:0; background:rgba(8,14,30,0.97); z-index:99; padding:10px 16px 16px; display:flex; flex-direction:column; gap:4px; transform:translateY(-110%); transition:transform 200ms var(--ease-out); border-bottom:1px solid var(--color-nav-border); }
+.mobile-nav.open { transform:translateY(0); }
+.mobile-nav .nav-tab { font-size:var(--font-size-md); padding:12px 16px; width:100%; justify-content:flex-start; }
+@media (max-width:1024px) { .mobile-menu-btn { display:inline-flex; } }
+@media (min-width:1025px) { .mobile-nav { display:none !important; } }
+
+/* Notifications panel */
+.notifications-panel { position:fixed; top:56px; right:0; bottom:0; width:360px; background:var(--color-surface); border-left:1px solid var(--color-border); box-shadow:var(--shadow-lg); z-index:150; overflow-y:auto; transform:translateX(100%); transition:transform var(--transition-base); }
+.notifications-panel.open { transform:translateX(0); }
+.panel-header { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; border-bottom:1px solid var(--color-border-light); font-weight:var(--font-weight-semibold); font-size:var(--font-size-md); background:var(--color-surface); position:sticky; top:0; z-index:1; }
+.panel-alerts { padding:12px; display:flex; flex-direction:column; gap:8px; }
+.notif-badge { background:var(--color-danger); color:white; font-size:9px; font-weight:700; width:16px; height:16px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; position:absolute; top:3px; right:3px; }
+.icon-btn { position:relative; }
+
+/* Chart extras */
+.line-forecast { fill:none; stroke:#f59e0b; stroke-width:2; stroke-dasharray:3 6; stroke-linejoin:round; stroke-linecap:round; }
+.legend-dot.forecast { background:#f59e0b; }
+.wf-base { fill:#94a3b8; opacity:0.45; }
+.wf-positive { fill:var(--color-success); }
+.wf-negative { fill:var(--color-danger); }
+.wf-total { fill:var(--color-primary); }
+
+/* Efficiency ranking extensions */
+.rank-row-ext { grid-template-columns:28px 1fr 80px 56px 84px; }
+.eff-badge { font-size:9px; padding:1px 5px; border-radius:var(--radius-full); font-weight:var(--font-weight-semibold); }
+.eff-above { background:var(--color-success-bg); color:var(--color-success); }
+.eff-below { background:var(--color-danger-bg); color:var(--color-danger); }
+.rank-bar-wrap { position:relative; flex:1; }
+.rank-benchmark { position:absolute; left:80%; top:-3px; bottom:-3px; width:2px; background:var(--color-danger); border-radius:1px; z-index:1; }
+.eff-individual { display:flex; flex-direction:column; gap:8px; }
+.eff-individual.hidden { display:none; }
+.eff-aggregate { display:none; flex-direction:column; gap:8px; }
+.eff-aggregate.visible { display:flex; }
+
+/* Planning + misc */
+.local-filter { background:var(--color-surface-2); border:1px solid var(--color-border-light); border-radius:var(--radius-lg); padding:10px 16px; }
+.planning-kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:var(--space-4); }
+@media (max-width:1280px) { .planning-kpi-grid { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:640px) { .planning-kpi-grid { grid-template-columns:1fr; } }
+.decision-banner { display:flex; align-items:flex-start; gap:12px; padding:12px 16px; background:#eff6ff; border:1px solid rgba(37,99,235,0.2); border-radius:var(--radius-lg); font-size:var(--font-size-sm); color:var(--color-text-secondary); }
+.decision-banner .decision-icon { color:#2563eb; flex-shrink:0; margin-top:2px; }
+.kpi-grid.cols-6 { grid-template-columns:repeat(6,1fr); }
+@media (max-width:1280px) { .kpi-grid.cols-6 { grid-template-columns:repeat(3,1fr); } }
+@media (max-width:1024px) { .kpi-grid.cols-6 { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:640px) { .kpi-grid.cols-6 { grid-template-columns:1fr; } }
+.grid-equal-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
+@media (max-width:1280px) { .grid-equal-3 { grid-template-columns:1fr 1fr; } }
+@media (max-width:640px) { .grid-equal-3 { grid-template-columns:1fr; } }
+
+/* Num cells */
+th.num, td.num { text-align:right; font-variant-numeric:tabular-nums; }
+
+/* Forecast line */
+.line-forecast { fill:none; stroke:#f59e0b; stroke-width:1.6; stroke-dasharray:5 3; }
+
+/* Planning chart */
+.plan-chart-bar-req { fill:#5b7ef5; opacity:0.25; }
+.plan-chart-bar-plan { fill:#5b7ef5; opacity:0.85; }
+.plan-chart-gap { fill:#dc2626; opacity:0.7; }
+
+/* Notifications panel */
+.notifications-panel { position:fixed; top:56px; right:0; width:340px; max-height:calc(100vh - 56px); background:var(--color-surface); border-left:1px solid var(--color-border); box-shadow:-4px 0 24px rgba(0,0,0,0.10); display:none; flex-direction:column; z-index:200; overflow-y:auto; }
+.notifications-panel.open { display:flex; }
+.panel-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--color-border); font-weight:var(--font-weight-semibold); font-size:var(--font-size-sm); }
+.panel-alerts { display:flex; flex-direction:column; gap:0; }
+.notif-item { padding:12px 16px; border-bottom:1px solid var(--color-border-light); font-size:var(--font-size-sm); }
+.notif-item:last-child { border-bottom:none; }
+.notif-item .notif-title { font-weight:var(--font-weight-semibold); margin-bottom:2px; }
+.notif-item .notif-time { font-size:11px; color:var(--color-text-muted); }
+.notif-item.notif-danger { border-left:3px solid var(--color-danger); }
+.notif-item.notif-warn { border-left:3px solid var(--color-warning); }
+.notif-item.notif-info { border-left:3px solid var(--color-primary); }
+.notif-badge { position:absolute; top:5px; right:5px; min-width:16px; height:16px; background:var(--color-danger); color:#fff; font-size:9px; font-weight:700; border-radius:var(--radius-full); display:flex; align-items:center; justify-content:center; padding:0 3px; }
+.notif-btn-wrap { position:relative; display:flex; align-items:center; }
+
+/* Threshold settings */
+.settings-panel { position:fixed; top:0; right:0; width:380px; height:100vh; background:var(--color-surface); border-left:1px solid var(--color-border); box-shadow:-4px 0 24px rgba(0,0,0,0.12); display:none; flex-direction:column; z-index:300; overflow-y:auto; }
+.settings-panel.open { display:flex; }
+.settings-section { padding:16px; border-bottom:1px solid var(--color-border-light); }
+.settings-section h4 { font-size:var(--font-size-sm); font-weight:var(--font-weight-semibold); color:var(--color-text-secondary); margin:0 0 10px; text-transform:uppercase; letter-spacing:.05em; }
+.settings-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px; font-size:var(--font-size-sm); }
+.settings-row input[type=number] { width:72px; padding:4px 8px; border:1px solid var(--color-border); border-radius:var(--radius-sm); font-size:var(--font-size-sm); text-align:right; }
 </style>
 </head>
 <body>
@@ -674,10 +760,15 @@ table { border-collapse: collapse; width: 100%; }
       <button class="nav-tab" type="button" data-view="financieel">Financieel <span class="phase-tag">Fase 2</span></button>
       <button class="nav-tab" type="button" data-view="personeel">Personeel <span class="phase-tag">Fase 3</span></button>
       <button class="nav-tab" type="button" data-view="fb">F&amp;B <span class="phase-tag">Fase 4</span></button>
+      <button class="nav-tab" type="button" data-view="planning">Planning <span class="phase-tag">Fase 5</span></button>
     </nav>
 
     <div class="topbar-right">
-      <button class="icon-btn" type="button" aria-label="Meldingen" title="3 meldingen">
+      <button class="mobile-menu-btn" type="button" id="mobileMenuBtn" aria-label="Menu" aria-expanded="false">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <button class="icon-btn" type="button" aria-label="Meldingen" id="notifBtn" title="7 meldingen">
+        <span class="notif-badge">7</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
       </button>
       <div class="role-pill" title="Wissel rol (mock-up)">
@@ -691,6 +782,15 @@ table { border-collapse: collapse; width: 100%; }
     </div>
   </header>
 
+  <!-- Mobile nav overlay -->
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobiele navigatie">
+    <button class="nav-tab active" type="button" data-view="executive">Executive <span class="phase-tag">Fase 1</span></button>
+    <button class="nav-tab" type="button" data-view="financieel">Financieel <span class="phase-tag">Fase 2</span></button>
+    <button class="nav-tab" type="button" data-view="personeel">Personeel <span class="phase-tag">Fase 3</span></button>
+    <button class="nav-tab" type="button" data-view="fb">F&amp;B <span class="phase-tag">Fase 4</span></button>
+    <button class="nav-tab" type="button" data-view="planning">Planning <span class="phase-tag">Fase 5</span></button>
+  </nav>
+
   <!-- ========================================================== SCREEN BODY -->
   <main class="screen-body">
 
@@ -700,9 +800,9 @@ table { border-collapse: collapse; width: 100%; }
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
       </span>
       <span>
-        <strong>Design mock-up v2 — alle fases.</strong>
-        Klik bovenaan op <em>Executive · Financieel · Personeel · F&amp;B</em> om tussen de fasen te wisselen.
-        De filterchips zijn klikbaar — selecties worden direct in de KPI-cijfers verwerkt. Data is fictief.
+        <strong>Design mock-up v3 — alle fases.</strong>
+        Klik bovenaan op <em>Executive · Financieel · Personeel · F&amp;B · Planning</em> om tussen de fasen te wisselen.
+        Filterchips zijn klikbaar. De 🔔 knop (rechts) opent het meldingenoverzicht. Data is fictief.
       </span>
       <button class="alert-close" type="button" aria-label="Sluit melding" id="mockBannerClose">×</button>
     </div>
@@ -766,7 +866,7 @@ table { border-collapse: collapse; width: 100%; }
     <!-- ========================================================== VIEW: EXECUTIVE (Phase 1) -->
     <section class="view active" id="view-executive" data-phase="1">
 
-      <div class="kpi-grid">
+      <div class="kpi-grid cols-6">
         <article class="kpi-card">
           <div class="kpi-eyebrow">RevPAR <span class="info-dot" title="Revenue per Available Room">i</span></div>
           <div class="kpi-value" data-kpi="revpar">€&nbsp;87,40</div>
@@ -842,6 +942,21 @@ table { border-collapse: collapse; width: 100%; }
           </svg>
           <div class="formula">(actual − budget) / budget</div>
         </article>
+
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Verkochte kamers <span class="info-dot" title="rooms_sold MTD alle hotels">i</span></div>
+          <div class="kpi-value" data-kpi="rooms-sold">3.118</div>
+          <div class="kpi-meta">
+            <span class="delta-pill up" data-delta="rooms-sold">▲ +5,2%</span>
+            <span class="kpi-context" data-compare-text>vs. vorige periode</span>
+          </div>
+          <svg class="spark" viewBox="0 0 200 36" preserveAspectRatio="none">
+            <defs><linearGradient id="sg6" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5b7ef5" stop-opacity="0.28"/><stop offset="1" stop-color="#5b7ef5" stop-opacity="0"/></linearGradient></defs>
+            <path d="M0,28 L20,26 40,23 60,21 80,19 100,17 120,15 140,13 160,11 180,9 200,8" fill="none" stroke="#5b7ef5" stroke-width="1.6"/>
+            <path d="M0,28 L20,26 40,23 60,21 80,19 100,17 120,15 140,13 160,11 180,9 200,8 L200,36 L0,36 Z" fill="url(#sg6)"/>
+          </svg>
+          <div class="formula">SUM(rooms_sold)</div>
+        </article>
       </div>
 
       <!-- Charts -->
@@ -854,7 +969,8 @@ table { border-collapse: collapse; width: 100%; }
             </div>
             <div class="legend">
               <span><span class="legend-dot primary"></span>Werkelijk</span>
-              <span><span class="legend-dot accent"></span>Budget / forecast</span>
+              <span><span class="legend-dot accent"></span>Budget</span>
+              <span><span style="display:inline-block;width:10px;height:2px;background:#f59e0b;border-radius:1px;margin-right:4px;vertical-align:middle;border-top:2px dashed #f59e0b;"></span>Forecast</span>
             </div>
           </div>
           <svg class="chart-svg" viewBox="0 0 720 260" preserveAspectRatio="none">
@@ -862,11 +978,18 @@ table { border-collapse: collapse; width: 100%; }
             <g><line class="gridline" x1="50" y1="30" x2="710" y2="30"/><line class="gridline" x1="50" y1="80" x2="710" y2="80"/><line class="gridline" x1="50" y1="130" x2="710" y2="130"/><line class="gridline" x1="50" y1="180" x2="710" y2="180"/><line class="gridline" x1="50" y1="230" x2="710" y2="230"/></g>
             <g><text class="axis-label" x="42" y="34" text-anchor="end">€ 20k</text><text class="axis-label" x="42" y="84" text-anchor="end">€ 16k</text><text class="axis-label" x="42" y="134" text-anchor="end">€ 12k</text><text class="axis-label" x="42" y="184" text-anchor="end">€ 8k</text><text class="axis-label" x="42" y="234" text-anchor="end">€ 4k</text></g>
             <g><text class="axis-label" x="60" y="252">3 apr</text><text class="axis-label" x="180" y="252">10 apr</text><text class="axis-label" x="320" y="252">17 apr</text><text class="axis-label" x="460" y="252">24 apr</text><text class="axis-label" x="600" y="252">1 mei</text><text class="axis-label" x="700" y="252" text-anchor="end">vandaag</text></g>
-            <path class="area-actual" d="M50,200 L72,195 94,185 116,200 138,180 160,175 182,165 204,170 226,150 248,160 270,140 292,150 314,135 336,125 358,140 380,115 402,120 424,105 446,110 468,90 490,100 512,85 534,95 556,75 578,85 600,70 622,80 644,60 666,70 688,55 710,65 L710,240 L50,240 Z"/>
-            <path class="line-actual" d="M50,200 L72,195 94,185 116,200 138,180 160,175 182,165 204,170 226,150 248,160 270,140 292,150 314,135 336,125 358,140 380,115 402,120 424,105 446,110 468,90 490,100 512,85 534,95 556,75 578,85 600,70 622,80 644,60 666,70 688,55 710,65"/>
+            <!-- Actual (up to today ~x=590) -->
+            <path class="area-actual" d="M50,200 L72,195 94,185 116,200 138,180 160,175 182,165 204,170 226,150 248,160 270,140 292,150 314,135 336,125 358,140 380,115 402,120 424,105 446,110 468,90 490,100 512,85 534,95 556,75 578,85 590,70 L590,240 L50,240 Z"/>
+            <path class="line-actual" d="M50,200 L72,195 94,185 116,200 138,180 160,175 182,165 204,170 226,150 248,160 270,140 292,150 314,135 336,125 358,140 380,115 402,120 424,105 446,110 468,90 490,100 512,85 534,95 556,75 578,85 590,70"/>
+            <!-- Budget line -->
             <path class="line-budget" d="M50,210 L72,205 94,200 116,195 138,190 160,185 182,180 204,175 226,170 248,165 270,160 292,155 314,150 336,145 358,140 380,135 402,130 424,125 446,120 468,115 490,110 512,105 534,100 556,95 578,90 600,85 622,80 644,75 666,70 688,67 710,68"/>
-            <circle cx="710" cy="65" r="3.5" fill="#5b7ef5" stroke="white" stroke-width="1.5"/>
+            <!-- Forecast from today onward (dashed amber) -->
+            <line x1="590" y1="30" x2="590" y2="235" stroke="#94a3b8" stroke-dasharray="2 4" stroke-width="1"/>
+            <path class="line-forecast" d="M590,70 L622,60 644,52 666,44 688,38 710,33"/>
+            <circle cx="590" cy="70" r="3.5" fill="#5b7ef5" stroke="white" stroke-width="1.5"/>
             <circle cx="710" cy="68" r="3.5" fill="#10cdb0" stroke="white" stroke-width="1.5"/>
+            <circle cx="710" cy="33" r="3.5" fill="#f59e0b" stroke="white" stroke-width="1.5"/>
+            <text class="axis-label" x="593" y="225" fill="#94a3b8" font-size="9">vandaag</text>
           </svg>
         </div>
 
@@ -951,6 +1074,91 @@ table { border-collapse: collapse; width: 100%; }
           </table>
         </div>
       </section>
+
+      <!-- M1.5: Bezetting per hotel (staafgrafiek) + M1.8: Ontbijt KPI -->
+      <div class="chart-grid">
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Bezetting per hotel — MTD</div><div class="card-sub">Procentuele bezettingsgraad per property</div></div>
+            <div class="legend"><span><span class="legend-dot primary"></span>Bezetting</span><span><span style="display:inline-block;width:10px;height:1.5px;background:#dc2626;margin-right:4px;vertical-align:middle;border-top:2px dashed #dc2626;"></span>Target (70%)</span></div>
+          </div>
+          <svg class="chart-bar-svg" viewBox="0 0 560 260">
+            <!-- grid lines -->
+            <line class="gridline" x1="60" y1="20" x2="60" y2="210"/>
+            <line class="gridline" x1="60" y1="20" x2="540" y2="20"/>
+            <line class="gridline" x1="60" y1="68" x2="540" y2="68"/>
+            <line class="gridline" x1="60" y1="116" x2="540" y2="116"/>
+            <line class="gridline" x1="60" y1="164" x2="540" y2="164"/>
+            <line class="gridline" x1="60" y1="210" x2="540" y2="210"/>
+            <!-- Y labels -->
+            <text class="axis-label" x="55" y="24" text-anchor="end">100%</text>
+            <text class="axis-label" x="55" y="72" text-anchor="end">75%</text>
+            <text class="axis-label" x="55" y="120" text-anchor="end">50%</text>
+            <text class="axis-label" x="55" y="168" text-anchor="end">25%</text>
+            <text class="axis-label" x="55" y="214" text-anchor="end">0%</text>
+            <!-- bars: height = occ% * (190/100) from y=210 -->
+            <!-- Zoutelande 78.4% => h=149 -->
+            <rect x="76" y="61" width="55" height="149" rx="3" fill="#5b7ef5" opacity="0.85"/>
+            <text class="axis-label" x="103" y="55" text-anchor="middle" font-weight="600">78,4%</text>
+            <text class="axis-label" x="103" y="225" text-anchor="middle">Zoutelande</text>
+            <!-- Copper 71% => h=135 -->
+            <rect x="152" y="77" width="55" height="133" rx="3" fill="#5b7ef5" opacity="0.85"/>
+            <text class="axis-label" x="179" y="71" text-anchor="middle" font-weight="600">71,0%</text>
+            <text class="axis-label" x="179" y="225" text-anchor="middle">Copper</text>
+            <!-- Bommelje 68.3% => h=130 -->
+            <rect x="228" y="80" width="55" height="130" rx="3" fill="#5b7ef5" opacity="0.85"/>
+            <text class="axis-label" x="255" y="74" text-anchor="middle" font-weight="600">68,3%</text>
+            <text class="axis-label" x="255" y="225" text-anchor="middle">Bommeljé</text>
+            <!-- Cityhotel 64.1% => h=122 -->
+            <rect x="304" y="88" width="55" height="122" rx="3" fill="#94a3b8" opacity="0.85"/>
+            <text class="axis-label" x="331" y="82" text-anchor="middle" font-weight="600">64,1%</text>
+            <text class="axis-label" x="331" y="225" text-anchor="middle">Wood</text>
+            <!-- Tien Torens 59.8% => h=114 -->
+            <rect x="380" y="96" width="55" height="114" rx="3" fill="#94a3b8" opacity="0.85"/>
+            <text class="axis-label" x="407" y="90" text-anchor="middle" font-weight="600">59,8%</text>
+            <text class="axis-label" x="407" y="225" text-anchor="middle">T.Torens</text>
+            <!-- Mezger 55.4% => h=105 -->
+            <rect x="456" y="105" width="55" height="105" rx="3" fill="#94a3b8" opacity="0.85"/>
+            <text class="axis-label" x="483" y="99" text-anchor="middle" font-weight="600">55,4%</text>
+            <text class="axis-label" x="483" y="225" text-anchor="middle">Mezger</text>
+            <!-- Target line at 70% => y = 210 - (70*1.9) = 210-133 = 77 -->
+            <line x1="60" y1="77" x2="540" y2="77" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 4"/>
+            <text class="axis-label" x="543" y="75" fill="#dc2626" font-weight="600">70%</text>
+          </svg>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">F&amp;B omzet per productcategorie — MTD</div><div class="card-sub">POS-bron Lightspeed · ex-BTW · alle outlets</div></div>
+          </div>
+          <!-- M1.6/M1.7: Donut + breakdown tabel -->
+          <div style="display:flex;gap:16px;align-items:center;padding:8px 8px 0;">
+            <svg viewBox="0 0 160 160" style="width:140px;height:140px;flex-shrink:0;">
+              <!-- Donut segments: Drank 38%, Keuken 29%, Ontbijt 22%, Overig 11% -->
+              <!-- Circumference of r=60 = 376.99 -->
+              <circle cx="80" cy="80" r="60" fill="none" stroke="#5b7ef5" stroke-width="28" stroke-dasharray="143.3 233.7" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
+              <circle cx="80" cy="80" r="60" fill="none" stroke="#10cdb0" stroke-width="28" stroke-dasharray="109.3 267.7" stroke-dashoffset="-143.3" transform="rotate(-90 80 80)"/>
+              <circle cx="80" cy="80" r="60" fill="none" stroke="#f59e0b" stroke-width="28" stroke-dasharray="83.0 294.0" stroke-dashoffset="-252.6" transform="rotate(-90 80 80)"/>
+              <circle cx="80" cy="80" r="60" fill="none" stroke="#94a3b8" stroke-width="28" stroke-dasharray="41.5 335.5" stroke-dashoffset="-335.6" transform="rotate(-90 80 80)"/>
+              <circle cx="80" cy="80" r="42" fill="white"/>
+              <text x="80" y="77" text-anchor="middle" font-size="11" font-weight="700" fill="#0b1120">€ 103k</text>
+              <text x="80" y="90" text-anchor="middle" font-size="9" fill="#64748b">totaal F&amp;B</text>
+            </svg>
+            <div style="flex:1;font-size:12px;display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:2px;background:#5b7ef5;flex-shrink:0;"></span><span style="flex:1;">Drank</span><strong>€ 39.140</strong><span style="color:#64748b;">38%</span></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:2px;background:#10cdb0;flex-shrink:0;"></span><span style="flex:1;">Keuken</span><strong>€ 29.870</strong><span style="color:#64748b;">29%</span></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:2px;background:#f59e0b;flex-shrink:0;"></span><span style="flex:1;">Ontbijt</span><strong>€ 22.660</strong><span style="color:#64748b;">22%</span></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:2px;background:#94a3b8;flex-shrink:0;"></span><span style="flex:1;">Overig</span><strong>€ 11.330</strong><span style="color:#64748b;">11%</span></div>
+              <div style="border-top:1px solid var(--color-border-light);padding-top:6px;display:flex;gap:8px;align-items:center;">
+                <span style="flex:1;font-weight:600;">Ontbijt coverage</span>
+                <span class="delta-pill up" style="font-size:10px;">▲ 84,2%</span>
+              </div>
+              <div style="font-size:10px;color:var(--color-text-muted);">M1.8: rooms_breakfast / rooms_sold · target ≥ 80%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ========================================================== VIEW: FINANCIEEL (Phase 2) -->
@@ -1069,10 +1277,120 @@ table { border-collapse: collapse; width: 100%; }
           </table>
         </div>
       </section>
+
+      <!-- M2.4 + M2.5: Inkoop per productgroep (commodity-niveau) -->
+      <section class="card table-card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Inkoop per productgroep</div>
+            <div class="card-sub">Commodity-niveau · MTD · ex-BTW · bron Exact Online (purchase_invoice.product_group)</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Productgroep</th><th>Werkelijk</th><th>Budget</th><th>Forecast</th><th>Δ Budget (€)</th><th>Δ Budget (%)</th><th style="text-align:left;">Status</th></tr></thead>
+            <tbody>
+              <tr><td>Drank hoog BTW (21%)</td><td>€ 34.180</td><td>€ 32.000</td><td>€ 33.100</td><td><span class="value-down">+ € 2.180</span></td><td><span class="value-down">+6,8%</span></td><td style="text-align:left;"><span class="badge badge-danger">Overschrijding</span></td></tr>
+              <tr><td>Drank laag BTW (9%)</td><td>€ 22.640</td><td>€ 23.500</td><td>€ 23.200</td><td><span class="value-up">− € 860</span></td><td><span class="value-up">−3,7%</span></td><td style="text-align:left;"><span class="badge badge-success">Op koers</span></td></tr>
+              <tr><td>Ontbijt</td><td>€ 41.280</td><td>€ 40.000</td><td>€ 40.800</td><td><span class="value-down">+ € 1.280</span></td><td><span class="value-flat">+3,2%</span></td><td style="text-align:left;"><span class="badge badge-warning">Aandacht</span></td></tr>
+              <tr><td>Keuken</td><td>€ 58.320</td><td>€ 55.800</td><td>€ 57.100</td><td><span class="value-down">+ € 2.520</span></td><td><span class="value-down">+4,5%</span></td><td style="text-align:left;"><span class="badge badge-danger">Overschrijding</span></td></tr>
+              <tr><td>Non-food</td><td>€ 18.640</td><td>€ 19.200</td><td>€ 18.900</td><td><span class="value-up">− € 560</span></td><td><span class="value-up">−2,9%</span></td><td style="text-align:left;"><span class="badge badge-success">Op koers</span></td></tr>
+              <tr><td>Huisvestinglasten</td><td>€ 12.360</td><td>€ 12.000</td><td>€ 12.200</td><td><span class="value-down">+ € 360</span></td><td><span class="value-flat">+3,0%</span></td><td style="text-align:left;"><span class="badge badge-warning">Aandacht</span></td></tr>
+            </tbody>
+            <tfoot><tr><td>Totaal</td><td>€ 187.420</td><td>€ 182.500</td><td>€ 185.300</td><td><span class="value-down">+ € 4.920</span></td><td><span class="value-down">+2,7%</span></td><td style="text-align:left;"><span class="badge badge-warning">Aandacht</span></td></tr></tfoot>
+          </table>
+        </div>
+      </section>
+
+      <!-- M2.6: Loonkosten % omzet per afdeling -->
+      <section class="card table-card">
+        <div class="card-header">
+          <div><div class="card-title">Loonkosten % omzet — per afdeling</div><div class="card-sub">MTD · doelstelling per afdeling · bron DISH + MEWS</div></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Afdeling</th><th>Loonkosten</th><th>Omzet (toebedeeld)</th><th>% Omzet</th><th>Doel</th><th style="text-align:left;">Status</th></tr></thead>
+            <tbody>
+              <tr><td>Restaurant</td><td>€ 48.200</td><td>€ 130.400</td><td><span class="value-down">37,0%</span></td><td>≤ 35%</td><td style="text-align:left;"><span class="badge badge-danger">Boven doel</span></td></tr>
+              <tr><td>Housekeeping</td><td>€ 25.560</td><td>€ 412.380</td><td><span class="value-up">6,2%</span></td><td>≤ 8%</td><td style="text-align:left;"><span class="badge badge-success">Op koers</span></td></tr>
+              <tr><td>Receptie</td><td>€ 18.720</td><td>€ 412.380</td><td><span class="value-up">4,5%</span></td><td>≤ 6%</td><td style="text-align:left;"><span class="badge badge-success">Op koers</span></td></tr>
+              <tr><td>F&amp;B</td><td>€ 8.840</td><td>€ 109.660</td><td><span class="value-flat">8,1%</span></td><td>≤ 8%</td><td style="text-align:left;"><span class="badge badge-warning">Aandacht</span></td></tr>
+              <tr><td>Onderhoud</td><td>€ 4.200</td><td>€ 412.380</td><td><span class="value-up">1,0%</span></td><td>≤ 2%</td><td style="text-align:left;"><span class="badge badge-success">Op koers</span></td></tr>
+            </tbody>
+            <tfoot><tr><td>Portfolio totaal</td><td>€ 129.480</td><td>€ 412.380</td><td><span class="value-flat">31,4%</span></td><td>≤ 32%</td><td style="text-align:left;"><span class="badge badge-success">Op koers</span></td></tr></tfoot>
+          </table>
+        </div>
+      </section>
+
+      <!-- M2.7: Watervaldiagram — maandvariatie t.o.v. budget -->
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Maandvariatie t.o.v. budget — YTD (waterval)</div><div class="card-sub">Maandelijkse afwijking kameromzet · positief = boven budget</div></div>
+          <div class="legend">
+            <span><span class="legend-dot success"></span>Boven budget</span>
+            <span><span class="legend-dot danger"></span>Onder budget</span>
+            <span><span class="legend-dot neutral"></span>Budget referentie</span>
+          </div>
+        </div>
+        <svg class="chart-bar-svg" viewBox="0 0 620 260">
+          <!-- Y-axis gridlines -->
+          <line class="gridline" x1="80" y1="30" x2="590" y2="30"/>
+          <line class="gridline" x1="80" y1="90" x2="590" y2="90"/>
+          <line class="gridline" x1="80" y1="150" x2="590" y2="150"/>
+          <line class="gridline" x1="80" y1="210" x2="590" y2="210"/>
+          <!-- Y-axis labels -->
+          <text class="axis-label" x="74" y="34" text-anchor="end">+€ 6k</text>
+          <text class="axis-label" x="74" y="94" text-anchor="end">+€ 3k</text>
+          <text class="axis-label" x="74" y="154" text-anchor="end">€ 0</text>
+          <text class="axis-label" x="74" y="214" text-anchor="end">−€ 3k</text>
+          <!-- Budget baseline (zero line) -->
+          <line x1="80" y1="150" x2="590" y2="150" stroke="#10cdb0" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <text class="axis-label" x="590" y="146" text-anchor="end" fill="#10cdb0" font-weight="600">budget</text>
+          <!-- Jan: +€ 702 above budget → bar goes UP from y=150 -->
+          <rect class="wf-positive" x="100" y="136" width="70" height="14" rx="3"/>
+          <text class="axis-label" x="135" y="130" text-anchor="middle" fill="#0f9060" font-weight="600">+€ 702</text>
+          <text class="axis-label" x="135" y="245" text-anchor="middle" font-weight="600">Jan</text>
+          <!-- Feb: −€ 2.000 below budget → bar goes DOWN -->
+          <rect class="wf-negative" x="200" y="150" width="70" height="40" rx="3"/>
+          <text class="axis-label" x="235" y="205" text-anchor="middle" fill="#dc2626" font-weight="600">−€ 2.000</text>
+          <text class="axis-label" x="235" y="245" text-anchor="middle" font-weight="600">Feb</text>
+          <!-- Mar: +€ 5.000 above budget -->
+          <rect class="wf-positive" x="300" y="50" width="70" height="100" rx="3"/>
+          <text class="axis-label" x="335" y="44" text-anchor="middle" fill="#0f9060" font-weight="600">+€ 5.000</text>
+          <text class="axis-label" x="335" y="245" text-anchor="middle" font-weight="600">Mrt</text>
+          <!-- Apr: +€ 2.406 above budget -->
+          <rect class="wf-positive" x="400" y="102" width="70" height="48" rx="3"/>
+          <text class="axis-label" x="435" y="96" text-anchor="middle" fill="#0f9060" font-weight="600">+€ 2.406</text>
+          <text class="axis-label" x="435" y="245" text-anchor="middle" font-weight="600">Apr</text>
+          <!-- YTD totaal: +€ 6.108 cumulative -->
+          <rect class="wf-total" x="510" y="28" width="70" height="122" rx="3" opacity="0.85"/>
+          <text class="axis-label" x="545" y="22" text-anchor="middle" fill="#5b7ef5" font-weight="600">+€ 6.108</text>
+          <text class="axis-label" x="545" y="245" text-anchor="middle" font-weight="600">YTD tot.</text>
+          <!-- Connector dots -->
+          <circle cx="170" cy="136" r="3" fill="#0f9060"/>
+          <circle cx="200" cy="150" r="3" fill="#dc2626"/>
+          <circle cx="370" cy="50" r="3" fill="#0f9060"/>
+          <circle cx="470" cy="102" r="3" fill="#0f9060"/>
+        </svg>
+      </div>
     </section>
 
     <!-- ========================================================== VIEW: PERSONEEL (Phase 3) -->
     <section class="view" id="view-personeel" data-phase="3">
+
+      <div class="local-filter">
+        <div class="filter-row">
+          <span class="filter-label">Afdeling</span>
+          <div class="chip-group" id="deptChips">
+            <button class="chip toggle-all active" type="button" data-action="toggle-all-depts">Alle afdelingen</button>
+            <button class="chip active" type="button" data-dept="housekeeping"><span class="chip-check">✓</span>Housekeeping</button>
+            <button class="chip active" type="button" data-dept="receptie"><span class="chip-check">✓</span>Receptie</button>
+            <button class="chip active" type="button" data-dept="restaurant"><span class="chip-check">✓</span>Restaurant</button>
+            <button class="chip active" type="button" data-dept="fb-dept"><span class="chip-check">✓</span>F&amp;B</button>
+            <button class="chip active" type="button" data-dept="onderhoud"><span class="chip-check">✓</span>Onderhoud</button>
+          </div>
+        </div>
+      </div>
 
       <div class="alert-banner warning">
         <span class="alert-icon" aria-hidden="true">
@@ -1155,17 +1473,42 @@ table { border-collapse: collapse; width: 100%; }
 
         <div class="card">
           <div class="card-header">
-            <div><div class="card-title">Personeelsefficiëntie — top 8 (Housekeeping)</div><div class="card-sub">Kamers schoongemaakt per uur · MTD · gepseudonimiseerd</div></div>
+            <div><div class="card-title">Personeelsefficiëntie — Housekeeping</div><div class="card-sub">Kamers schoongemaakt per uur · MTD · gepseudonimiseerd</div></div>
+            <div class="segmented" role="tablist" id="effToggle" style="font-size:11px;">
+              <button class="seg active" type="button" role="tab" aria-selected="true" data-eff="individual">Individueel</button>
+              <button class="seg" type="button" role="tab" aria-selected="false" data-eff="aggregate">Per hotel</button>
+            </div>
           </div>
-          <div class="rank-list">
-            <div class="rank-row"><span class="rank-num">1</span><span class="rank-id">DISH-HK-0142</span><div class="rank-bar"><span style="width:96%"></span></div><span class="rank-val">3,1</span></div>
-            <div class="rank-row"><span class="rank-num">2</span><span class="rank-id">DISH-HK-0089</span><div class="rank-bar"><span style="width:90%"></span></div><span class="rank-val">2,9</span></div>
-            <div class="rank-row"><span class="rank-num">3</span><span class="rank-id">DISH-HK-0211</span><div class="rank-bar"><span style="width:84%"></span></div><span class="rank-val">2,7</span></div>
-            <div class="rank-row"><span class="rank-num">4</span><span class="rank-id">DISH-HK-0073</span><div class="rank-bar"><span style="width:78%"></span></div><span class="rank-val">2,5</span></div>
-            <div class="rank-row"><span class="rank-num">5</span><span class="rank-id">DISH-HK-0156</span><div class="rank-bar"><span style="width:72%"></span></div><span class="rank-val">2,4</span></div>
-            <div class="rank-row"><span class="rank-num">6</span><span class="rank-id">DISH-HK-0044</span><div class="rank-bar"><span style="width:66%"></span></div><span class="rank-val">2,2</span></div>
-            <div class="rank-row"><span class="rank-num">7</span><span class="rank-id">DISH-HK-0198</span><div class="rank-bar"><span style="width:58%"></span></div><span class="rank-val">2,0</span></div>
-            <div class="rank-row"><span class="rank-num">8</span><span class="rank-id">DISH-HK-0107</span><div class="rank-bar"><span style="width:50%"></span></div><span class="rank-val">1,8</span></div>
+          <!-- Individual view -->
+          <div class="eff-individual" id="effIndividual">
+            <div style="font-size:11px;color:var(--color-text-muted);padding:0 12px 4px;">Portfolio gem. 2,4 k/u · benchmark lijn = target 2,5</div>
+            <div class="rank-list">
+              <div class="rank-row-ext"><span class="rank-num">1</span><span class="rank-id">DISH-HK-0142</span><div class="rank-bar-wrap"><div class="rank-bar"><span style="width:96%"></span></div><div class="rank-benchmark"></div></div><span class="rank-val">3,1</span><span class="eff-badge eff-above">+0,7</span></div>
+              <div class="rank-row-ext"><span class="rank-num">2</span><span class="rank-id">DISH-HK-0089</span><div class="rank-bar-wrap"><div class="rank-bar"><span style="width:90%"></span></div><div class="rank-benchmark"></div></div><span class="rank-val">2,9</span><span class="eff-badge eff-above">+0,4</span></div>
+              <div class="rank-row-ext"><span class="rank-num">3</span><span class="rank-id">DISH-HK-0211</span><div class="rank-bar-wrap"><div class="rank-bar"><span style="width:84%"></span></div><div class="rank-benchmark"></div></div><span class="rank-val">2,7</span><span class="eff-badge eff-above">+0,2</span></div>
+              <div class="rank-row-ext"><span class="rank-num">4</span><span class="rank-id">DISH-HK-0073</span><div class="rank-bar-wrap"><div class="rank-bar"><span style="width:78%"></span></div><div class="rank-benchmark"></div></div><span class="rank-val">2,5</span><span class="eff-badge eff-above">+0,1</span></div>
+              <div class="rank-row-ext"><span class="rank-num">5</span><span class="rank-id">DISH-HK-0156</span><div class="rank-bar-wrap"><div class="rank-bar"><span style="width:72%"></span></div><div class="rank-benchmark"></div></div><span class="rank-val">2,4</span><span class="eff-badge eff-below">−0,1</span></div>
+              <div class="rank-row-ext"><span class="rank-num">6</span><span class="rank-id">DISH-HK-0044</span><div class="rank-bar-wrap"><div class="rank-bar"><span style="width:66%"></span></div><div class="rank-benchmark"></div></div><span class="rank-val">2,2</span><span class="eff-badge eff-below">−0,3</span></div>
+              <div class="rank-row-ext"><span class="rank-num">7</span><span class="rank-id">DISH-HK-0198</span><div class="rank-bar-wrap"><div class="rank-bar"><span style="width:58%"></span></div><div class="rank-benchmark"></div></div><span class="rank-val">2,0</span><span class="eff-badge eff-below">−0,5</span></div>
+              <div class="rank-row-ext"><span class="rank-num">8</span><span class="rank-id">DISH-HK-0107</span><div class="rank-bar-wrap"><div class="rank-bar"><span style="width:50%"></span></div><div class="rank-benchmark"></div></div><span class="rank-val">1,8</span><span class="eff-badge eff-below">−0,7</span></div>
+            </div>
+          </div>
+          <!-- Aggregate view (per hotel) -->
+          <div class="eff-aggregate" id="effAggregate">
+            <div class="table-wrap" style="padding:0 4px;">
+              <table class="data-table">
+                <thead><tr><th>Hotel</th><th class="num">Gem. k/u</th><th class="num">Min</th><th class="num">Max</th><th class="num">Δ portfolio</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>Strandhotel Zoutelande</td><td class="num">2,7</td><td class="num">1,9</td><td class="num">3,1</td><td class="num"><span class="value-up">+0,3</span></td><td><span class="eff-badge eff-above">Boven gem.</span></td></tr>
+                  <tr><td>Copper &amp; Co</td><td class="num">2,6</td><td class="num">2,0</td><td class="num">2,9</td><td class="num"><span class="value-up">+0,2</span></td><td><span class="eff-badge eff-above">Boven gem.</span></td></tr>
+                  <tr><td>Bommeljé</td><td class="num">2,4</td><td class="num">1,9</td><td class="num">2,8</td><td class="num"><span class="value-flat">0,0</span></td><td><span style="font-size:9px;padding:1px 5px;border-radius:999px;background:var(--color-border-light);color:var(--color-text-muted)">Gemiddeld</span></td></tr>
+                  <tr><td>Cityhotel Wood</td><td class="num">2,3</td><td class="num">1,8</td><td class="num">2,7</td><td class="num"><span class="value-down">−0,1</span></td><td><span class="eff-badge eff-below">Onder gem.</span></td></tr>
+                  <tr><td>Tien Torens</td><td class="num">2,2</td><td class="num">1,7</td><td class="num">2,6</td><td class="num"><span class="value-down">−0,2</span></td><td><span class="eff-badge eff-below">Onder gem.</span></td></tr>
+                  <tr><td>Mezger Lodges</td><td class="num">2,1</td><td class="num">1,6</td><td class="num">2,5</td><td class="num"><span class="value-down">−0,3</span></td><td><span class="eff-badge eff-below">Onder gem.</span></td></tr>
+                </tbody>
+                <tfoot><tr><td>Portfolio</td><td class="num"><strong>2,4</strong></td><td class="num">1,6</td><td class="num">3,1</td><td class="num">—</td><td></td></tr></tfoot>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -1223,6 +1566,110 @@ table { border-collapse: collapse; width: 100%; }
           </div>
         </div>
       </div>
+
+      <!-- M5.5: HK efficiëntie 4-weken trend -->
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">HK efficiëntie — 4-weken trend</div><div class="card-sub">Portfolio gemiddelde vs. target 2,5 k/u · wekelijks</div></div>
+          <div class="legend">
+            <span><span class="legend-dot primary"></span>Portfolio gem.</span>
+            <span><span style="display:inline-block;width:10px;height:0;border-top:2px dashed #dc2626;margin-right:4px;vertical-align:middle;"></span>Target (2,5)</span>
+          </div>
+        </div>
+        <svg class="chart-svg" viewBox="0 0 720 200" preserveAspectRatio="none">
+          <g><line class="gridline" x1="60" y1="20" x2="700" y2="20"/><line class="gridline" x1="60" y1="60" x2="700" y2="60"/><line class="gridline" x1="60" y1="100" x2="700" y2="100"/><line class="gridline" x1="60" y1="140" x2="700" y2="140"/><line class="gridline" x1="60" y1="180" x2="700" y2="180"/></g>
+          <g><text class="axis-label" x="54" y="24" text-anchor="end">3,5</text><text class="axis-label" x="54" y="64" text-anchor="end">3,0</text><text class="axis-label" x="54" y="104" text-anchor="end">2,5</text><text class="axis-label" x="54" y="144" text-anchor="end">2,0</text><text class="axis-label" x="54" y="184" text-anchor="end">1,5</text></g>
+          <!-- Week labels -->
+          <g><text class="axis-label" x="200" y="198" text-anchor="middle">W14 (7 apr)</text><text class="axis-label" x="360" y="198" text-anchor="middle">W15 (14 apr)</text><text class="axis-label" x="520" y="198" text-anchor="middle">W16 (21 apr)</text><text class="axis-label" x="680" y="198" text-anchor="middle">W17 (28 apr)</text></g>
+          <!-- Area -->
+          <defs><linearGradient id="hkGrad" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5b7ef5" stop-opacity="0.18"/><stop offset="1" stop-color="#5b7ef5" stop-opacity="0"/></linearGradient></defs>
+          <path fill="url(#hkGrad)" d="M200,120 360,108 520,100 680,96 L680,180 200,180 Z"/>
+          <!-- Portfolio avg line: 2.2 @W14, 2.3 @W15, 2.4 @W16, 2.4 @W17 -->
+          <!-- y = 180 - (val - 1.5) * 80 -->
+          <!-- 2.2 → 180 - 0.7*80 = 124; 2.3→116; 2.4→108; 2.4→108 -->
+          <path class="line-actual" d="M200,124 360,116 520,108 680,96"/>
+          <!-- Target line at 2.5 → y=100 -->
+          <line x1="60" y1="100" x2="700" y2="100" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <text class="axis-label" x="703" y="98" fill="#dc2626" font-weight="600">2,5</text>
+          <!-- Data points -->
+          <circle cx="200" cy="124" r="4" fill="#5b7ef5" stroke="white" stroke-width="2"/>
+          <text class="axis-label" x="200" y="115" text-anchor="middle" font-size="10" font-weight="600">2,2</text>
+          <circle cx="360" cy="116" r="4" fill="#5b7ef5" stroke="white" stroke-width="2"/>
+          <text class="axis-label" x="360" y="107" text-anchor="middle" font-size="10" font-weight="600">2,3</text>
+          <circle cx="520" cy="108" r="4" fill="#5b7ef5" stroke="white" stroke-width="2"/>
+          <text class="axis-label" x="520" y="99" text-anchor="middle" font-size="10" font-weight="600">2,4</text>
+          <circle cx="680" cy="96" r="4" fill="#5b7ef5" stroke="white" stroke-width="2"/>
+          <text class="axis-label" x="680" y="87" text-anchor="middle" font-size="10" font-weight="600">2,4</text>
+        </svg>
+      </div>
+
+      <!-- M3.1–M3.5 + M3.10: Loonkosten per afdeling -->
+      <section class="card table-card">
+        <div class="card-header">
+          <div><div class="card-title">Loonkosten per afdeling — MTD</div><div class="card-sub">Geroosterd / goedgekeurd / verzuim / inhuur / totaal · ex. BTW</div></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Afdeling</th>
+                <th class="num">Geroosterd</th>
+                <th class="num">Goedgekeurd</th>
+                <th class="num">Acc. / rooster</th>
+                <th class="num">Verzuimkosten</th>
+                <th class="num">Uitzendkosten</th>
+                <th class="num">Totaal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Housekeeping</td><td class="num">€ 18.144</td><td class="num">€ 17.625</td><td class="num">97,1%</td><td class="num"><span class="value-down">€ 1.152</span></td><td class="num">€ 1.920</td><td class="num"><strong>€ 20.697</strong></td></tr>
+              <tr><td>Receptie</td><td class="num">€ 10.368</td><td class="num">€ 10.152</td><td class="num">97,9%</td><td class="num"><span class="value-flat">€ 432</span></td><td class="num">€ 0</td><td class="num"><strong>€ 10.584</strong></td></tr>
+              <tr><td>Restaurant</td><td class="num">€ 14.112</td><td class="num">€ 13.651</td><td class="num">96,7%</td><td class="num"><span class="value-down">€ 832</span></td><td class="num">€ 720</td><td class="num"><strong>€ 15.203</strong></td></tr>
+              <tr><td>F&amp;B</td><td class="num">€ 4.896</td><td class="num">€ 4.723</td><td class="num">96,5%</td><td class="num"><span class="value-flat">€ 288</span></td><td class="num">€ 0</td><td class="num"><strong>€ 5.011</strong></td></tr>
+              <tr><td>Onderhoud</td><td class="num">€ 1.728</td><td class="num">€ 1.627</td><td class="num">94,2%</td><td class="num"><span class="value-flat">€ 48</span></td><td class="num">€ 0</td><td class="num"><strong>€ 1.675</strong></td></tr>
+            </tbody>
+            <tfoot>
+              <tr><td>Totaal</td><td class="num">€ 49.248</td><td class="num">€ 47.778</td><td class="num">97,0%</td><td class="num"><span class="value-down">€ 2.752</span></td><td class="num">€ 2.640</td><td class="num"><strong>€ 53.170</strong></td></tr>
+            </tfoot>
+          </table>
+        </div>
+        <div style="padding:8px 16px 10px;font-size:11px;color:var(--color-text-muted)">
+          Formules: Geroosterd = <code>SUM(hours_scheduled × hourly_rate)</code> · Acc./rooster = <code>hours_approved / hours_scheduled</code> · Verzuim = <code>hours_absenteeism × avg_rate</code> · Inhuur = <code>agency_hours × agency_rate</code>
+        </div>
+      </section>
+
+      <!-- M3.11: Gecombineerde rollen -->
+      <section class="card table-card">
+        <div class="card-header">
+          <div><div class="card-title">Gecombineerde rollen — MTD</div><div class="card-sub">Medewerkers actief in meerdere afdelingen · bezuinigingsrisico</div></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Medewerker-ID</th>
+                <th>Primaire rol</th>
+                <th>Tweede rol</th>
+                <th class="num">Uren rol 1</th>
+                <th class="num">Uren rol 2</th>
+                <th class="num">Totaal uren</th>
+                <th>Risico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>DISH-0412</td><td>Receptie</td><td>Restaurant</td><td class="num">72 u</td><td class="num">24 u</td><td class="num"><strong>96 u</strong></td><td><span class="badge badge-warning">Overkoppeld</span></td></tr>
+              <tr><td>DISH-0387</td><td>Housekeeping</td><td>F&amp;B</td><td class="num">84 u</td><td class="num">18 u</td><td class="num"><strong>102 u</strong></td><td><span class="badge badge-danger">Overschrijding</span></td></tr>
+              <tr><td>DISH-0291</td><td>Restaurant</td><td>Receptie</td><td class="num">64 u</td><td class="num">16 u</td><td class="num"><strong>80 u</strong></td><td><span class="badge badge-success">Binnen norm</span></td></tr>
+              <tr><td>DISH-0504</td><td>F&amp;B</td><td>Onderhoud</td><td class="num">56 u</td><td class="num">12 u</td><td class="num"><strong>68 u</strong></td><td><span class="badge badge-success">Binnen norm</span></td></tr>
+              <tr><td>DISH-0178</td><td>Housekeeping</td><td>Receptie</td><td class="num">90 u</td><td class="num">22 u</td><td class="num"><strong>112 u</strong></td><td><span class="badge badge-danger">Overschrijding</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:8px 16px 10px;font-size:11px;color:var(--color-text-muted)">
+          Bron: DISH HR · medewerkers weergegeven via <code>external_id</code> (privacy AVG). Overschrijding = &gt; 104 u / 4 weken.
+        </div>
+      </section>
+
     </section>
 
     <!-- ========================================================== VIEW: F&B (Phase 4) -->
@@ -1327,6 +1774,197 @@ table { border-collapse: collapse; width: 100%; }
       </div>
     </section>
 
+    <!-- ========================================================== VIEW: PLANNING (Phase 5) -->
+    <section class="view" id="view-planning" data-phase="5">
+
+      <div class="alert-banner info" style="background:#eff6ff;border-color:rgba(37,99,235,0.2);">
+        <span class="alert-icon" aria-hidden="true" style="color:#2563eb;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </span>
+        <span><strong>Fase 5 — Planning Intelligence.</strong> Bronnen: DISH HR (roosters), MEWS (bezetting), Atomize (forecast). Vragen <strong>V21</strong> (HK-formule), <strong>V22</strong> (restaurant-norm), <strong>V28</strong> (parameters) staan open.</span>
+      </div>
+
+      <!-- M4.1: Planning KPIs -->
+      <div class="planning-kpi-grid">
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">HK uren benodigd (vandaag)</div>
+          <div class="kpi-value">312 u</div>
+          <div class="kpi-meta"><span class="delta-pill down">▼ −24 u tekort</span><span class="kpi-context">gepland 288 u</span></div>
+          <div class="formula">rooms_occupied × cleaning_time / 60</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Restaurant covers (morgen)</div>
+          <div class="kpi-value">428</div>
+          <div class="kpi-meta"><span class="delta-pill warn">▲ +38 vs. plan</span><span class="kpi-context">benodigd +5,2 u</span></div>
+          <div class="formula">reservation_count + walk-in_estimate</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Geplande uren (7 dagen)</div>
+          <div class="kpi-value">5.840 u</div>
+          <div class="kpi-meta"><span class="delta-pill up">▲ +120 u</span><span class="kpi-context">vs. benodigde 5.720 u</span></div>
+          <div class="formula">SUM(hours_planned) 7-daags</div>
+        </article>
+        <article class="kpi-card">
+          <div class="kpi-eyebrow">Actieve tekorten</div>
+          <div class="kpi-value">3</div>
+          <div class="kpi-meta"><span class="delta-pill down">▼ kritiek</span><span class="kpi-context">drempel &gt; 8 u/dag</span></div>
+          <div class="formula">COUNT(days WHERE gap &gt; threshold)</div>
+        </article>
+      </div>
+
+      <!-- M4.2: Beslissingsindicator -->
+      <div class="decision-banner">
+        <span class="decision-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </span>
+        <div>
+          <strong>Actie vereist — 2 kritieke tekorten komende 48 uur</strong>
+          <div style="margin-top:4px;font-size:12px;">Strandhotel Zoutelande · HK vrijdag 8 mei: −14 u · Restaurant Copper &amp; Co zaterdag 9 mei: −11 u. Drempel (8 u/dag) overschreden. Overweeg inhuurplanning of verschuiving van vaste medewerkers.</div>
+        </div>
+      </div>
+
+      <!-- M4.3: HK Uren breakdown per hotel -->
+      <section class="card table-card">
+        <div class="card-header">
+          <div><div class="card-title">HK uren — vandaag per hotel</div><div class="card-sub">Benodigd (formule) vs. gepland · per property</div></div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>Hotel</th><th class="num">Bezetting</th><th class="num">Kamers occ.</th><th class="num">Benodigd (u)</th><th class="num">Gepland (u)</th><th class="num">Delta</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Strandhotel Zoutelande</td><td class="num">82%</td><td class="num">69</td><td class="num">96 u</td><td class="num">82 u</td><td class="num"><span class="value-down">−14 u</span></td><td><span class="badge badge-danger">Tekort</span></td></tr>
+              <tr><td>Copper &amp; Co</td><td class="num">76%</td><td class="num">47</td><td class="num">66 u</td><td class="num">68 u</td><td class="num"><span class="value-up">+2 u</span></td><td><span class="badge badge-success">Op koers</span></td></tr>
+              <tr><td>Bommeljé</td><td class="num">71%</td><td class="num">34</td><td class="num">48 u</td><td class="num">44 u</td><td class="num"><span class="value-down">−4 u</span></td><td><span class="badge badge-warning">Grenswaarde</span></td></tr>
+              <tr><td>Cityhotel Wood</td><td class="num">65%</td><td class="num">35</td><td class="num">49 u</td><td class="num">52 u</td><td class="num"><span class="value-up">+3 u</span></td><td><span class="badge badge-success">Op koers</span></td></tr>
+              <tr><td>Tien Torens</td><td class="num">58%</td><td class="num">21</td><td class="num">29 u</td><td class="num">28 u</td><td class="num"><span class="value-flat">−1 u</span></td><td><span class="badge badge-success">Op koers</span></td></tr>
+              <tr><td>Mezger Lodges</td><td class="num">54%</td><td class="num">15</td><td class="num">21 u</td><td class="num">22 u</td><td class="num"><span class="value-up">+1 u</span></td><td><span class="badge badge-success">Op koers</span></td></tr>
+            </tbody>
+            <tfoot><tr><td>Totaal</td><td class="num">68%</td><td class="num">221</td><td class="num">309 u</td><td class="num">296 u</td><td class="num"><span class="value-down">−13 u</span></td><td><span class="badge badge-warning">Aandacht</span></td></tr></tfoot>
+          </table>
+        </div>
+        <div style="padding:8px 16px 10px;font-size:11px;color:var(--color-text-muted)">
+          Formule: <code>rooms_occupied × 1,4u (standaard) + stayover × 0,6u</code> · Bron: MEWS bezettingsdata + DISH HR-roosters · Open vraag V21 (definitieve formule)
+        </div>
+      </section>
+
+      <!-- M4.4: Restaurant + Receptie tabel -->
+      <div class="chart-grid equal">
+        <section class="card table-card">
+          <div class="card-header">
+            <div><div class="card-title">Restaurant planning — komende 7 dagen</div><div class="card-sub">Verwachte covers vs. geplande uren · norm 1u/8 covers</div></div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Datum</th><th class="num">Forecast covers</th><th class="num">Benodigd (u)</th><th class="num">Gepland (u)</th><th class="num">Delta</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>ma 6 mei</td><td class="num">310</td><td class="num">39 u</td><td class="num">40 u</td><td class="num"><span class="value-up">+1 u</span></td><td><span class="badge badge-success">Ok</span></td></tr>
+                <tr><td>di 7 mei</td><td class="num">328</td><td class="num">41 u</td><td class="num">40 u</td><td class="num"><span class="value-flat">−1 u</span></td><td><span class="badge badge-success">Ok</span></td></tr>
+                <tr><td>wo 8 mei</td><td class="num">356</td><td class="num">45 u</td><td class="num">44 u</td><td class="num"><span class="value-flat">−1 u</span></td><td><span class="badge badge-success">Ok</span></td></tr>
+                <tr><td>do 9 mei</td><td class="num">388</td><td class="num">49 u</td><td class="num">44 u</td><td class="num"><span class="value-down">−5 u</span></td><td><span class="badge badge-warning">Aandacht</span></td></tr>
+                <tr><td>vr 10 mei</td><td class="num">452</td><td class="num">57 u</td><td class="num">48 u</td><td class="num"><span class="value-down">−9 u</span></td><td><span class="badge badge-danger">Tekort</span></td></tr>
+                <tr><td>za 11 mei</td><td class="num">480</td><td class="num">60 u</td><td class="num">52 u</td><td class="num"><span class="value-down">−8 u</span></td><td><span class="badge badge-danger">Tekort</span></td></tr>
+                <tr><td>zo 12 mei</td><td class="num">392</td><td class="num">49 u</td><td class="num">48 u</td><td class="num"><span class="value-flat">−1 u</span></td><td><span class="badge badge-success">Ok</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card table-card">
+          <div class="card-header">
+            <div><div class="card-title">Receptie planning — komende 7 dagen</div><div class="card-sub">Check-in/out volume vs. geplande bemanning</div></div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Datum</th><th class="num">Check-ins</th><th class="num">Check-outs</th><th class="num">Benodigd (u)</th><th class="num">Gepland (u)</th><th class="num">Delta</th></tr></thead>
+              <tbody>
+                <tr><td>ma 6 mei</td><td class="num">42</td><td class="num">38</td><td class="num">12 u</td><td class="num">14 u</td><td class="num"><span class="value-up">+2 u</span></td></tr>
+                <tr><td>di 7 mei</td><td class="num">48</td><td class="num">44</td><td class="num">14 u</td><td class="num">14 u</td><td class="num"><span class="value-flat">0 u</span></td></tr>
+                <tr><td>wo 8 mei</td><td class="num">52</td><td class="num">50</td><td class="num">15 u</td><td class="num">14 u</td><td class="num"><span class="value-flat">−1 u</span></td></tr>
+                <tr><td>do 9 mei</td><td class="num">58</td><td class="num">54</td><td class="num">17 u</td><td class="num">16 u</td><td class="num"><span class="value-flat">−1 u</span></td></tr>
+                <tr><td>vr 10 mei</td><td class="num">72</td><td class="num">62</td><td class="num">20 u</td><td class="num">18 u</td><td class="num"><span class="value-down">−2 u</span></td></tr>
+                <tr><td>za 11 mei</td><td class="num">80</td><td class="num">68</td><td class="num">22 u</td><td class="num">20 u</td><td class="num"><span class="value-down">−2 u</span></td></tr>
+                <tr><td>zo 12 mei</td><td class="num">64</td><td class="num">70</td><td class="num">19 u</td><td class="num">18 u</td><td class="num"><span class="value-flat">−1 u</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- M4.5: 7-daagse planning grafiek (HK + Restaurant) -->
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">7-daagse planning — alle afdelingen</div><div class="card-sub">Benodigd vs. gepland uren per dag · alle hotels gecombineerd</div></div>
+          <div class="legend">
+            <span><span class="legend-dot primary"></span>Gepland</span>
+            <span><span class="legend-dot warning"></span>Benodigd</span>
+            <span><span class="legend-dot danger"></span>Tekort (gap)</span>
+          </div>
+        </div>
+        <svg class="chart-svg" viewBox="0 0 720 260" preserveAspectRatio="none">
+          <g><line class="gridline" x1="50" y1="30" x2="710" y2="30"/><line class="gridline" x1="50" y1="80" x2="710" y2="80"/><line class="gridline" x1="50" y1="130" x2="710" y2="130"/><line class="gridline" x1="50" y1="180" x2="710" y2="180"/><line class="gridline" x1="50" y1="230" x2="710" y2="230"/></g>
+          <g><text class="axis-label" x="42" y="34" text-anchor="end">900u</text><text class="axis-label" x="42" y="84" text-anchor="end">750u</text><text class="axis-label" x="42" y="134" text-anchor="end">600u</text><text class="axis-label" x="42" y="184" text-anchor="end">450u</text><text class="axis-label" x="42" y="234" text-anchor="end">300u</text></g>
+          <!-- Geplande uren (blauwe bars) -->
+          <g fill="#5b7ef5" opacity="0.75">
+            <rect x="65"  y="88"  width="70" height="142" rx="3"/>
+            <rect x="165" y="84"  width="70" height="146" rx="3"/>
+            <rect x="265" y="80"  width="70" height="150" rx="3"/>
+            <rect x="365" y="78"  width="70" height="152" rx="3"/>
+            <rect x="465" y="68"  width="70" height="162" rx="3"/>
+            <rect x="565" y="62"  width="70" height="168" rx="3"/>
+            <rect x="665" y="78"  width="40" height="152" rx="3"/>
+          </g>
+          <!-- Benodigde lijn (oranje) -->
+          <path d="M100,95 200,88 300,82 400,74 500,55 600,48 685,80" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+          <!-- Tekort markers (rode punten) -->
+          <circle cx="500" cy="55" r="5" fill="#dc2626"/>
+          <circle cx="600" cy="48" r="5" fill="#dc2626"/>
+          <!-- Day labels -->
+          <g><text class="axis-label" x="100" y="250" text-anchor="middle">ma 6</text><text class="axis-label" x="200" y="250" text-anchor="middle">di 7</text><text class="axis-label" x="300" y="250" text-anchor="middle">wo 8</text><text class="axis-label" x="400" y="250" text-anchor="middle">do 9</text><text class="axis-label" x="500" y="250" text-anchor="middle" fill="#dc2626" font-weight="600">vr 10</text><text class="axis-label" x="600" y="250" text-anchor="middle" fill="#dc2626" font-weight="600">za 11</text><text class="axis-label" x="685" y="250" text-anchor="middle">zo 12</text></g>
+        </svg>
+      </div>
+
+      <!-- M4.10: Parameters tabel -->
+      <div class="chart-grid equal">
+        <section class="card table-card">
+          <div class="card-header">
+            <div><div class="card-title">Planning parameters</div><div class="card-sub">Staffing-normen per afdeling · open: V28</div></div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Afdeling</th><th>Eenheid</th><th class="num">Huidig</th><th class="num">Minimum</th><th class="num">Maximum</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Housekeeping</td><td>kamers/uur</td><td class="num">2,5</td><td class="num">2,0</td><td class="num">3,5</td><td><span class="badge badge-warning">Open V21</span></td></tr>
+                <tr><td>Restaurant</td><td>covers/uur</td><td class="num">8,0</td><td class="num">6,0</td><td class="num">12,0</td><td><span class="badge badge-warning">Open V22</span></td></tr>
+                <tr><td>Receptie</td><td>trans./uur</td><td class="num">4,5</td><td class="num">3,0</td><td class="num">6,0</td><td><span class="badge badge-success">Bevestigd</span></td></tr>
+                <tr><td>F&amp;B</td><td>orders/uur</td><td class="num">12,0</td><td class="num">8,0</td><td class="num">18,0</td><td><span class="badge badge-success">Bevestigd</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- M4.11: Restaurant planning grafiek -->
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Restaurant — covers vs. uren (7 d)</div><div class="card-sub">Forecast covers (links) · Delta gepland/benodigd (rechts)</div></div>
+          </div>
+          <svg class="chart-bar-svg" viewBox="0 0 520 260">
+            <g><line class="gridline" x1="50" y1="20" x2="50" y2="220"/><line class="gridline" x1="125" y1="20" x2="125" y2="220"/><line class="gridline" x1="200" y1="20" x2="200" y2="220"/><line class="gridline" x1="275" y1="20" x2="275" y2="220"/><line class="gridline" x1="350" y1="20" x2="350" y2="220"/></g>
+            <g><text class="axis-label" x="50" y="238" text-anchor="middle">200</text><text class="axis-label" x="125" y="238" text-anchor="middle">300</text><text class="axis-label" x="200" y="238" text-anchor="middle">400</text><text class="axis-label" x="275" y="238" text-anchor="middle">500</text></g>
+            <text class="axis-label" x="44" y="42" text-anchor="end" fill="#0b1120" font-weight="600">ma</text><rect x="50" y="28" width="188" height="18" rx="3" class="plan-chart-bar-req"/><rect x="50" y="28" width="172" height="18" rx="3" class="plan-chart-bar-plan"/><text class="axis-label" x="244" y="42" font-weight="600">310 / 320</text>
+            <text class="axis-label" x="44" y="72" text-anchor="end" fill="#0b1120" font-weight="600">di</text><rect x="50" y="58" width="203" height="18" rx="3" class="plan-chart-bar-req"/><rect x="50" y="58" width="203" height="18" rx="3" class="plan-chart-bar-plan"/><text class="axis-label" x="259" y="72" font-weight="600">328 / 328</text>
+            <text class="axis-label" x="44" y="102" text-anchor="end" fill="#0b1120" font-weight="600">wo</text><rect x="50" y="88" width="223" height="18" rx="3" class="plan-chart-bar-req"/><rect x="50" y="88" width="216" height="18" rx="3" class="plan-chart-bar-plan"/><text class="axis-label" x="279" y="102" font-weight="600">356 / 347</text>
+            <text class="axis-label" x="44" y="132" text-anchor="end" fill="#0b1120" font-weight="600">do</text><rect x="50" y="118" width="244" height="18" rx="3" class="plan-chart-bar-req"/><rect x="50" y="118" width="220" height="18" rx="3" class="plan-chart-bar-plan"/><text class="axis-label" x="300" y="132" font-weight="600">388 / 352</text>
+            <text class="axis-label" x="44" y="162" text-anchor="end" fill="#dc2626" font-weight="600">vr</text><rect x="50" y="148" width="285" height="18" rx="3" class="plan-chart-bar-req"/><rect x="50" y="148" width="254" height="18" rx="3" class="plan-chart-bar-plan"/><text class="axis-label" x="341" y="162" font-weight="600">452 / 407</text><text class="axis-label" x="410" y="162" fill="#dc2626" font-weight="600">−9u</text>
+            <text class="axis-label" x="44" y="192" text-anchor="end" fill="#dc2626" font-weight="600">za</text><rect x="50" y="178" width="302" height="18" rx="3" class="plan-chart-bar-req"/><rect x="50" y="178" width="270" height="18" rx="3" class="plan-chart-bar-plan"/><text class="axis-label" x="358" y="192" font-weight="600">480 / 432</text><text class="axis-label" x="410" y="192" fill="#dc2626" font-weight="600">−8u</text>
+            <text class="axis-label" x="44" y="222" text-anchor="end" fill="#0b1120" font-weight="600">zo</text><rect x="50" y="208" width="246" height="18" rx="3" class="plan-chart-bar-req"/><rect x="50" y="208" width="246" height="18" rx="3" class="plan-chart-bar-plan"/><text class="axis-label" x="302" y="222" font-weight="600">392 / 392</text>
+          </svg>
+        </div>
+      </div>
+
+    </section>
+
   </main>
 
   <!-- ========================================================== STATUS BAR -->
@@ -1338,6 +1976,93 @@ table { border-collapse: collapse; width: 100%; }
     <div class="status-item"><span class="status-dot muted" aria-hidden="true"></span><span><strong style="color:var(--color-text-secondary);font-weight:600">POS</strong> · pending V16</span></div>
     <div class="status-version">Mock-up v2 · 2026-05-02 · Alle fasen</div>
   </footer>
+
+  <!-- M7.4: Notificaties panel -->
+  <aside class="notifications-panel" id="notifPanel" role="complementary" aria-label="Meldingen">
+    <div class="panel-header">
+      <span>Meldingen (7)</span>
+      <button type="button" id="notifClose" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--color-text-muted);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="panel-alerts">
+      <div class="notif-item notif-danger">
+        <div class="notif-title">Tekort HK — Strandhotel Zoutelande</div>
+        <div>Vrijdag 8 mei: −14 u benodigd (gepland 82 u, nodig 96 u)</div>
+        <div class="notif-time">2 min geleden · Planning</div>
+      </div>
+      <div class="notif-item notif-danger">
+        <div class="notif-title">Tekort Restaurant — Copper &amp; Co</div>
+        <div>Zaterdag 9 mei: −11 u bij 142 verwachte covers</div>
+        <div class="notif-time">2 min geleden · Planning</div>
+      </div>
+      <div class="notif-item notif-warn">
+        <div class="notif-title">Grenswaarde Receptie — Bommeljé</div>
+        <div>Zondag 10 mei: −6 u (drempel 8 u, nog niet overschreden)</div>
+        <div class="notif-time">4 min geleden · Planning</div>
+      </div>
+      <div class="notif-item notif-warn">
+        <div class="notif-title">Verzuim trend — Tien Torens HK</div>
+        <div>+18 u verzuim deze week vs. vorige week (+24%)</div>
+        <div class="notif-time">11 min geleden · Personeel</div>
+      </div>
+      <div class="notif-item notif-info">
+        <div class="notif-title">Loonkosten overschrijding — Exact</div>
+        <div>Totaal +€ 5.120 boven budget (2,8%). 3 afdelingen actief.</div>
+        <div class="notif-time">38 min geleden · Financieel</div>
+      </div>
+      <div class="notif-item notif-warn">
+        <div class="notif-title">Reconciliatie delta — Ontbijt</div>
+        <div>MEWS vs. Exact: +€ 1.240 (3,2%) — oorzaak onbekend</div>
+        <div class="notif-time">1 u geleden · F&amp;B</div>
+      </div>
+      <div class="notif-item notif-info">
+        <div class="notif-title">Dubbele rol — DISH-0387 uren overschrijding</div>
+        <div>Medewerker HK+F&B: 102 u — maximum 104 u (bijna grens)</div>
+        <div class="notif-time">2 u geleden · Personeel</div>
+      </div>
+    </div>
+    <div style="padding:10px 16px;border-top:1px solid var(--color-border-light);">
+      <button type="button" id="openSettingsBtn" class="btn btn-secondary btn-sm" style="width:100%;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:middle;"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 0 4.93 19.07A10 10 0 0 0 19.07 4.93Z"/></svg>
+        Drempelwaarden instellen
+      </button>
+    </div>
+  </aside>
+
+  <!-- M7.5: Drempelinstellingen panel -->
+  <aside class="settings-panel" id="settingsPanel" role="complementary" aria-label="Instellingen">
+    <div class="panel-header">
+      <span>Drempelwaarden</span>
+      <button type="button" id="settingsClose" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--color-text-muted);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="settings-section">
+      <h4>Planning — Uren-tekort</h4>
+      <div class="settings-row"><label>HK tekort-drempel (u/dag)</label><input type="number" value="8" min="0" max="50"/></div>
+      <div class="settings-row"><label>Restaurant tekort-drempel (u/dag)</label><input type="number" value="8" min="0" max="50"/></div>
+      <div class="settings-row"><label>Receptie tekort-drempel (u/dag)</label><input type="number" value="4" min="0" max="20"/></div>
+      <div class="settings-row"><label>Melding horizon (dagen vooruit)</label><input type="number" value="7" min="1" max="30"/></div>
+    </div>
+    <div class="settings-section">
+      <h4>Financieel — Budget</h4>
+      <div class="settings-row"><label>Budget-overschrijding drempel (%)</label><input type="number" value="5" min="0" max="50"/></div>
+      <div class="settings-row"><label>Loonkosten % max. omzet</label><input type="number" value="32" min="10" max="60"/></div>
+    </div>
+    <div class="settings-section">
+      <h4>Personeel — Efficiëntie</h4>
+      <div class="settings-row"><label>HK kamers/uur target</label><input type="number" value="2.5" min="1" max="5" step="0.1"/></div>
+      <div class="settings-row"><label>Verzuim trend-drempel (u/week)</label><input type="number" value="16" min="0" max="100"/></div>
+    </div>
+    <div class="settings-section">
+      <h4>F&amp;B — Reconciliatie</h4>
+      <div class="settings-row"><label>Ontbijt-reconciliatie max. delta (%)</label><input type="number" value="2" min="0" max="20"/></div>
+    </div>
+    <div style="padding:12px 16px;">
+      <button type="button" class="btn btn-primary" style="width:100%;" id="saveSettingsBtn">Instellingen opslaan</button>
+    </div>
+  </aside>
 
   <!-- Toast -->
   <div class="toast" id="toast" role="status" aria-live="polite">
@@ -1379,7 +2104,8 @@ table { border-collapse: collapse; width: 100%; }
     'executive': { title: 'Executive overzicht', sub: 'Portfolio · {hotelCount} hotels · {period}' },
     'financieel': { title: 'Financieel overzicht', sub: 'Inkoop & loonkosten · {hotelCount} hotels · {period}' },
     'personeel': { title: 'Personeel & uren', sub: 'Roosters & efficiëntie · {hotelCount} hotels · {period}' },
-    'fb': { title: 'F&B / Voorraad', sub: 'POS & ontbijt-reconciliatie · {hotelCount} hotels · {period}' }
+    'fb': { title: 'F&B / Voorraad', sub: 'POS & ontbijt-reconciliatie · {hotelCount} hotels · {period}' },
+    'planning': { title: 'Planning Intelligence', sub: 'Roosters & bezettingsprognose · {hotelCount} hotels · {period}' }
   };
 
   /* Period multipliers — fictive but believable variations */
@@ -1639,6 +2365,125 @@ table { border-collapse: collapse; width: 100%; }
     var b = document.getElementById('mockBanner');
     if (b) b.style.display = 'none';
   });
+
+  /* Mobile nav toggle */
+  var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  var mobileNav = document.getElementById('mobileNav');
+  if (mobileMenuBtn && mobileNav) {
+    mobileMenuBtn.addEventListener('click', function(){
+      var open = mobileNav.classList.toggle('open');
+      mobileMenuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    mobileNav.addEventListener('click', function(e){
+      var btn = e.target.closest('[data-view]');
+      if (!btn) return;
+      var v = btn.getAttribute('data-view');
+      state.view = v;
+      document.querySelectorAll('#mainNav .nav-tab').forEach(function(t){ t.classList.toggle('active', t.getAttribute('data-view') === v); });
+      document.querySelectorAll('#mobileNav .nav-tab').forEach(function(t){ t.classList.toggle('active', t === btn); });
+      document.querySelectorAll('.view').forEach(function(s){ s.classList.toggle('active', s.id === 'view-' + v); });
+      mobileNav.classList.remove('open');
+      updatePageHeader();
+      if (v === 'executive') renderExecutive();
+      showToast('Fase ' + (document.getElementById('view-' + v).getAttribute('data-phase') || '?') + ' geladen');
+    });
+  }
+
+  /* Dept filter chips */
+  var deptChips = document.getElementById('deptChips');
+  if (deptChips) {
+    deptChips.addEventListener('click', function(e){
+      var btn = e.target.closest('.chip');
+      if (!btn) return;
+      if (btn.getAttribute('data-action') === 'toggle-all-depts') {
+        this.querySelectorAll('.chip[data-dept]').forEach(function(c){ c.classList.add('active'); });
+        btn.classList.add('active');
+      } else {
+        var d = btn.getAttribute('data-dept');
+        if (!d) return;
+        btn.classList.toggle('active');
+        var allActive = Array.from(this.querySelectorAll('.chip[data-dept]')).every(function(c){ return c.classList.contains('active'); });
+        var allChip = this.querySelector('[data-action="toggle-all-depts"]');
+        if (allChip) allChip.classList.toggle('active', allActive);
+      }
+      showToast('Afdeling filter bijgewerkt');
+    });
+  }
+
+  /* Notifications panel toggle */
+  var notifBtn = document.getElementById('notifBtn');
+  var notifPanel = document.getElementById('notifPanel');
+  var notifClose = document.getElementById('notifClose');
+  if (notifBtn && notifPanel) {
+    notifBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      notifPanel.classList.toggle('open');
+      if (settingsPanel) settingsPanel.classList.remove('open');
+    });
+  }
+  if (notifClose && notifPanel) {
+    notifClose.addEventListener('click', function(){
+      notifPanel.classList.remove('open');
+    });
+  }
+
+  /* Settings panel */
+  var settingsPanel = document.getElementById('settingsPanel');
+  var settingsClose = document.getElementById('settingsClose');
+  var openSettingsBtn = document.getElementById('openSettingsBtn');
+  var saveSettingsBtn = document.getElementById('saveSettingsBtn');
+  if (openSettingsBtn && settingsPanel) {
+    openSettingsBtn.addEventListener('click', function(){
+      settingsPanel.classList.add('open');
+      if (notifPanel) notifPanel.classList.remove('open');
+    });
+  }
+  if (settingsClose && settingsPanel) {
+    settingsClose.addEventListener('click', function(){
+      settingsPanel.classList.remove('open');
+    });
+  }
+  if (saveSettingsBtn) {
+    saveSettingsBtn.addEventListener('click', function(){
+      settingsPanel.classList.remove('open');
+      showToast('Drempelwaarden opgeslagen');
+    });
+  }
+
+  /* Close panels on outside click */
+  document.addEventListener('click', function(e){
+    if (notifPanel && notifPanel.classList.contains('open') && !notifPanel.contains(e.target) && !e.target.closest('#notifBtn')) {
+      notifPanel.classList.remove('open');
+    }
+    if (settingsPanel && settingsPanel.classList.contains('open') && !settingsPanel.contains(e.target)) {
+      settingsPanel.classList.remove('open');
+    }
+  });
+
+  /* HK efficiëntie toggle (individueel / per hotel) */
+  var effToggle = document.getElementById('effToggle');
+  var effIndividual = document.getElementById('effIndividual');
+  var effAggregate = document.getElementById('effAggregate');
+  if (effToggle && effIndividual && effAggregate) {
+    effToggle.addEventListener('click', function(e){
+      var btn = e.target.closest('.seg[data-eff]');
+      if (!btn) return;
+      var mode = btn.getAttribute('data-eff');
+      this.querySelectorAll('.seg').forEach(function(s){
+        var on = s === btn;
+        s.classList.toggle('active', on);
+        s.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+      if (mode === 'individual') {
+        effIndividual.classList.add('eff-individual');
+        effIndividual.classList.remove('hidden');
+        effAggregate.classList.remove('visible');
+      } else {
+        effIndividual.classList.add('hidden');
+        effAggregate.classList.add('visible');
+      }
+    });
+  }
 
   /* Initial render */
   updatePageHeader();
