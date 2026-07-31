@@ -4,8 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hotel BI · Mock-up v2 — Alle onderdelen</title>
-<link rel="stylesheet" href="./feedback-widget.css">
+<link rel="stylesheet" href="./components/widget-feedback/feedback-widget.css">
+<link rel="stylesheet" href="./components/graph-workforce-costs/cost-of-workforce.css">
+<link rel="stylesheet" href="./components/graph-workforce-efficiency/workforce-efficiency.css">
+<link rel="stylesheet" href="./components/filter-menu/filter-menu.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
+<script src="./components/filter-menu/filter-menu.js"></script>
 <style>
 /* ==========================================================================
    Tokens — copied from styling/tokens.css for offline portability
@@ -298,89 +302,9 @@ code.inline-code { background: var(--color-neutral-bg); padding: 1px 4px; border
 .btn-sm { padding: var(--space-1) var(--space-3); font-size: var(--font-size-xs); }
 
 /* ==========================================================================
-   Filter bar
+   Segmented control — hergebruikt door de personeel-efficiëntie toggle
+   (#effToggle); het filtermenu zelf zit in components/filter-menu/
    ========================================================================== */
-.filter-bar {
-  position: sticky;
-  top: 56px;
-  z-index: 90;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  padding: var(--space-2) var(--space-4);
-  display: flex; flex-direction: column; gap: var(--space-2);
-  transition: box-shadow var(--transition-base), border-color var(--transition-base), padding var(--transition-base);
-}
-.filter-bar.is-pinned { box-shadow: var(--shadow-md); border-color: var(--color-border); }
-.filter-bar-header { display: flex; align-items: center; gap: var(--space-3); min-height: 22px; }
-.filter-toggle {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: var(--font-size-2xs);
-  font-weight: var(--font-weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-widest);
-  color: var(--color-text-muted);
-  padding: 2px 4px;
-  margin: -2px -4px;
-  border-radius: var(--radius-sm);
-  flex-shrink: 0;
-  transition: color var(--transition-fast);
-}
-.filter-toggle:hover { color: var(--color-text); }
-.filter-toggle-icon { transition: transform var(--transition-base); flex-shrink: 0; }
-.filter-bar.collapsed .filter-toggle-icon { transform: rotate(-90deg); }
-.filter-summary {
-  display: none;
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.filter-bar.collapsed .filter-summary { display: block; }
-.filter-bar-body { display: flex; flex-direction: column; gap: var(--space-2); }
-.filter-bar.collapsed .filter-bar-body { display: none; }
-.filter-row { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
-.filter-label {
-  font-size: var(--font-size-2xs);
-  font-weight: var(--font-weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-widest);
-  color: var(--color-text-muted);
-  min-width: 96px;
-}
-.chip-group { display: flex; gap: var(--space-1); flex-wrap: wrap; }
-.chip {
-  padding: var(--space-1) var(--space-3);
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
-  display: inline-flex; align-items: center; gap: var(--space-1);
-  transition: all var(--transition-fast);
-  user-select: none;
-}
-.chip:hover { border-color: var(--color-primary); color: var(--color-primary); }
-.chip.active {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: var(--color-text-inverse);
-  box-shadow: var(--shadow-xs);
-}
-.chip.toggle-all { background: transparent; border-style: dashed; color: var(--color-text-muted); }
-.chip.toggle-all.active { background: var(--color-text-secondary); border-style: solid; border-color: var(--color-text-secondary); color: var(--color-text-inverse); }
-.chip-check {
-  width: 12px; height: 12px;
-  border-radius: 3px;
-  background: rgba(255,255,255,0.0);
-  border: 1.5px solid currentColor;
-  display: inline-flex; align-items: center; justify-content: center;
-  color: currentColor;
-  font-size: 9px;
-  line-height: 1;
-}
-.chip.active .chip-check { background: rgba(255,255,255,0.35); border-color: rgba(255,255,255,0.65); color: var(--color-text-inverse); }
 .segmented {
   display: inline-flex;
   background: var(--color-surface-2);
@@ -763,7 +687,6 @@ code.inline-code { background: var(--color-neutral-bg); padding: 1px 4px; border
 .eff-aggregate.visible { display:flex; }
 
 /* Planning + misc */
-.local-filter { background:var(--color-surface-2); border:1px solid var(--color-border-light); border-radius:var(--radius-lg); padding:10px 16px; }
 .decision-banner { display:flex; align-items:flex-start; gap:12px; padding:12px 16px; background:var(--color-info-bg); border:1px solid var(--color-info-border); border-radius:var(--radius-lg); font-size:var(--font-size-sm); color:var(--color-text-secondary); }
 .decision-banner .decision-icon { color:var(--color-info); flex-shrink:0; margin-top:2px; }
 .kpi-grid.cols-6 { grid-template-columns:repeat(6,1fr); }
@@ -900,6 +823,7 @@ th.num, td.num { text-align:right; font-variant-numeric:tabular-nums; }
       <button class="nav-tab active" type="button" data-view="executive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>Portfolio</button>
       <button class="nav-tab" type="button" data-view="financieel"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 6.5a7.5 7.5 0 1 0 0 11"/><line x1="4" y1="10" x2="16" y2="10"/><line x1="4" y1="14" x2="14" y2="14"/></svg>Financieel</button>
       <button class="nav-tab" type="button" data-view="personeel"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Personeel</button>
+      <button class="nav-tab" type="button" data-view="workforce"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7v7H4V4z"/><path d="M13 4h7v7h-7V4z"/><path d="M4 13h7v7H4v-7z"/><path d="M13 13h7v7h-7v-7z"/></svg>Workforce</button>
       <button class="nav-tab" type="button" data-view="fb"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>F&amp;B</button>
       <button class="nav-tab" type="button" data-view="planning"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Planning</button>
       <button class="nav-tab" type="button" data-view="instellingen"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 0 4.93 19.07A10 10 0 0 0 19.07 4.93Z"/></svg>Instellingen</button>
@@ -930,6 +854,7 @@ th.num, td.num { text-align:right; font-variant-numeric:tabular-nums; }
     <button class="nav-tab active" type="button" data-view="executive"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>Portfolio</button>
     <button class="nav-tab" type="button" data-view="financieel"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 6.5a7.5 7.5 0 1 0 0 11"/><line x1="4" y1="10" x2="16" y2="10"/><line x1="4" y1="14" x2="14" y2="14"/></svg>Financieel</button>
     <button class="nav-tab" type="button" data-view="personeel"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Personeel</button>
+    <button class="nav-tab" type="button" data-view="workforce"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7v7H4V4z"/><path d="M13 4h7v7h-7V4z"/><path d="M4 13h7v7H4v-7z"/><path d="M13 13h7v7h-7v-7z"/></svg>Workforce</button>
     <button class="nav-tab" type="button" data-view="fb"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>F&amp;B</button>
     <button class="nav-tab" type="button" data-view="planning"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Planning</button>
     <button class="nav-tab" type="button" data-view="instellingen"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 0 4.93 19.07A10 10 0 0 0 19.07 4.93Z"/></svg>Instellingen</button>
@@ -969,52 +894,8 @@ th.num, td.num { text-align:right; font-variant-numeric:tabular-nums; }
       </div>
     </div>
 
-    <!-- Filter bar (shared across views) -->
-    <section class="filter-bar" aria-label="Filters" id="filterBar">
-      <div class="filter-bar-header">
-        <button class="filter-toggle" type="button" id="filterToggleBtn" aria-expanded="true" aria-controls="filterBarBody">
-          <svg class="filter-toggle-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-          <span>Filters</span>
-        </button>
-        <span class="filter-summary" id="filterSummary"></span>
-      </div>
-      <div class="filter-bar-body" id="filterBarBody">
-        <div class="filter-row">
-          <span class="filter-label">Periode</span>
-          <div class="chip-group" id="periodChips" data-single="true">
-            <button class="chip" type="button" data-period="today">Vandaag</button>
-            <button class="chip" type="button" data-period="yesterday">Gisteren</button>
-            <button class="chip active" type="button" data-period="mtd">MTD</button>
-            <button class="chip" type="button" data-period="prev-month">Vorige maand</button>
-            <button class="chip" type="button" data-period="ytd">YTD</button>
-            <button class="chip" type="button" data-period="custom">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              Custom
-            </button>
-          </div>
-        </div>
-        <div class="filter-row">
-          <span class="filter-label">Hotels</span>
-          <div class="chip-group" id="hotelChips">
-            <button class="chip toggle-all active" type="button" data-action="toggle-all-hotels">Alle objecten</button>
-            <button class="chip active" type="button" data-hotel="strandhotel-zoutelande"><span class="chip-check">✓</span>Strandhotel Zoutelande</button>
-            <button class="chip active" type="button" data-hotel="mezger-lodges"><span class="chip-check">✓</span>Mezger Lodges</button>
-            <button class="chip active" type="button" data-hotel="duinhotel-tien-torens"><span class="chip-check">✓</span>Duinhotel Tien Torens</button>
-            <button class="chip active" type="button" data-hotel="hotel-bommelje"><span class="chip-check">✓</span>Hotel Bommeljé</button>
-            <button class="chip active" type="button" data-hotel="cityhotel-wood"><span class="chip-check">✓</span>Cityhotel Wood</button>
-            <button class="chip active" type="button" data-hotel="hotel-copper-and-co"><span class="chip-check">✓</span>Hotel Copper &amp; Co</button>
-          </div>
-        </div>
-        <div class="filter-row">
-          <span class="filter-label">Vergelijken met</span>
-          <div class="segmented" role="tablist" id="compareSeg">
-            <button class="seg active" type="button" role="tab" aria-selected="true" data-compare="prev-period">Vorige periode</button>
-            <button class="seg" type="button" role="tab" aria-selected="false" data-compare="prev-year">Vorig jaar</button>
-            <button class="seg" type="button" role="tab" aria-selected="false" data-compare="none">Geen</button>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Filter menu (component, gedeeld tussen alle views) — zie components/filter-menu/ -->
+    <div id="filterMenuRoot"></div>
 
     <!-- ========================================================== VIEW: EXECUTIVE (Phase 1) -->
     <section class="view active" id="view-executive" data-phase="1">
@@ -1374,6 +1255,23 @@ th.num, td.num { text-align:right; font-variant-numeric:tabular-nums; }
         </div>
       </section>
 
+      <!-- M2.8: Cost of Workforce — gestapeld staafdiagram + budgetlijn (zie cost-of-workforce.js) -->
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Cost of Workforce</div><div class="card-sub">Personeelskosten per afdeling · per maand · vs. budget</div></div>
+        </div>
+        <div class="chart-canvas-wrap tall">
+          <canvas id="canvas-fin-workforce"></canvas>
+        </div>
+        <div class="legend legend-below">
+          <span><span class="legend-dot accent"></span>Housekeeping</span>
+          <span><span class="legend-dot violet"></span>Receptie</span>
+          <span><span class="legend-dot amber"></span>F&amp;B</span>
+          <span><span class="legend-dot plum"></span>Onderhoud</span>
+          <span><span class="legend-dot primary"></span>Begrote personeelskosten</span>
+        </div>
+      </div>
+
       <!-- M2.7: Watervaldiagram — maandvariatie t.o.v. budget -->
       <div class="card">
         <div class="card-header">
@@ -1392,20 +1290,6 @@ th.num, td.num { text-align:right; font-variant-numeric:tabular-nums; }
 
     <!-- ========================================================== VIEW: PERSONEEL (Phase 3) -->
     <section class="view" id="view-personeel" data-phase="3">
-
-      <div class="local-filter">
-        <div class="filter-row">
-          <span class="filter-label">Afdeling</span>
-          <div class="chip-group" id="deptChips">
-            <button class="chip toggle-all active" type="button" data-action="toggle-all-depts">Alle afdelingen</button>
-            <button class="chip active" type="button" data-dept="housekeeping"><span class="chip-check">✓</span>Housekeeping</button>
-            <button class="chip active" type="button" data-dept="receptie"><span class="chip-check">✓</span>Receptie</button>
-            <button class="chip active" type="button" data-dept="restaurant"><span class="chip-check">✓</span>Restaurant</button>
-            <button class="chip active" type="button" data-dept="fb-dept"><span class="chip-check">✓</span>F&amp;B</button>
-            <button class="chip active" type="button" data-dept="onderhoud"><span class="chip-check">✓</span>Onderhoud</button>
-          </div>
-        </div>
-      </div>
 
       <div class="alert-banner warning">
         <span class="alert-icon" aria-hidden="true">
@@ -1519,11 +1403,11 @@ th.num, td.num { text-align:right; font-variant-numeric:tabular-nums; }
             <table class="data-table">
               <thead><tr><th>Afdeling</th><th>Gepland</th><th>Goedgekeurd</th><th>Verzuim</th><th>Inhuur</th><th>Δ G/V</th></tr></thead>
               <tbody>
-                <tr><td>Housekeeping</td><td>1.260 u</td><td>1.224 u</td><td>32 u</td><td>48 u</td><td><span class="value-down">−36 u</span></td></tr>
-                <tr><td>Receptie</td><td>720 u</td><td>705 u</td><td>15 u</td><td>0 u</td><td><span class="value-flat">−15 u</span></td></tr>
-                <tr><td>Restaurant</td><td>980 u</td><td>948 u</td><td>32 u</td><td>24 u</td><td><span class="value-down">−32 u</span></td></tr>
-                <tr><td>F&amp;B</td><td>340 u</td><td>328 u</td><td>12 u</td><td>0 u</td><td><span class="value-flat">−12 u</span></td></tr>
-                <tr><td>Onderhoud</td><td>120 u</td><td>113 u</td><td>3 u</td><td>0 u</td><td><span class="value-flat">−7 u</span></td></tr>
+                <tr data-dept-row="housekeeping"><td>Housekeeping</td><td>1.260 u</td><td>1.224 u</td><td>32 u</td><td>48 u</td><td><span class="value-down">−36 u</span></td></tr>
+                <tr data-dept-row="receptie"><td>Receptie</td><td>720 u</td><td>705 u</td><td>15 u</td><td>0 u</td><td><span class="value-flat">−15 u</span></td></tr>
+                <tr data-dept-row="restaurant"><td>Restaurant</td><td>980 u</td><td>948 u</td><td>32 u</td><td>24 u</td><td><span class="value-down">−32 u</span></td></tr>
+                <tr data-dept-row="fb-dept"><td>F&amp;B</td><td>340 u</td><td>328 u</td><td>12 u</td><td>0 u</td><td><span class="value-flat">−12 u</span></td></tr>
+                <tr data-dept-row="onderhoud"><td>Onderhoud</td><td>120 u</td><td>113 u</td><td>3 u</td><td>0 u</td><td><span class="value-flat">−7 u</span></td></tr>
               </tbody>
               <tfoot><tr><td>Totaal</td><td>3.420 u</td><td>3.318 u</td><td>94 u</td><td>72 u</td><td><span class="value-down">−102 u</span></td></tr></tfoot>
             </table>
@@ -1597,11 +1481,11 @@ th.num, td.num { text-align:right; font-variant-numeric:tabular-nums; }
               </tr>
             </thead>
             <tbody>
-              <tr><td>Housekeeping</td><td class="num">€ 18.144</td><td class="num">€ 17.625</td><td class="num">97,1%</td><td class="num"><span class="value-down">€ 1.152</span></td><td class="num">€ 1.920</td><td class="num"><strong>€ 20.697</strong></td></tr>
-              <tr><td>Receptie</td><td class="num">€ 10.368</td><td class="num">€ 10.152</td><td class="num">97,9%</td><td class="num"><span class="value-flat">€ 432</span></td><td class="num">€ 0</td><td class="num"><strong>€ 10.584</strong></td></tr>
-              <tr><td>Restaurant</td><td class="num">€ 14.112</td><td class="num">€ 13.651</td><td class="num">96,7%</td><td class="num"><span class="value-down">€ 832</span></td><td class="num">€ 720</td><td class="num"><strong>€ 15.203</strong></td></tr>
-              <tr><td>F&amp;B</td><td class="num">€ 4.896</td><td class="num">€ 4.723</td><td class="num">96,5%</td><td class="num"><span class="value-flat">€ 288</span></td><td class="num">€ 0</td><td class="num"><strong>€ 5.011</strong></td></tr>
-              <tr><td>Onderhoud</td><td class="num">€ 1.728</td><td class="num">€ 1.627</td><td class="num">94,2%</td><td class="num"><span class="value-flat">€ 48</span></td><td class="num">€ 0</td><td class="num"><strong>€ 1.675</strong></td></tr>
+              <tr data-dept-row="housekeeping"><td>Housekeeping</td><td class="num">€ 18.144</td><td class="num">€ 17.625</td><td class="num">97,1%</td><td class="num"><span class="value-down">€ 1.152</span></td><td class="num">€ 1.920</td><td class="num"><strong>€ 20.697</strong></td></tr>
+              <tr data-dept-row="receptie"><td>Receptie</td><td class="num">€ 10.368</td><td class="num">€ 10.152</td><td class="num">97,9%</td><td class="num"><span class="value-flat">€ 432</span></td><td class="num">€ 0</td><td class="num"><strong>€ 10.584</strong></td></tr>
+              <tr data-dept-row="restaurant"><td>Restaurant</td><td class="num">€ 14.112</td><td class="num">€ 13.651</td><td class="num">96,7%</td><td class="num"><span class="value-down">€ 832</span></td><td class="num">€ 720</td><td class="num"><strong>€ 15.203</strong></td></tr>
+              <tr data-dept-row="fb-dept"><td>F&amp;B</td><td class="num">€ 4.896</td><td class="num">€ 4.723</td><td class="num">96,5%</td><td class="num"><span class="value-flat">€ 288</span></td><td class="num">€ 0</td><td class="num"><strong>€ 5.011</strong></td></tr>
+              <tr data-dept-row="onderhoud"><td>Onderhoud</td><td class="num">€ 1.728</td><td class="num">€ 1.627</td><td class="num">94,2%</td><td class="num"><span class="value-flat">€ 48</span></td><td class="num">€ 0</td><td class="num"><strong>€ 1.675</strong></td></tr>
             </tbody>
             <tfoot>
               <tr><td>Totaal</td><td class="num">€ 49.248</td><td class="num">€ 47.778</td><td class="num">97,0%</td><td class="num"><span class="value-down">€ 2.752</span></td><td class="num">€ 2.640</td><td class="num"><strong>€ 53.170</strong></td></tr>
@@ -1648,8 +1532,16 @@ th.num, td.num { text-align:right; font-variant-numeric:tabular-nums; }
 
     </section>
 
-    <!-- ========================================================== VIEW: F&B (Phase 4) -->
-    <section class="view" id="view-fb" data-phase="4">
+    <section class="view" id="view-workforce" data-phase="3">
+      <div class="alert-banner info">
+        <span class="alert-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </span>
+        <span><strong>Workforce Efficiency.</strong> Hiërarchische heatmap voor hotel-, afdeling- en medewerker-efficiëntie. Filter wordt gedeeld met de andere views.</span>
+      </div>
+      <div id="view-workforce-content"></div>
+    </section>
+
 
       <div class="alert-banner warning">
         <span class="alert-icon" aria-hidden="true">
@@ -2438,21 +2330,19 @@ function initPlanningCharts() {
      State
      ====================================================================== */
   var HOTELS = ['strandhotel-zoutelande','mezger-lodges','duinhotel-tien-torens','hotel-bommelje','cityhotel-wood','hotel-copper-and-co'];
+  var hotelLabels={'strandhotel-zoutelande':'Strandhotel Zoutelande','mezger-lodges':'Mezger Lodges','duinhotel-tien-torens':'Duinhotel Tien Torens','hotel-bommelje':'Hotel Bommeljé','cityhotel-wood':'Cityhotel Wood','hotel-copper-and-co':'Hotel Copper & Co'};
+  var DEPTS = ['housekeeping','receptie','restaurant','fb-dept','onderhoud'];
   var state = {
     view: 'executive',
-    period: 'mtd',
+    period: 'this-month',
     hotels: HOTELS.slice(),
+    depts: DEPTS.slice(),
     compare: 'prev-period'
   };
 
-  var PERIOD_LABELS = {
-    'today': 'Vandaag · 30 april 2026',
-    'yesterday': 'Gisteren · 29 april 2026',
-    'mtd': 'MTD t/m 30 april 2026',
-    'prev-month': 'Vorige maand · maart 2026',
-    'ytd': 'YTD · 1 jan – 30 april 2026',
-    'custom': 'Custom periode'
-  };
+  /* Wordt gevuld door de filter-menu-adapter (formatPeriodLabel), op basis van
+     FilterMenu.resolvePresetRange() — geen hardcoded datums meer. */
+  var PERIOD_LABELS = {};
   var COMPARE_LABELS = {
     'prev-period': 'vs. vorige periode',
     'prev-year': 'vs. vorig jaar',
@@ -2464,23 +2354,45 @@ function initPlanningCharts() {
     'personeel': { title: 'Personeel & uren', sub: 'Roosters & efficiëntie · {hotelCount} objecten · {period}' },
     'fb': { title: 'F&B / Voorraad', sub: 'POS & ontbijt-reconciliatie · {hotelCount} objecten · {period}' },
     'planning': { title: 'Planning', sub: 'Roosters & bezettingsprognose · {hotelCount} objecten · {period}' },
+    'workforce': { title: 'Workforce Efficiency', sub: 'Personeelsefficiëntie · {hotelCount} objecten · {period}' },
     'instellingen': { title: 'Drempelwaarden', sub: 'Beheer thresholds voor KPI-signalering en meldingen' }
   };
   var VIEW_LABELS = {
     'executive': 'Portfolio',
     'financieel': 'Financieel',
     'personeel': 'Personeel',
+    'workforce': 'Workforce',
     'fb': 'F&B',
     'planning': 'Planning',
     'instellingen': 'Instellingen'
   };
 
-  /* Period multipliers — base is full-month (30d) April 2026 */
+  function normalizeWorkforceDepts(depts) {
+    var normalized = [];
+    (depts || []).forEach(function (d) {
+      if (d === 'housekeeping' || d === 'receptie' || d === 'onderhoud') {
+        normalized.push(d);
+      } else if (d === 'restaurant' || d === 'fb-dept') {
+        if (normalized.indexOf('fb') === -1) normalized.push('fb');
+      }
+    });
+    return normalized.length ? normalized : ['housekeeping','receptie','fb','onderhoud'];
+  }
+
+  /* Period multipliers — base is full-month (30d) April 2026.
+     Sleutels komen overeen met de preset-id's van het filter-menu component;
+     computeKPIs() valt terug op 'this-month' bij een onbekende/nieuwe preset. */
   var PERIOD_FACTORS = {
-    'today':      { rev: 0.033, occ: -2.4, adr: 0.97, delta: 1.2 },
-    'yesterday':  { rev: 0.030, occ: -3.1, adr: 0.95, delta: 0.8 },
-    'mtd':        { rev: 1.000, occ: 0,    adr: 1.00, delta: 4.2 },
-    'prev-month': { rev: 0.757, occ: -15.6, adr: 0.94, delta: 1.8 },
+    'today':      { rev: 0.033, occ: -2.4,  adr: 0.97, delta: 1.2 },
+    'yesterday':  { rev: 0.030, occ: -3.1,  adr: 0.95, delta: 0.8 },
+    'this-week':  { rev: 0.230, occ: -1.8,  adr: 0.98, delta: 1.6 },
+    'last-week':  { rev: 0.230, occ: -2.6,  adr: 0.96, delta: 1.1 },
+    'this-month': { rev: 1.000, occ: 0,     adr: 1.00, delta: 4.2 },
+    'last-month': { rev: 0.757, occ: -15.6, adr: 0.94, delta: 1.8 },
+    'last-30':    { rev: 1.000, occ: 0,     adr: 1.00, delta: 4.2 },
+    'last-90':    { rev: 2.960, occ: -8.4,  adr: 0.97, delta: 3.6 },
+    'this-year':  { rev: 2.520, occ: -22.7, adr: 0.96, delta: 3.2 },
+    'last-year':  { rev: 2.400, occ: -20.5, adr: 0.93, delta: 2.4 },
     'ytd':        { rev: 2.520, occ: -22.7, adr: 0.96, delta: 3.2 },
     'custom':     { rev: 0.500, occ:  0.4,  adr: 1.01, delta: 3.2 }
   };
@@ -2496,6 +2408,10 @@ function initPlanningCharts() {
   };
   /* Expose to chart functions in global scope */
   window._HB = HOTEL_BASE;
+
+  /* Input voor de geïsoleerde Cost of Workforce-module (cost-of-workforce.js) */
+  var HOTEL_META = {};
+  HOTELS.forEach(function(h){ HOTEL_META[h] = { label: hotelLabels[h], rooms: HOTEL_BASE[h].rooms }; });
 
   /* ========================================================================
      Helpers
@@ -2518,7 +2434,7 @@ function initPlanningCharts() {
      Computation — derive KPIs from selected hotels + period
      ====================================================================== */
   function computeKPIs(){
-    var period = PERIOD_FACTORS[state.period] || PERIOD_FACTORS['mtd'];
+    var period = PERIOD_FACTORS[state.period] || PERIOD_FACTORS['this-month'];
     var selected = state.hotels;
 
     var totalRev = 0, totalRooms = 0, weightedADR = 0, weightedOCC = 0;
@@ -2546,7 +2462,6 @@ function initPlanningCharts() {
       if(ho>bestOcc){bestOcc=ho;bestH=h;}
       if(ho<worstOcc){worstOcc=ho;worstH=h;}
     });
-    var hotelLabels={'strandhotel-zoutelande':'Strandhotel Zoutelande','mezger-lodges':'Mezger Lodges','duinhotel-tien-torens':'Duinhotel Tien Torens','hotel-bommelje':'Hotel Bommeljé','cityhotel-wood':'Cityhotel Wood','hotel-copper-and-co':'Hotel Copper & Co'};
 
     window._PERIOD_FACTOR = period.rev;
     window._PERIOD_OCC    = period.occ;
@@ -2578,7 +2493,7 @@ function initPlanningCharts() {
   var ALL_REV_MTD = HOTELS.reduce(function(s,h){ return s + HOTEL_BASE[h].rev;   }, 0);
 
   function computePortfolioScale(){
-    var period = PERIOD_FACTORS[state.period] || PERIOD_FACTORS['mtd'];
+    var period = PERIOD_FACTORS[state.period] || PERIOD_FACTORS['this-month'];
     var selected = state.hotels;
     var selRev = 0, selRooms = 0;
     selected.forEach(function(h){
@@ -2633,7 +2548,7 @@ function initPlanningCharts() {
       if (b) { sumRev += b.rev; sumRooms += b.rooms; }
     });
     if (footCells) {
-      var period = PERIOD_FACTORS[state.period] || PERIOD_FACTORS['mtd'];
+      var period = PERIOD_FACTORS[state.period] || PERIOD_FACTORS['this-month'];
       var portfolioRev = sumRev * period.rev;
       var portfolioRevpar = sumRooms ? portfolioRev / (sumRooms * 30) : 0;
       if (state.period === 'today' || state.period === 'yesterday') portfolioRevpar = sumRooms ? portfolioRev / sumRooms : 0;
@@ -2682,6 +2597,18 @@ function initPlanningCharts() {
     return count;
   }
 
+  /* Toont/verbergt [data-dept-row]-rijen binnen root op basis van state.depts; retourneert het aantal zichtbare rijen. */
+  function applyDeptRowVisibility(root){
+    var count = 0;
+    root.querySelectorAll('[data-dept-row]').forEach(function(tr){
+      var d = tr.getAttribute('data-dept-row');
+      var on = state.depts.indexOf(d) !== -1;
+      tr.style.display = on ? '' : 'none';
+      if (on) count++;
+    });
+    return count;
+  }
+
   /* ========================================================================
      Kop-KPI-reactiviteit voor Financieel/Personeel/F&B/Planning — schaalt
      mee met de hotel/periode-selectie via computePortfolioScale(). Ratio's/
@@ -2710,6 +2637,7 @@ function initPlanningCharts() {
     setKpi(personeelView, 'goedgekeurde-uren', goedgekeurdUren.toLocaleString('nl-NL') + ' u', -3.0 * deltaScale, ' u');
     setKpi(personeelView, 'verzuim-uren', verzuimUren.toLocaleString('nl-NL') + ' u', 19.0 * deltaScale, ' u');
     setKpi(personeelView, 'schoonmaak-per-uur', '2,4', 8.3, '%');
+    applyDeptRowVisibility(personeelView);
   }
 
   var fbView = document.getElementById('view-fb');
@@ -2747,8 +2675,14 @@ function initPlanningCharts() {
 
   function renderCurrentView(){
     if (state.view === 'executive')       renderExecutive();
-    else if (state.view === 'financieel') renderFinancieel();
+    else if (state.view === 'financieel') {
+      renderFinancieel();
+      if (window.CostOfWorkforce) window.CostOfWorkforce.render('canvas-fin-workforce', state.hotels, HOTEL_META);
+    }
     else if (state.view === 'personeel')  renderPersoneel();
+    else if (state.view === 'workforce') {
+      if (window.WorkforceEfficiency) window.WorkforceEfficiency.render('view-workforce-content', state.hotels, HOTEL_META, { depts: normalizeWorkforceDepts(state.depts), period: state.period });
+    }
     else if (state.view === 'fb')         renderFb();
     else if (state.view === 'planning')   renderPlanning();
   }
@@ -2777,8 +2711,15 @@ function initPlanningCharts() {
 
   function initChartsForView(v) {
     if (v === 'executive') { renderExecutive(); }
-    else if (v === 'financieel') { renderFinancieel(); setTimeout(initFinancieelCharts, 50); }
+    else if (v === 'financieel') {
+      renderFinancieel();
+      setTimeout(function(){
+        initFinancieelCharts();
+        if (window.CostOfWorkforce) window.CostOfWorkforce.render('canvas-fin-workforce', state.hotels, HOTEL_META);
+      }, 50);
+    }
     else if (v === 'personeel')  { renderPersoneel();  setTimeout(initPersoonelCharts,  50); }
+    else if (v === 'workforce')  { if (window.WorkforceEfficiency) window.WorkforceEfficiency.render('view-workforce-content', state.hotels, HOTEL_META, { depts: normalizeWorkforceDepts(state.depts), period: state.period }); }
     else if (v === 'fb')         { renderFb();         setTimeout(initFbCharts,         50); }
     else if (v === 'planning')   { renderPlanning();   setTimeout(initPlanningCharts,   50); }
   }
@@ -2789,8 +2730,8 @@ function initPlanningCharts() {
     document.querySelectorAll('#mainNav .nav-tab').forEach(function(t){ t.classList.toggle('active', t.getAttribute('data-view') === v); });
     document.querySelectorAll('#mobileNav .nav-tab').forEach(function(t){ t.classList.toggle('active', t.getAttribute('data-view') === v); });
     document.querySelectorAll('.view').forEach(function(s){ s.classList.toggle('active', s.id === 'view-' + v); });
-    var fb = document.getElementById('filterBar');
-    if (fb) fb.style.display = (v === 'instellingen') ? 'none' : '';
+    var filterMenuRootEl = document.getElementById('filterMenuRoot');
+    if (filterMenuRootEl) filterMenuRootEl.style.display = (v === 'instellingen') ? 'none' : '';
     updatePageHeader();
     initChartsForView(v);
     showToast((VIEW_LABELS[v] || v) + ' geladen');
@@ -2802,101 +2743,79 @@ function initPlanningCharts() {
     switchView(btn.getAttribute('data-view'));
   });
 
-  /* Filter bar — samenvatting (zichtbaar wanneer ingeklapt) */
-  var filterBar = document.getElementById('filterBar');
-  var filterToggleBtn = document.getElementById('filterToggleBtn');
-  var filterSummary = document.getElementById('filterSummary');
-  var FILTER_COLLAPSE_KEY = 'zeayou-filterbar-collapsed';
+  /* ========================================================================
+     Filter menu — adapter naar het zelfstandige component
+     (components/filter-menu/). Vertaalt filtermenu:change/ready-events naar
+     het bestaande state-object en de render-pijplijn hieronder.
+     ====================================================================== */
+  var DEPT_LABELS_DISPLAY = { housekeeping:'Housekeeping', receptie:'Receptie', restaurant:'Restaurant', 'fb-dept':'F&B', onderhoud:'Onderhoud' };
+  var filterMenuInstance = null;
 
-  function updateFilterSummary(){
-    if (!filterSummary) return;
-    var hotelTotal = HOTELS.length;
-    var hotelLabel = state.hotels.length === hotelTotal ? 'alle hotels' : state.hotels.length + '/' + hotelTotal + ' hotels';
-    var parts = [PERIOD_LABELS[state.period] || state.period, hotelLabel];
-    if (state.compare !== 'none') parts.push(COMPARE_LABELS[state.compare] || state.compare);
-    filterSummary.textContent = parts.join(' · ');
+  function mapCompareToLegacy(compareState){
+    if (!compareState.enabled) return 'none';
+    return compareState.presetId === 'last-year' ? 'prev-year' : 'prev-period';
   }
 
-  function setFilterCollapsed(collapsed){
-    if (!filterBar || !filterToggleBtn) return;
-    filterBar.classList.toggle('collapsed', collapsed);
-    filterToggleBtn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-    if (collapsed) updateFilterSummary();
-    try { localStorage.setItem(FILTER_COLLAPSE_KEY, collapsed ? '1' : '0'); } catch(e){}
+  function formatPeriodLabel(rangeState){
+    var opts = { day: 'numeric', month: 'long', year: 'numeric' };
+    var startTxt = rangeState.start.toLocaleDateString('nl-NL', opts);
+    var endTxt = rangeState.end.toLocaleDateString('nl-NL', opts);
+    return startTxt === endTxt ? startTxt : startTxt + ' – ' + endTxt;
   }
 
-  if (filterToggleBtn) {
-    filterToggleBtn.addEventListener('click', function(){
-      setFilterCollapsed(!filterBar.classList.contains('collapsed'));
-    });
-    var storedCollapsed = false;
-    try { storedCollapsed = localStorage.getItem(FILTER_COLLAPSE_KEY) === '1'; } catch(e){}
-    setFilterCollapsed(storedCollapsed);
+  function syncStateFromFilterMenu(fmState){
+    state.hotels = fmState.hotels.slice();
+    state.depts = fmState.depts.slice();
+    state.period = fmState.period.presetId;
+    state.compare = mapCompareToLegacy(fmState.compare);
+    PERIOD_LABELS[state.period] = formatPeriodLabel(fmState.period);
   }
 
-  /* Period chips (single-select) */
-  document.getElementById('periodChips').addEventListener('click', function(e){
-    var btn = e.target.closest('.chip[data-period]');
-    if (!btn) return;
-    var p = btn.getAttribute('data-period');
-    state.period = p;
-    this.querySelectorAll('.chip').forEach(function(c){ c.classList.toggle('active', c === btn); });
+  var filterMenuRoot = document.getElementById('filterMenuRoot');
+  filterMenuRoot.addEventListener('filtermenu:change', function(e){
+    syncStateFromFilterMenu(e.detail.state);
     updatePageHeader();
-    updateFilterSummary();
     renderCurrentView();
-    showToast('Periode: ' + (PERIOD_LABELS[p] || p));
+    showToast('Filters bijgewerkt');
   });
+  filterMenuRoot.addEventListener('filtermenu:ready', function(e){
+    syncStateFromFilterMenu(e.detail.state);
+    setupFilterMenuPinObserver();
+    updatePageHeader();
+    renderExecutive();
+  }, { once: true });
 
-  /* Hotel chips (multi-select + toggle-all) */
-  var hotelChips = document.getElementById('hotelChips');
-  hotelChips.addEventListener('click', function(e){
-    var btn = e.target.closest('.chip');
-    if (!btn) return;
-
-    if (btn.getAttribute('data-action') === 'toggle-all-hotels') {
-      var allOn = state.hotels.length === HOTELS.length;
-      if (allOn) {
-        state.hotels = [];
-      } else {
-        state.hotels = HOTELS.slice();
+  FilterMenu.init({
+    root: filterMenuRoot,
+    referenceDate: new Date(2026, 3, 30),
+    filters: [
+      {
+        key: 'hotels', type: 'multiselect', label: 'Hotels', searchable: true, searchPlaceholder: 'Zoek hotel…',
+        options: HOTELS.map(function(h){ return { id: h, label: hotelLabels[h] }; }),
+        value: state.hotels.slice(), allLabel: 'Alle hotels', badgeCategoryLabel: 'Hotels'
+      },
+      {
+        key: 'depts', type: 'multiselect', label: 'Afdeling', searchable: true, searchPlaceholder: 'Zoek afdeling…',
+        options: DEPTS.map(function(d){ return { id: d, label: DEPT_LABELS_DISPLAY[d] }; }),
+        value: state.depts.slice(), allLabel: 'Alle afdelingen', badgeCategoryLabel: 'Afdeling'
+      },
+      {
+        key: 'period', type: 'daterange-preset', label: 'Periode',
+        presets: ['today','yesterday','this-week','last-week','this-month','last-month','last-30','last-90','this-year','last-year','ytd','custom'],
+        value: { presetId: 'this-month' }, badgeCategoryLabel: 'Periode'
+      },
+      {
+        key: 'compare', type: 'daterange-optional', label: 'Vergelijken met',
+        presets: ['today','yesterday','this-week','last-week','this-month','last-month','last-30','last-90','this-year','last-year','ytd','custom'],
+        value: { enabled: true, presetId: 'last-month' }, badgeCategoryLabel: 'Vergelijking'
       }
-    } else {
-      var h = btn.getAttribute('data-hotel');
-      if (!h) return;
-      var idx = state.hotels.indexOf(h);
-      if (idx === -1) state.hotels.push(h); else state.hotels.splice(idx, 1);
-    }
-
-    /* Sync chip visuals */
-    this.querySelectorAll('.chip[data-hotel]').forEach(function(c){
-      c.classList.toggle('active', state.hotels.indexOf(c.getAttribute('data-hotel')) !== -1);
-    });
-    var allChip = this.querySelector('[data-action="toggle-all-hotels"]');
-    if (allChip) {
-      allChip.classList.toggle('active', state.hotels.length === HOTELS.length);
-      allChip.textContent = state.hotels.length === HOTELS.length ? 'Alle hotels' : (state.hotels.length === 0 ? 'Selecteer hotels' : state.hotels.length + ' van ' + HOTELS.length);
-    }
-
+    ]
+  }).then(function(instance){
+    filterMenuInstance = instance;
+  }).catch(function(err){
+    console.warn('[FilterMenu] laden mislukt, val terug op standaard-filters', err);
     updatePageHeader();
-    updateFilterSummary();
-    renderCurrentView();
-    showToast(state.hotels.length + ' hotel' + (state.hotels.length === 1 ? '' : 's') + ' geselecteerd');
-  });
-
-  /* Compare-with segmented */
-  document.getElementById('compareSeg').addEventListener('click', function(e){
-    var btn = e.target.closest('.seg[data-compare]');
-    if (!btn) return;
-    var c = btn.getAttribute('data-compare');
-    state.compare = c;
-    this.querySelectorAll('.seg').forEach(function(s){
-      var on = s === btn;
-      s.classList.toggle('active', on);
-      s.setAttribute('aria-selected', on ? 'true' : 'false');
-    });
-    updateFilterSummary();
-    renderCurrentView();
-    showToast('Vergelijken: ' + (COMPARE_LABELS[c] || 'geen vergelijking'));
+    renderExecutive();
   });
 
   /* Misc buttons */
@@ -2916,12 +2835,14 @@ function initPlanningCharts() {
     if (b) b.style.display = 'none';
   });
 
-  /* Sticky filter-bar — "gepind"-status voor subtiele schaduw-feedback */
-  var pageHeaderEl = document.querySelector('.page-header');
-  var filterBarEl  = document.querySelector('.filter-bar');
-  if (pageHeaderEl && filterBarEl && 'IntersectionObserver' in window) {
+  function setupFilterMenuPinObserver() {
+    var pageHeaderEl = document.querySelector('.page-header');
+    var filterMenuRootEl = document.getElementById('filterMenuRoot');
+    if (!pageHeaderEl || !filterMenuRootEl || !('IntersectionObserver' in window)) return;
+    var widgetEl = filterMenuRootEl.querySelector('.fm-widget');
+    if (!widgetEl) return;
     new IntersectionObserver(function(entries){
-      filterBarEl.classList.toggle('is-pinned', !entries[0].isIntersecting);
+      widgetEl.classList.toggle('fm-widget--pinned', !entries[0].isIntersecting);
     }, { rootMargin: '-57px 0px 0px 0px', threshold: 0 }).observe(pageHeaderEl);
   }
 
@@ -2938,27 +2859,6 @@ function initPlanningCharts() {
       if (!btn) return;
       mobileNav.classList.remove('open');
       switchView(btn.getAttribute('data-view'));
-    });
-  }
-
-  /* Dept filter chips */
-  var deptChips = document.getElementById('deptChips');
-  if (deptChips) {
-    deptChips.addEventListener('click', function(e){
-      var btn = e.target.closest('.chip');
-      if (!btn) return;
-      if (btn.getAttribute('data-action') === 'toggle-all-depts') {
-        this.querySelectorAll('.chip[data-dept]').forEach(function(c){ c.classList.add('active'); });
-        btn.classList.add('active');
-      } else {
-        var d = btn.getAttribute('data-dept');
-        if (!d) return;
-        btn.classList.toggle('active');
-        var allActive = Array.from(this.querySelectorAll('.chip[data-dept]')).every(function(c){ return c.classList.contains('active'); });
-        var allChip = this.querySelector('[data-action="toggle-all-depts"]');
-        if (allChip) allChip.classList.toggle('active', allActive);
-      }
-      showToast('Afdeling filter bijgewerkt');
     });
   }
 
@@ -3141,6 +3041,8 @@ function initPlanningCharts() {
   renderExecutive();
 })();
 </script>
-<script type="module" src="./feedback-widget.js"></script>
+<script src="./components/graph-workforce-efficiency/workforce-efficiency.js"></script>
+<script src="./components/graph-workforce-costs/cost-of-workforce.js"></script>
+<script type="module" src="./components/widget-feedback/feedback-widget.js"></script>
 </body>
 </html>

@@ -1,0 +1,22 @@
+<!--
+  Filter Menu — chrome-template.
+  Bevat uitsluitend de niet-domeinspecifieke buitenkant; de kolommen (Hotels,
+  Afdeling, Periode, Vergelijken met, en eventuele toekomstige filters) worden
+  door filter-menu.js gegenereerd op basis van de config die index.html meegeeft.
+  Dit bestand wordt door filter-menu.js opgehaald (fetch) en in het aangewezen
+  root-element van de hostpagina gekloond.
+-->
+<section class="fm-widget" aria-label="Filters">
+  <div class="fm-header">
+    <button class="fm-toggle" type="button" data-fm="toggleBtn" aria-expanded="true" aria-controls="">
+      <svg class="fm-toggle-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <span>Filters</span>
+    </button>
+  </div>
+  <div class="fm-collapse" data-fm="collapse">
+    <div class="fm-collapse-inner">
+      <div class="fm-columns" data-fm="columns"></div>
+    </div>
+  </div>
+  <ul class="fm-active-filters" data-fm="activeFilters" role="list" hidden></ul>
+</section>

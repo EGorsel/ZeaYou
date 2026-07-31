@@ -1,0 +1,243 @@
+/* ==========================================================================
+   Filter Menu component — ZeaYou Hotel BI
+   Vereist dat de design tokens (--color-*, --space-*, --radius-*, --shadow-*,
+   --font-*, --tracking-*, --transition-*, --ease-out, --ring-primary) al op
+   :root staan — die worden door index.html gezet. Dit bestand definieert
+   zelf geen tokens en dupliceert ze niet.
+   Alle classes zijn geprefixt met "fm-" om botsingen met bestaande classes
+   in de hostpagina (bv. .chip, .filter-*, .segmented) te vermijden.
+   ========================================================================== */
+
+.fm-widget {
+  position: sticky;
+  top: 56px;
+  z-index: 90;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  transition: box-shadow var(--transition-base), border-color var(--transition-base);
+}
+.fm-widget--pinned { box-shadow: var(--shadow-md); border-color: var(--color-border); }
+
+/* Header + collapse toggle */
+.fm-header { display: flex; align-items: center; }
+.fm-toggle {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  padding: 3px 4px;
+  margin: -3px -4px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast);
+}
+.fm-toggle:hover { color: var(--color-primary); }
+.fm-toggle-icon { transition: transform var(--transition-base); flex-shrink: 0; }
+.fm-widget.fm-widget--collapsed .fm-toggle-icon { transform: rotate(-90deg); }
+
+/* Vloeiende in/uitklap-animatie zonder vaste max-height:
+   grid-template-rows animeert naar de werkelijke intrinsieke inhoud-hoogte. */
+.fm-collapse {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--transition-base);
+}
+.fm-widget--collapsed .fm-collapse { grid-template-rows: 0fr; }
+.fm-collapse-inner { overflow: hidden; min-height: 0; }
+
+/* Kolommen — auto-fit laat toekomstige extra filters vanzelf meereflowen */
+.fm-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-5) var(--space-6);
+  padding-top: var(--space-2);
+}
+@media (max-width: 1024px) { .fm-columns { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .fm-columns { grid-template-columns: 1fr; } }
+
+.fm-column { position: relative; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.fm-column-label {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--color-text-muted);
+}
+
+/* Trigger button (elke kolom) */
+.fm-trigger {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  text-align: left;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.fm-trigger:hover { border-color: var(--color-primary); }
+.fm-trigger[aria-expanded="true"] { border-color: var(--color-primary); box-shadow: var(--ring-primary); }
+.fm-trigger:disabled { opacity: 0.5; cursor: not-allowed; }
+.fm-trigger-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fm-trigger-icon { flex-shrink: 0; color: var(--color-text-faint-on-light); transition: transform var(--transition-fast); }
+.fm-trigger[aria-expanded="true"] .fm-trigger-icon--caret { transform: rotate(180deg); }
+
+/* Popover-paneel — blijft in de DOM voor transities, gestuurd via class + aria-hidden */
+.fm-panel {
+  position: absolute; top: calc(100% + 6px); left: 0;
+  min-width: 280px; max-width: 340px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-3);
+  display: flex; flex-direction: column; gap: var(--space-2);
+  opacity: 0; transform: translateY(-4px) scale(0.98);
+  pointer-events: none;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  z-index: 110;
+}
+.fm-panel--open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.fm-panel--daterange { min-width: 300px; }
+
+/* Multiselect: zoekveld, acties, optielijst */
+.fm-search-input {
+  width: 100%; padding: 6px var(--space-3);
+  border: 1px solid var(--color-border); border-radius: var(--radius-md);
+  font-size: var(--font-size-sm); color: var(--color-text);
+  background: var(--color-surface);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.fm-search-input:focus-visible { outline: none; border-color: var(--color-primary); box-shadow: var(--ring-primary); }
+
+.fm-panel-actions { display: flex; gap: var(--space-3); }
+.fm-text-btn { font-size: var(--font-size-xs); font-weight: var(--font-weight-medium); color: var(--color-primary); }
+.fm-text-btn:hover { color: var(--color-primary-hover); text-decoration: underline; }
+
+.fm-option-list { list-style: none; max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 1px; }
+.fm-option-label {
+  display: flex; align-items: center; gap: var(--space-2);
+  padding: 6px var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+.fm-option-label:hover { background: var(--color-surface-2); }
+.fm-option-checkbox { width: 15px; height: 15px; accent-color: var(--color-primary); flex-shrink: 0; }
+.fm-empty-state { font-size: var(--font-size-xs); color: var(--color-text-muted); padding: var(--space-2); text-align: center; }
+
+/* Vergelijken met — checkbox-gate */
+.fm-compare-toggle {
+  display: flex; align-items: center; gap: var(--space-2);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+.fm-compare-checkbox { width: 15px; height: 15px; accent-color: var(--color-primary); }
+.fm-compare-body[hidden] { display: none; }
+
+/* Periode / Vergelijken-met: preset-badges + datumvelden + kalender */
+.fm-preset-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.fm-preset-badge {
+  padding: 4px 10px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+}
+.fm-preset-badge:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.fm-preset-badge--active { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-text-inverse); }
+
+.fm-date-inputs { display: flex; gap: var(--space-2); }
+.fm-date-field { flex: 1; display: flex; flex-direction: column; gap: 2px; font-size: var(--font-size-2xs); color: var(--color-text-muted); }
+.fm-date-text {
+  padding: 5px var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  background: var(--color-surface-alt);
+  font-variant-numeric: tabular-nums;
+}
+
+.fm-calendar-nav { display: flex; align-items: center; justify-content: space-between; }
+.fm-cal-nav-btn {
+  width: 24px; height: 24px;
+  border-radius: var(--radius-sm);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-md);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.fm-cal-nav-btn:hover { background: var(--color-surface-2); color: var(--color-text); }
+.fm-calendar-heading { font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--color-text); text-transform: capitalize; }
+.fm-calendar-weekdays {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  font-size: 10px; color: var(--color-text-faint-on-light); text-align: center;
+  margin-top: 4px;
+}
+.fm-calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.fm-day {
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.fm-day:hover { background: var(--color-surface-2); }
+.fm-day--muted { color: var(--color-text-faint-on-light); }
+.fm-day--today { box-shadow: inset 0 0 0 1px var(--color-primary); }
+.fm-day--in-range { background: var(--color-primary-subtle); border-radius: 0; }
+.fm-day--range-start, .fm-day--range-end {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-semibold);
+}
+.fm-day--range-start { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.fm-day--range-end { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.fm-day--range-start.fm-day--range-end { border-radius: var(--radius-sm); }
+
+/* Actieve-filterbadges — sibling van .fm-collapse, dus zichtbaar ongeacht in/uitklapstatus */
+.fm-active-filters {
+  list-style: none;
+  display: flex; flex-wrap: wrap; gap: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border-light);
+}
+.fm-active-filters[hidden] { display: none; }
+.fm-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px var(--space-2) 3px 10px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+.fm-badge strong { color: var(--color-text); font-weight: var(--font-weight-semibold); }
+.fm-badge-remove {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--color-text-faint-on-light);
+  font-size: 12px; line-height: 1;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.fm-badge-remove:hover { background: var(--color-danger-bg); color: var(--color-danger); }

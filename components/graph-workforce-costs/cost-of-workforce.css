@@ -1,0 +1,19 @@
+/* ZeaYou mockup — styling voor de "Cost of Workforce" grafiek (cost-of-workforce.js).
+   Gebruikt de CSS custom properties die index.html op :root zet (werkt documentbreed). */
+
+.legend-dot.violet { background: #8b5cf6; }
+.legend-dot.amber  { background: #f59e0b; }
+.legend-dot.plum   { background: #c9699a; }
+.legend.legend-below { margin-top: var(--space-3); justify-content: center; }
+
+.workforce-tooltip {
+  position: absolute; pointer-events: none; opacity: 0;
+  transition: opacity 120ms var(--ease-out);
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); box-shadow: var(--shadow-md);
+  padding: var(--space-3) var(--space-4); min-width: 180px;
+  font-size: var(--font-size-xs); color: var(--color-text-secondary); z-index: 20;
+}
+.wf-tip-title { font-weight: var(--font-weight-semibold); margin-bottom: 4px; }
+.wf-tip-total { font-weight: var(--font-weight-semibold); border-bottom: 1px solid var(--color-border-light); padding-bottom: 4px; margin-bottom: 4px; }
+.wf-tip-row { display: flex; justify-content: space-between; gap: var(--space-3); }
