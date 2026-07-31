@@ -12,11 +12,20 @@ This folder contains a static preview deployment for the ZeaYou dashboard mock-u
 
 ## Run locally
 
-From this folder, start a simple local web server:
+### Open app
 
 ```powershell
-py -m http.server 8001
+cd "c:\Users\p296880\AI\ZeaYou\ZeaYou-preview-deploy"; py -m http.server 8001
 ```
+
+### Restart app
+
+```powershell
+cd "c:\Users\p296880\AI\ZeaYou\ZeaYou-preview-deploy"; py $proc = (Get-NetTCPConnection -LocalPort 8001 -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty OwningProcess); if ($proc) { Stop-Process -Id $proc -Force }; Set-Location "c:\Users\p296880\AI\ZeaYou\ZeaYou-preview-deploy"; py -m http.server 8001
+```
+
+
+
 
 Then open:
 
