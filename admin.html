@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>ZeaYou · Feedback admin</title>
+<title>ZeaYou · Admin</title>
 <style>
 :root {
   --primary: #5b7ef5;
@@ -108,7 +108,7 @@ label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; c
   margin-top: 12px;
 }
 
-/* ============= Dashboard ============= */
+/* ============= Dashboard shell ============= */
 #dashboard {
   display: flex;
   flex-direction: column;
@@ -120,12 +120,14 @@ label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; c
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 22px;
+  padding: 0 22px;
+  height: 52px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
+  gap: 16px;
 }
-.topbar h1 { margin: 0; font-size: 16px; font-weight: 700; }
+.topbar h1 { margin: 0; font-size: 16px; font-weight: 700; white-space: nowrap; }
 .topbar h1 .accent { color: var(--primary); }
 .topbar .user-info {
   display: flex;
@@ -133,8 +135,48 @@ label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; c
   gap: 12px;
   font-size: 13px;
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
+/* ============= Top navigation tabs ============= */
+.topnav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
+.topnav-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 0 14px;
+  height: 52px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.12s ease, border-color 0.12s ease;
+}
+.topnav-tab[aria-selected="true"] {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+.topnav-tab:hover:not([aria-selected="true"]) {
+  color: var(--text);
+  background: var(--surface-alt);
+}
+
+/* ============= Page containers ============= */
+.page-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ============= Feedback page — Sidebar (list) ============= */
 .main-layout {
   display: grid;
   grid-template-columns: 360px 1fr;
@@ -142,7 +184,6 @@ label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; c
   min-height: 0;
 }
 
-/* ============= Sidebar (list) ============= */
 .sidebar {
   background: var(--surface);
   border-right: 1px solid var(--border);
@@ -388,9 +429,250 @@ label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; c
 .toast[data-kind="success"] { background: var(--success); }
 .toast[data-kind="error"] { background: var(--error); }
 
+/* ============= KB Progress page ============= */
+#page-kb {
+  overflow-y: auto;
+  padding: 28px;
+  background: var(--bg);
+}
+
+.kb-page {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Top row: donut + KPI strip */
+.kb-top-row {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+}
+
+.kb-card {
+  background: var(--surface);
+  border-radius: 14px;
+  border: 1px solid var(--border-light);
+  padding: 20px 22px;
+}
+.kb-card-title {
+  margin: 0 0 16px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+/* Donut card */
+.kb-donut-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.kb-donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+}
+.kb-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.kb-legend-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.kb-legend-label { color: var(--text); flex: 1; }
+.kb-legend-count { font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+
+/* KPI grid */
+.kb-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  height: 100%;
+  align-content: start;
+}
+.kb-kpi-cell {
+  background: var(--surface-alt);
+  border-radius: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-light);
+}
+.kb-kpi-value {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.kb-kpi-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 5px;
+  line-height: 1.3;
+}
+.kb-kpi-cell.c-success .kb-kpi-value { color: var(--success); }
+.kb-kpi-cell.c-warning .kb-kpi-value { color: var(--warning); }
+.kb-kpi-cell.c-error   .kb-kpi-value { color: var(--error); }
+.kb-kpi-cell.c-primary .kb-kpi-value { color: var(--primary); }
+
+/* Category bars */
+.kb-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 9px;
+}
+.kb-bar-row:last-child { margin-bottom: 0; }
+.kb-bar-label {
+  flex: 0 0 210px;
+  font-size: 12px;
+  text-align: right;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kb-bar-track {
+  flex: 1;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--border-light);
+  overflow: hidden;
+  display: flex;
+}
+.kb-bar-seg { height: 100%; }
+.kb-bar-seg.seg-ok      { background: var(--success); }
+.kb-bar-seg.seg-partial { background: #d97706; }
+.kb-bar-seg.seg-missing { background: #fca5a5; }
+.kb-bar-count {
+  flex: 0 0 100px;
+  font-size: 11px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* V-vragen per fase */
+.kb-fase-header {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin: 18px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.kb-fase-header:first-child { margin-top: 0; }
+.kb-fase-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.kb-fase-badge.f1 { background: var(--error-bg); color: var(--error); }
+.kb-fase-badge.f2 { background: var(--warning-bg); color: var(--warning); }
+.kb-fase-badge.f3 { background: var(--primary-light); color: var(--primary); }
+
+.kb-vragen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.kb-vraag-card {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-light);
+  border-radius: 9px;
+  padding: 10px 12px;
+}
+.kb-vraag-code {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 11px;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 5px;
+}
+.kb-vraag-code.f1 { background: var(--error-bg);    color: var(--error); }
+.kb-vraag-code.f2 { background: var(--warning-bg);  color: var(--warning); }
+.kb-vraag-code.f3 { background: var(--primary-light); color: var(--primary); }
+.kb-vraag-tekst { font-size: 12px; color: var(--text); line-height: 1.4; }
+.kb-vraag-stakeholder { font-size: 11px; color: var(--text-faint); margin-top: 4px; }
+
+/* Architectuurvragen */
+.kb-arch-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.kb-arch-col-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.kb-arch-col-title.c-resolved { color: var(--success); }
+.kb-arch-col-title.c-open     { color: var(--error); }
+.kb-arch-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 7px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.kb-arch-badge {
+  flex-shrink: 0;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  margin-top: 1px;
+}
+.kb-arch-badge.b-res  { background: var(--success-bg); color: var(--success); }
+.kb-arch-badge.b-open { background: var(--error-bg);   color: var(--error); }
+.kb-arch-tekst { color: var(--text); flex: 1; }
+.kb-arch-fase {
+  flex-shrink: 0;
+  font-size: 10px;
+  color: var(--text-faint);
+  white-space: nowrap;
+  margin-top: 2px;
+}
+
+.kb-footer {
+  font-size: 11px;
+  color: var(--text-faint);
+  text-align: center;
+  margin: 4px 0 16px;
+}
+
 @media (max-width: 900px) {
   .main-layout { grid-template-columns: 1fr; }
   .sidebar { border-right: none; border-bottom: 1px solid var(--border); max-height: 50vh; }
+  .kb-top-row { grid-template-columns: 1fr; }
+  .kb-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .kb-bar-label { flex: 0 0 130px; }
+  .kb-arch-cols { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -399,8 +681,8 @@ label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; c
 <!-- =============== Login =============== -->
 <div id="login">
   <form class="login-card" id="login-form">
-    <h1>ZeaYou <span style="color: var(--primary);">·</span> Feedback admin</h1>
-    <p class="subtitle">Log in om feedback van de mockup-preview in te zien.</p>
+    <h1>ZeaYou <span style="color: var(--primary);">·</span> Admin</h1>
+    <p class="subtitle">Log in om feedback en kennisvoortgang in te zien.</p>
     <div class="field">
       <label for="email">E-mailadres</label>
       <input type="email" id="email" name="email" autocomplete="email" required>
@@ -417,45 +699,519 @@ label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; c
 <!-- =============== Dashboard =============== -->
 <div id="dashboard" hidden>
   <header class="topbar">
-    <h1>ZeaYou <span class="accent">·</span> Feedback admin</h1>
+    <h1>ZeaYou <span class="accent">·</span> Admin</h1>
+    <nav class="topnav" role="tablist" aria-label="Adminpagina's">
+      <button type="button" class="topnav-tab" role="tab" data-tab="feedback" aria-selected="true">Feedback</button>
+      <button type="button" class="topnav-tab" role="tab" data-tab="kb" aria-selected="false">Voortgang KB</button>
+    </nav>
     <div class="user-info">
       <span id="user-email"></span>
       <button type="button" class="ghost" id="logout-btn">Uitloggen</button>
     </div>
   </header>
 
-  <div class="main-layout">
-    <aside class="sidebar">
-      <div class="filter-tabs" role="tablist">
-        <button type="button" class="filter-tab" role="tab" data-filter="open" aria-pressed="true">
-          Open <span class="count" id="count-open">0</span>
-        </button>
-        <button type="button" class="filter-tab" role="tab" data-filter="resolved" aria-pressed="false">
-          Opgelost <span class="count" id="count-resolved">0</span>
-        </button>
-        <button type="button" class="filter-tab" role="tab" data-filter="all" aria-pressed="false">
-          Alles <span class="count" id="count-all">0</span>
-        </button>
-      </div>
-      <div class="list-scroll" id="feedback-list">
-        <div class="empty-state">Bezig met laden…</div>
-      </div>
-    </aside>
+  <!-- ======= Feedback pagina ======= -->
+  <div id="page-feedback" class="page-content">
+    <div class="main-layout">
+      <aside class="sidebar">
+        <div class="filter-tabs" role="tablist">
+          <button type="button" class="filter-tab" role="tab" data-filter="open" aria-pressed="true">
+            Open <span class="count" id="count-open">0</span>
+          </button>
+          <button type="button" class="filter-tab" role="tab" data-filter="resolved" aria-pressed="false">
+            Opgelost <span class="count" id="count-resolved">0</span>
+          </button>
+          <button type="button" class="filter-tab" role="tab" data-filter="all" aria-pressed="false">
+            Alles <span class="count" id="count-all">0</span>
+          </button>
+        </div>
+        <div class="list-scroll" id="feedback-list">
+          <div class="empty-state">Bezig met laden…</div>
+        </div>
+      </aside>
 
-    <section class="detail" id="detail-pane">
-      <div class="detail-empty">Selecteer een feedback-item uit de lijst.</div>
-    </section>
+      <section class="detail" id="detail-pane">
+        <div class="detail-empty">Selecteer een feedback-item uit de lijst.</div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ======= Voortgang KB pagina ======= -->
+  <div id="page-kb" class="page-content" hidden>
+    <div class="kb-page">
+
+      <!-- Rij 1: Donut + KPI's -->
+      <div class="kb-top-row">
+        <div class="kb-card">
+          <p class="kb-card-title">Kennisitems totaal</p>
+          <div class="kb-donut-inner">
+            <div id="kb-donut"></div>
+            <div class="kb-donut-legend" id="kb-donut-legend"></div>
+          </div>
+        </div>
+        <div class="kb-card">
+          <p class="kb-card-title">Voortgang op basis van vragen</p>
+          <div class="kb-kpi-grid" id="kb-kpi-grid"></div>
+        </div>
+      </div>
+
+      <!-- Rij 2: Status per categorie -->
+      <div class="kb-card">
+        <p class="kb-card-title">Status per categorie</p>
+        <div id="kb-bars"></div>
+      </div>
+
+      <!-- Rij 3: Open V-vragen per fase -->
+      <div class="kb-card">
+        <p class="kb-card-title">Open vragen — V-reeks</p>
+        <div id="kb-vragen"></div>
+      </div>
+
+      <!-- Rij 4: Architectuurbesluiten -->
+      <div class="kb-card">
+        <p class="kb-card-title">Architectuurbesluiten (A–J reeks)</p>
+        <div id="kb-arch"></div>
+      </div>
+
+      <p class="kb-footer">Bijgewerkt: <span id="kb-bijgewerkt"></span> · Gesynchroniseerd via sync-kb-progress.py</p>
+    </div>
   </div>
 </div>
 
 <div id="toast" class="toast" hidden></div>
 
 <script type="module">
+// @KB_DATA_START
+const KB_DATA = {
+  "summary": {
+    "totaal": {
+      "aanwezig": 40,
+      "gedeeltelijk": 7,
+      "ontbreekt": 49
+    },
+    "categorieen": [
+      {
+        "naam": "Businesscontext & doelen",
+        "aanwezig": 3,
+        "gedeeltelijk": 0,
+        "ontbreekt": 5
+      },
+      {
+        "naam": "Portfolio & locaties",
+        "aanwezig": 3,
+        "gedeeltelijk": 0,
+        "ontbreekt": 3
+      },
+      {
+        "naam": "Data bronnen & integraties",
+        "aanwezig": 8,
+        "gedeeltelijk": 2,
+        "ontbreekt": 19
+      },
+      {
+        "naam": "KPI-definities & formules",
+        "aanwezig": 4,
+        "gedeeltelijk": 3,
+        "ontbreekt": 3
+      },
+      {
+        "naam": "Data model & database",
+        "aanwezig": 5,
+        "gedeeltelijk": 0,
+        "ontbreekt": 4
+      },
+      {
+        "naam": "Technische architectuur",
+        "aanwezig": 5,
+        "gedeeltelijk": 1,
+        "ontbreekt": 3
+      },
+      {
+        "naam": "Dashboard views & UX",
+        "aanwezig": 2,
+        "gedeeltelijk": 1,
+        "ontbreekt": 6
+      },
+      {
+        "naam": "Beveiliging & compliance",
+        "aanwezig": 5,
+        "gedeeltelijk": 0,
+        "ontbreekt": 3
+      },
+      {
+        "naam": "Project & samenwerking",
+        "aanwezig": 5,
+        "gedeeltelijk": 0,
+        "ontbreekt": 3
+      }
+    ]
+  },
+  "vragen": {
+    "totaal": 38,
+    "gesloten": 6,
+    "open": 32,
+    "fase1": [
+      {
+        "code": "V2",
+        "tekst": "Alle locaties op één MEWS-account?",
+        "stakeholder": "Jur / IT"
+      },
+      {
+        "code": "V3",
+        "tekst": "Enkelvoudige supplementen + 9% toeslag als productcategorieën in MEWS?",
+        "stakeholder": "Jur / MEWS-beheerder"
+      },
+      {
+        "code": "V4",
+        "tekst": "Hoeveel jaar historische data vereist?",
+        "stakeholder": "Jur"
+      },
+      {
+        "code": "V5",
+        "tekst": "Atomize API of export-only?",
+        "stakeholder": "Atomize-leverancier"
+      },
+      {
+        "code": "V26",
+        "tekst": "Hoeveel gebruikers + welke rollen (Supabase Auth)?",
+        "stakeholder": "Jur"
+      },
+      {
+        "code": "V27",
+        "tekst": "Portfolioweergave vereist?",
+        "stakeholder": "Jur"
+      },
+      {
+        "code": "V28",
+        "tekst": "Beoogde go-livedatum Fase 1?",
+        "stakeholder": "Jur"
+      },
+      {
+        "code": "V30",
+        "tekst": "Primair toegangsapparaat?",
+        "stakeholder": "Jur"
+      },
+      {
+        "code": "V34",
+        "tekst": "Supabase RLS-rollen: wie mag wat zien?",
+        "stakeholder": "Jur / IT"
+      },
+      {
+        "code": "V35",
+        "tekst": "Persoonsgegevens in Supabase — AVG/DPO-vereisten?",
+        "stakeholder": "Jur / Juridisch"
+      },
+      {
+        "code": "V36",
+        "tekst": "Taalvoorkeur dashboard: NL of EN?",
+        "stakeholder": "Jur"
+      }
+    ],
+    "fase2": [
+      {
+        "code": "V29",
+        "tekst": "Vereiste verversingsfrequentie? (bepaalt Vercel Free vs Pro)",
+        "stakeholder": "Jur"
+      },
+      {
+        "code": "V6",
+        "tekst": "Bevat Atomize budgetten of alleen prognoses?",
+        "stakeholder": "Jur / Atomize-leverancier"
+      },
+      {
+        "code": "V7",
+        "tekst": "Alle locaties op één Exact-administratie?",
+        "stakeholder": "Controller / IT"
+      },
+      {
+        "code": "V8",
+        "tekst": "Waar staan de budgetten — Exact, Atomize of Excel?",
+        "stakeholder": "Controller / Jur"
+      },
+      {
+        "code": "V9",
+        "tekst": "Invantive of Microsoft premium Exact-connector?",
+        "stakeholder": "Jur / IT"
+      },
+      {
+        "code": "V10",
+        "tekst": "Bij Microsoft-connector: kan IT IPs whitelisten + ODBC v18 installeren?",
+        "stakeholder": "IT"
+      },
+      {
+        "code": "V37",
+        "tekst": "BTW-conventie: netto of bruto in dashboard?",
+        "stakeholder": "Controller / Jur"
+      },
+      {
+        "code": "V38",
+        "tekst": "Authoritative source ontbijtomzet: MEWS of Exact Online?",
+        "stakeholder": "Controller / Jur"
+      }
+    ],
+    "fase3plus": [
+      {
+        "code": "V11",
+        "tekst": "DISH API aanwezig? HR / POS / beide? (onderzoeksbevinding: geen publieke API)",
+        "stakeholder": "DISH-leverancier / Jur"
+      },
+      {
+        "code": "V12",
+        "tekst": "Weergave gecombineerde rollen in DISH?",
+        "stakeholder": "Jur / DISH-leverancier"
+      },
+      {
+        "code": "V13",
+        "tekst": "Uitzendkosten via DISH of Exact?",
+        "stakeholder": "Controller"
+      },
+      {
+        "code": "V14",
+        "tekst": "Welk systeem registreert reinigingen per medewerker?",
+        "stakeholder": "Jur / hoofd HK"
+      },
+      {
+        "code": "V15",
+        "tekst": "Reinigingsdata: per medewerker of per team/dienst?",
+        "stakeholder": "Jur / hoofd HK"
+      },
+      {
+        "code": "V21",
+        "tekst": "Personeelsformule-variabelen (volledige werksessie)?",
+        "stakeholder": "Jur"
+      },
+      {
+        "code": "V22",
+        "tekst": "Personeelsvariabelen gedeeld of locatiespecifiek?",
+        "stakeholder": "Jur"
+      },
+      {
+        "code": "V23",
+        "tekst": "Uren-noemer: gepland / goedgekeurd / goedgekeurd excl. verzuim?",
+        "stakeholder": "Jur / afdelingshoofden"
+      },
+      {
+        "code": "V24",
+        "tekst": "Uitzendkrachten meegenomen of uitgesloten van metingen?",
+        "stakeholder": "Jur / Controller"
+      },
+      {
+        "code": "V25",
+        "tekst": "Wie keurt personeelsvariabelen goed?",
+        "stakeholder": "Jur"
+      },
+      {
+        "code": "V31",
+        "tekst": "Efficiëntieweergave: namen, ID's of afdelingsaggregaat?",
+        "stakeholder": "Jur / HR / Juridisch"
+      },
+      {
+        "code": "V32",
+        "tekst": "Overeengekomen streef-HK-efficiëntie?",
+        "stakeholder": "Jur / hoofd HK"
+      },
+      {
+        "code": "V16",
+        "tekst": "POS-systeem — DISH POS of apart systeem?",
+        "stakeholder": "Jur / F&B-manager"
+      }
+    ]
+  },
+  "architectuur": {
+    "totaal": 38,
+    "opgelost": 13,
+    "open": 25,
+    "resolved": [
+      {
+        "code": "A1",
+        "tekst": "Should Power BI operate in Import mode, DirectQuery mode, or a Composite model?"
+      },
+      {
+        "code": "A2",
+        "tekst": "Do you need Incremental Refresh on large fact tables (daily_occupancy, staffing_daily, purchase_invoices)?"
+      },
+      {
+        "code": "A3",
+        "tekst": "Should there be one unified semantic model, or separate domain models per subject area?"
+      },
+      {
+        "code": "B1",
+        "tekst": "Which Azure SQL tier is acceptable?"
+      },
+      {
+        "code": "B2",
+        "tekst": "Should Azure Functions use a Consumption Plan or a Premium/App Service Plan?"
+      },
+      {
+        "code": "B3",
+        "tekst": "Should Azure Key Vault be used to store all API credentials?"
+      },
+      {
+        "code": "B4",
+        "tekst": "Should the Azure subscription be owned by Zeayou or by Erik (as consultant)?"
+      },
+      {
+        "code": "B5",
+        "tekst": "What Azure region should all resources be deployed to?"
+      },
+      {
+        "code": "B6",
+        "tekst": "Should there be a separate development/staging Azure environment, or will development happen directly against a single production environment?"
+      },
+      {
+        "code": "C1",
+        "tekst": "Should Azure Functions handle ETL directly, or should Azure Data Factory be used for the pipeline orchestration?"
+      },
+      {
+        "code": "D1",
+        "tekst": "What user roles need Row-Level Security (RLS), and what data should each role see?"
+      },
+      {
+        "code": "J1",
+        "tekst": "What is the intended long-term role of the Next.js/Supabase application that is already partially built?"
+      },
+      {
+        "code": "J2",
+        "tekst": "Will Azure SQL replace Supabase (Postgres) as the data warehouse, or will both be maintained?"
+      }
+    ],
+    "openItems": [
+      {
+        "code": "C2",
+        "tekst": "What should happen when a data source is unavailable (MEWS API is down, Exact returns an error)?",
+        "fase": "Fase 1"
+      },
+      {
+        "code": "C3",
+        "tekst": "How should historical data corrections be handled (e.g., a MEWS booking that was backdated or a cancellation applied retroactively)?",
+        "fase": "–"
+      },
+      {
+        "code": "C4",
+        "tekst": "What is the expected steady-state data volume per fact table per year?",
+        "fase": "–"
+      },
+      {
+        "code": "D2",
+        "tekst": "Does the data warehouse need to store any personal data — guest names (from MEWS), or staff names (from DISH)?",
+        "fase": "Fase 0"
+      },
+      {
+        "code": "D3",
+        "tekst": "Who is the designated Data Protection Officer (or responsible person) for this data warehouse?",
+        "fase": "–"
+      },
+      {
+        "code": "D4",
+        "tekst": "Should financial data (margins, supplier costs, budget vs. actuals) be visible to all dashboard users, or restricted to the controller role?",
+        "fase": "–"
+      },
+      {
+        "code": "E1",
+        "tekst": "For each data source, how many years of historical data are available and should be migrated?",
+        "fase": "–"
+      },
+      {
+        "code": "E2",
+        "tekst": "Are there known data quality issues or system cutover dates in historical data?",
+        "fase": "–"
+      },
+      {
+        "code": "E3",
+        "tekst": "Are there sandbox/test environments available for MEWS, Exact Online, DISH, and Atomize?",
+        "fase": "Fase 1"
+      },
+      {
+        "code": "F1",
+        "tekst": "Do any users need formatted, printable financial reports (e.g., a monthly cost summary as a PDF)?",
+        "fase": "Fase 2"
+      },
+      {
+        "code": "F2",
+        "tekst": "Should the dashboard be accessible via Microsoft Teams or embedded in a SharePoint intranet page?",
+        "fase": "–"
+      },
+      {
+        "code": "F3",
+        "tekst": "Should the dashboard UI be in Dutch, English, or both?",
+        "fase": "Fase 1"
+      },
+      {
+        "code": "F4",
+        "tekst": "Should users be able to export raw data to Excel from the dashboard, or should exports be restricted?",
+        "fase": "–"
+      },
+      {
+        "code": "F5",
+        "tekst": "What alert channels are preferred: email, in-app notification, Microsoft Teams message, or a combination?",
+        "fase": "–"
+      },
+      {
+        "code": "G1",
+        "tekst": "How many F&B outlets are in scope, and do they all use the same POS system and product catalog?",
+        "fase": "–"
+      },
+      {
+        "code": "G2",
+        "tekst": "Is the breakfast revenue figure authoritative in MEWS (as a product category) or in Exact Online (as a GL account)?",
+        "fase": "Fase 2"
+      },
+      {
+        "code": "G3",
+        "tekst": "Should VAT-inclusive or VAT-exclusive revenue figures be shown in the dashboard?",
+        "fase": "Fase 1"
+      },
+      {
+        "code": "H1",
+        "tekst": "Are any properties seasonal (closed for part of the year)? How should \"closed\" periods appear in the dashboard?",
+        "fase": "Fase 3"
+      },
+      {
+        "code": "H2",
+        "tekst": "Are the B&Bs and apartments managed with the same housekeeping and staffing model as the hotels, or do they operate differently?",
+        "fase": "Fase 3"
+      },
+      {
+        "code": "H3",
+        "tekst": "Is overtime tracked separately in DISH, and should it be shown as its own metric?",
+        "fase": "–"
+      },
+      {
+        "code": "I1",
+        "tekst": "Is there a support/maintenance contract in scope after go-live? If so, what is the agreed SLA?",
+        "fase": "–"
+      },
+      {
+        "code": "I2",
+        "tekst": "After delivery, who updates the staffing parameter Excel table when ratios change?",
+        "fase": "–"
+      },
+      {
+        "code": "I3",
+        "tekst": "Are there plans to add properties or F&B outlets to the portfolio within the next 12 months?",
+        "fase": "Fase 1"
+      },
+      {
+        "code": "I4",
+        "tekst": "Are there plans to integrate OTA (Booking.com, Expedia) channel data or guest review scores in the future?",
+        "fase": "–"
+      },
+      {
+        "code": "I5",
+        "tekst": "Is write-back functionality in scope — for example, entering annual budgets, staffing targets, or room rate strategies directly into the dashboard?",
+        "fase": "Fase 1"
+      }
+    ]
+  },
+  "bijgewerkt": "2026-07-31"
+};
+// @KB_DATA_END
+
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 const SUPABASE_URL  = 'https://lpptlfuhnyhciqhimoxa.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwcHRsZnVobnloY2lxaGltb3hhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2NjMwODgsImV4cCI6MjA5MzIzOTA4OH0.rlpHJRb_n6AXyTsF_ri6w0w7P4UJkjag1VLh3yYrRFM';
-const PREVIEW_MAX_WIDTH = 720; // CSS pixels for the preview canvas
+const PREVIEW_MAX_WIDTH = 720;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
   db:   { schema: 'dev_portal' },
@@ -477,10 +1233,28 @@ const countOpenEl   = document.getElementById('count-open');
 const countResEl    = document.getElementById('count-resolved');
 const countAllEl    = document.getElementById('count-all');
 const toastEl       = document.getElementById('toast');
+const pageFeedback  = document.getElementById('page-feedback');
+const pageKb        = document.getElementById('page-kb');
 
 let allFeedback = [];
 let activeFilter = 'open';
 let selectedId = null;
+
+// ============ Page tab switching ============
+const topnavTabs = [...document.querySelectorAll('.topnav-tab')];
+
+topnavTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    topnavTabs.forEach(t => t.setAttribute('aria-selected', String(t === tab)));
+    const isKb = tab.dataset.tab === 'kb';
+    pageFeedback.hidden = isKb;
+    pageKb.hidden = !isKb;
+    if (isKb && !pageKb.dataset.rendered) {
+      renderKbPage();
+      pageKb.dataset.rendered = '1';
+    }
+  });
+});
 
 // ============ Auth ============
 async function bootstrap() {
@@ -529,11 +1303,15 @@ logoutBtn.addEventListener('click', async () => {
   await supabase.auth.signOut();
   allFeedback = [];
   selectedId = null;
+  pageKb.dataset.rendered = '';
   loginForm.reset();
+  topnavTabs.forEach((t, i) => t.setAttribute('aria-selected', String(i === 0)));
+  pageFeedback.hidden = false;
+  pageKb.hidden = true;
   showLogin();
 });
 
-// ============ Load + render ============
+// ============ Load + render feedback ============
 async function loadFeedback() {
   listEl.innerHTML = '<div class="empty-state">Bezig met laden…</div>';
   const { data, error } = await supabase
@@ -598,10 +1376,10 @@ filterTabs.forEach(tab => {
   });
 });
 
-// ============ Detail ============
+// ============ Feedback detail ============
 function selectFeedback(id) {
   selectedId = id;
-  renderList(); // updates aria-current highlight
+  renderList();
   const item = allFeedback.find(f => f.id === id);
   if (!item) return;
   renderDetail(item);
@@ -758,6 +1536,156 @@ function replaceInList(updated) {
   if (idx >= 0) allFeedback[idx] = updated;
   updateCounts();
   renderList();
+}
+
+// ============ KB Page rendering ============
+function renderKbPage() {
+  renderKbDonut();
+  renderKbKpis();
+  renderKbBars();
+  renderKbVragen();
+  renderKbArch();
+  document.getElementById('kb-bijgewerkt').textContent = KB_DATA.bijgewerkt;
+}
+
+function renderKbDonut() {
+  const { aanwezig, gedeeltelijk, ontbreekt } = KB_DATA.summary.totaal;
+  const total = aanwezig + gedeeltelijk + ontbreekt;
+  if (total === 0) return;
+
+  const R = 56, cx = 76, cy = 76, sw = 20;
+  const C = 2 * Math.PI * R;
+
+  const segments = [
+    { val: aanwezig,    color: '#0f9060' },
+    { val: gedeeltelijk, color: '#d97706' },
+    { val: ontbreekt,  color: '#dc2626' }
+  ];
+
+  let cumArc = 0;
+  const circles = segments.map(({ val, color }) => {
+    const dash = (val / total) * C;
+    const gap  = C - dash;
+    const offset = -cumArc;
+    cumArc += dash;
+    return `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${color}" stroke-width="${sw}"
+      stroke-dasharray="${dash.toFixed(3)} ${gap.toFixed(3)}"
+      stroke-dashoffset="${offset.toFixed(3)}"
+      transform="rotate(-90 ${cx} ${cy})"/>`;
+  }).join('');
+
+  const pct = Math.round((aanwezig / total) * 100);
+  document.getElementById('kb-donut').innerHTML = `
+    <svg width="152" height="152" viewBox="0 0 152 152" aria-label="Kennisvoortgang: ${pct}% aanwezig" role="img">
+      <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="var(--border-light)" stroke-width="${sw}"/>
+      ${circles}
+      <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central"
+            font-size="26" font-weight="800" fill="var(--text)" font-family="-apple-system,sans-serif">${pct}%</text>
+      <text x="${cx}" y="${cy + 22}" text-anchor="middle"
+            font-size="11" fill="var(--text-muted)" font-family="-apple-system,sans-serif">aanwezig</text>
+    </svg>`;
+
+  const legendData = [
+    { color: '#0f9060', label: 'Aanwezig',     count: aanwezig },
+    { color: '#d97706', label: 'Gedeeltelijk', count: gedeeltelijk },
+    { color: '#dc2626', label: 'Ontbreekt',    count: ontbreekt }
+  ];
+  document.getElementById('kb-donut-legend').innerHTML = legendData.map(d =>
+    `<div class="kb-legend-item">
+      <span class="kb-legend-dot" style="background:${d.color}"></span>
+      <span class="kb-legend-label">${d.label}</span>
+      <span class="kb-legend-count">${d.count}</span>
+    </div>`
+  ).join('');
+}
+
+function renderKbKpis() {
+  const { vragen, architectuur } = KB_DATA;
+  const kpis = [
+    { value: vragen.gesloten,        label: 'V-vragen\ngesloten',    cls: 'c-success' },
+    { value: vragen.open,            label: 'V-vragen\nopen',        cls: 'c-error'   },
+    { value: vragen.fase1.length,    label: 'Fase 1\nblockers',      cls: 'c-error'   },
+    { value: vragen.fase2.length,    label: 'Fase 2\nvragen',        cls: 'c-warning' },
+    { value: architectuur.opgelost,  label: 'Architectuur\nopgelost', cls: 'c-success' },
+    { value: architectuur.open,      label: 'Architectuur\nopen',    cls: 'c-warning' }
+  ];
+  document.getElementById('kb-kpi-grid').innerHTML = kpis.map(k =>
+    `<div class="kb-kpi-cell ${k.cls}">
+      <div class="kb-kpi-value">${k.value}</div>
+      <div class="kb-kpi-label">${k.label.replace('\n', '<br>')}</div>
+    </div>`
+  ).join('');
+}
+
+function renderKbBars() {
+  const cats = KB_DATA.summary.categorieen;
+  document.getElementById('kb-bars').innerHTML = cats.map(cat => {
+    const total = cat.aanwezig + cat.gedeeltelijk + cat.ontbreekt;
+    const pOk  = Math.floor((cat.aanwezig    / total) * 100);
+    const pPar = Math.floor((cat.gedeeltelijk / total) * 100);
+    const pMis = 100 - pOk - pPar;
+    return `<div class="kb-bar-row">
+      <div class="kb-bar-label" title="${cat.naam}">${cat.naam}</div>
+      <div class="kb-bar-track" title="${cat.aanwezig}✅ ${cat.gedeeltelijk}⚠️ ${cat.ontbreekt}❌ van ${total}">
+        ${pOk  > 0 ? `<div class="kb-bar-seg seg-ok"      style="width:${pOk}%"></div>`  : ''}
+        ${pPar > 0 ? `<div class="kb-bar-seg seg-partial" style="width:${pPar}%"></div>` : ''}
+        ${pMis > 0 ? `<div class="kb-bar-seg seg-missing" style="width:${pMis}%"></div>` : ''}
+      </div>
+      <div class="kb-bar-count">${cat.aanwezig}✅ ${cat.gedeeltelijk}⚠️ ${cat.ontbreekt}❌</div>
+    </div>`;
+  }).join('');
+}
+
+function renderKbVragen() {
+  const { fase1, fase2, fase3plus } = KB_DATA.vragen;
+  const fases = [
+    { label: 'Fase 1', count: fase1.length,    items: fase1,    cls: 'f1', badge: 'Kritiek' },
+    { label: 'Fase 2', count: fase2.length,    items: fase2,    cls: 'f2', badge: 'Belangrijk' },
+    { label: 'Fase 3+', count: fase3plus.length, items: fase3plus, cls: 'f3', badge: 'Later' }
+  ];
+  document.getElementById('kb-vragen').innerHTML = fases.map(f =>
+    `<div class="kb-fase-header">
+      <span class="kb-fase-badge ${f.cls}">${f.label} — ${f.count} open</span>
+      <span style="color:var(--text-faint);font-size:11px;">${f.badge}</span>
+    </div>
+    <div class="kb-vragen-grid">
+      ${f.items.map(v =>
+        `<div class="kb-vraag-card">
+          <span class="kb-vraag-code ${f.cls}">${escapeHtml(v.code)}</span>
+          <div class="kb-vraag-tekst">${escapeHtml(v.tekst)}</div>
+          <div class="kb-vraag-stakeholder">↳ ${escapeHtml(v.stakeholder)}</div>
+        </div>`
+      ).join('')}
+    </div>`
+  ).join('');
+}
+
+function renderKbArch() {
+  const { resolved, openItems } = KB_DATA.architectuur;
+  const resolvedHtml = resolved.map(a =>
+    `<div class="kb-arch-item">
+      <span class="kb-arch-badge b-res">${escapeHtml(a.code)}</span>
+      <span class="kb-arch-tekst">${escapeHtml(a.tekst)}</span>
+    </div>`
+  ).join('');
+  const openHtml = openItems.map(a =>
+    `<div class="kb-arch-item">
+      <span class="kb-arch-badge b-open">${escapeHtml(a.code)}</span>
+      <span class="kb-arch-tekst">${escapeHtml(a.tekst)}</span>
+      <span class="kb-arch-fase">${escapeHtml(a.fase)}</span>
+    </div>`
+  ).join('');
+  document.getElementById('kb-arch').innerHTML = `
+    <div class="kb-arch-cols">
+      <div>
+        <p class="kb-arch-col-title c-resolved">✓ Opgelost (${resolved.length})</p>
+        ${resolvedHtml}
+      </div>
+      <div>
+        <p class="kb-arch-col-title c-open">✗ Open (${openItems.length})</p>
+        ${openHtml}
+      </div>
+    </div>`;
 }
 
 // ============ Helpers ============
