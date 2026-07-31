@@ -786,7 +786,7 @@ th.num, td.num { text-align:right; font-variant-numeric:tabular-nums; }
 .plan-chart-gap { fill:#dc2626; opacity:0.7; }
 
 /* Notifications panel */
-.notifications-panel { position:fixed; top:56px; right:0; width:340px; max-height:calc(100vh - 56px); background:var(--color-surface); border-left:1px solid var(--color-border); box-shadow:-4px 0 24px rgba(0,0,0,0.10); display:none; flex-direction:column; z-index:200; overflow-y:auto; }
+.notifications-panel { position:fixed; top:0; right:0; width:340px; height:100vh; background:var(--color-surface); border-left:1px solid var(--color-border); box-shadow:-4px 0 24px rgba(0,0,0,0.10); display:none; flex-direction:column; z-index:200; overflow-y:auto; }
 .notifications-panel.open { display:flex; }
 .panel-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--color-border); font-weight:var(--font-weight-semibold); font-size:var(--font-size-sm); }
 .panel-alerts { display:flex; flex-direction:column; gap:5px; padding-bottom:var(--space-2); }
